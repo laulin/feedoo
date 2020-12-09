@@ -2,11 +2,11 @@ from rethinkdb import r as Rethinkdb
 from chronyk import Chronyk
 import time
 from collections import defaultdict
-from abstract_action import AbstractAction
-from event import Event
+from .abstract_action import AbstractAction
+from .event import Event
 import unittest
 import logging
-from hash_storage import HashStorage
+from .hash_storage import HashStorage
 from time import time
 
 # push document to db

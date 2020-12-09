@@ -6,9 +6,9 @@ import shutil
 import unittest
 import logging
 from contextlib import suppress
-from abstract_action import AbstractAction
-from event import Event
-from hash_storage import HashStorage
+from .abstract_action import AbstractAction
+from .event import Event
+from .hash_storage import HashStorage
 from time import time
 
 # push document to archive files

@@ -1,7 +1,7 @@
 import json
 import unittest
-from abstract_action import AbstractAction
-from event import Event
+from .abstract_action import AbstractAction
+from .event import Event
 
 # parse a string as json
 

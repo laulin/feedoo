@@ -1,6 +1,6 @@
 from chronyk import Chronyk
-from abstract_action import AbstractAction
-from event import Event
+from .abstract_action import AbstractAction
+from .event import Event
 import unittest
 
 # parse a date field and transform it

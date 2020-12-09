@@ -1,10 +1,10 @@
-from configuration import Configuration
-from feed_manager import FeedManager 
-from cli import get_args
+from .configuration import Configuration
+from .feed_manager import FeedManager 
+from .cli import get_args
 import logging
 import sys
 
-if __name__ == "__main__":
+def main():
     args = get_args()
 
     if args.verbosity == 0:

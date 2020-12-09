@@ -1,6 +1,6 @@
 import json
-from abstract_action import AbstractAction
-from event import Event
+from .abstract_action import AbstractAction
+from .event import Event
 import unittest
 
 # remove one or more keys of the document

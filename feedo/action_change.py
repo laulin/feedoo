@@ -1,8 +1,8 @@
-from abstract_action import AbstractAction
-from event import Event
+from .abstract_action import AbstractAction
+from .event import Event
 import time
 import unittest
-from hash_storage import HashStorage
+from .hash_storage import HashStorage
 import os
 
 # This action will monitor a certain field and match if that field changes. The field must change with respect to the last event with the same query_key.

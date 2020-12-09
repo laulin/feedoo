@@ -5,8 +5,8 @@ import logging
 import unittest
 import fnmatch
 from glob import glob
-from abstract_action import AbstractAction
-from event import Event
+from .abstract_action import AbstractAction
+from .event import Event
 from time import time
 from unittest.mock import Mock
 

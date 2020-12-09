@@ -1,20 +1,20 @@
 import logging
 import unittest
 
-from event import Event
+from .event import Event
 
-from action_date import ActionDate
-from action_parser_json import ActionParserJson
-from action_parser_regex import ActionParserRegex
-from action_remove_keys import ActionRemoveKeys
-from action_rethinkdb import ActionRethinkdb
-from action_archive import ActionArchive
-from action_stdout import ActionStdout
-from action_dummy import ActionDummy
-from action_tee import ActionTee
-from action_retag import ActionRetag
-from action_change import ActionChange
-from input_file import InputFile
+from .action_date import ActionDate
+from .action_parser_json import ActionParserJson
+from .action_parser_regex import ActionParserRegex
+from .action_remove_keys import ActionRemoveKeys
+from .action_rethinkdb import ActionRethinkdb
+from .action_archive import ActionArchive
+from .action_stdout import ActionStdout
+from .action_dummy import ActionDummy
+from .action_tee import ActionTee
+from .action_retag import ActionRetag
+from .action_change import ActionChange
+from .input_file import InputFile
 
 CLASS_TABLE = {
     "date": ActionDate,

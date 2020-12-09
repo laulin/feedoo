@@ -1,8 +1,8 @@
 import re
 import unittest
 import logging
-from abstract_action import AbstractAction
-from event import Event
+from .abstract_action import AbstractAction
+from .event import Event
 
 # parse a string and return a dict
 # dict' keys is defines by tag (?P<name>)

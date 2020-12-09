@@ -1,5 +1,5 @@
-from abstract_action import AbstractAction
-from event import Event
+from .abstract_action import AbstractAction
+from .event import Event
 import time
 
 # provide a fake source of event for test

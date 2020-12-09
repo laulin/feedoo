@@ -1,6 +1,6 @@
 from chronyk import Chronyk
-from abstract_action import AbstractAction
-from event import Event
+from .abstract_action import AbstractAction
+from .event import Event
 import unittest
 
 # duplicate event with a new tag
