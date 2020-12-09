@@ -1,0 +1,5 @@
+rethinkdb
+chronyk
+inotify
+pyyaml
+fluentbit-server-py
