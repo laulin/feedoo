@@ -1,0 +1,7 @@
+FROM ubuntu:20.04
+
+ENV DEBIAN_FRONTEND noninteractive
+RUN apt update && apt upgrade -y && apt install -y python3 python3-pip
+RUN pip3 install chronyk rethinkdb inotify pyyaml fluentbit-server-py
+COPY sources/ /root/feed/
+WORKDIR /root/feed

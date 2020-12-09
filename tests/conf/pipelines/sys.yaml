@@ -1,0 +1,61 @@
+# - name : input_file
+#   watch_path : "/input/pihole"
+#   path_pattern : "/input/pihole/jarvis*/sys.*.log"
+#   remove: True
+#   tag : sys
+
+- name : dummy
+  tag : sys
+  data :
+   - {"log" : '2020-11-01T17:20:00+00:00       sys.ram {"tag":"sys.ram","source":"jarvis-2","Mem.total":3919812,"Mem.used":3107760,"Swap.free":102396,"Swap.total":102396,"Swap.used":0,"Mem.free":812052}'}
+   - {"log" : '2020-12-02 15:56:46.000000000 +0000 sys.cpu: {"cpu3.p_user":39,"cpu3.p_system":0,"tag":"sys.cpu","timestamp":1606924606,"source":"jarvis-2","cpu_p":12.5,"user_p":11.75,"system_p":0.75,"cpu0.p_cpu":6,"cpu0.p_user":3,"cpu0.p_system":3,"cpu1.p_cpu":2,"cpu1.p_user":2,"cpu1.p_system":0,"cpu2.p_cpu":3,"cpu2.p_user":3,"cpu2.p_system":0,"cpu3.p_cpu":39}'}
+   - {"log" : '2020-12-02 15:57:01.000000000 +0000 sys.temperature: {"name":"thermal_zone0","source":"jarvis-2","type":"cpu-thermal","temp":34.563,"tag":"sys.temperature","timestamp":1606924621}'}
+   - {"log" : '2020-12-02T17:39:05+00:00	sys.netif	{"eth0.rx.bytes":60718,"source":"jarvis-2","eth0.rx.errors":0,"eth0.tx.bytes":188780,"eth0.tx.packets":344,"eth0.tx.errors":0,"eth0.rx.packets":252,"tag":"sys.netif","timestamp":1606930745}'}
+   - {"log" : '2020-12-02T17:38:05+00:00	sys.disk	{"read_size":0,"write_size":4022272,"timestamp":1606930685,"tag":"sys.disk","source":"jarvis-2"}'}
+
+- name : parser_regex
+  key : log
+  regex : ".+?sys\\.(?P<type>\\w+).+?(?P<json>\\{.+\\})"
+  match : sys
+
+- name : retag
+  match : sys
+  value : sys
+  key : type
+
+- name : parser_json
+  key : json
+  mode : merge
+  match : "*"
+
+- name : remove_keys
+  keys : 
+    - tag
+    - retag
+  match : "*"
+
+- name : remove_keys
+  keys : 
+    - name
+    - type
+  match : temperature
+
+- name : stdout
+  match : "*"
+
+# - name : archive
+#   time_key : timestamp
+#   path_template : "/archives/pihole/{source}/{type}-%Y%m%d.json"
+#   buffer_size : 1000
+#   match : "*"
+
+# - name : rethinkdb
+#   time_key : timestamp
+#   table_template : "jarvis-{type}-%Y%m%d"
+#   buffer_size : 1000
+#   database : test
+#   ip : rethink
+#   port : 28015
+#   match : "*"
+
+

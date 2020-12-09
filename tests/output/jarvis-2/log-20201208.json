@@ -1,0 +1,69 @@
+{'type': 'auth', 'timestamp': 1607441173, 'log': 'Dec  8 16:26:13 jarvis-2 sshd[2941]: Accepted publickey for pi from 192.168.0.122 port 51981 ssh2: RSA SHA256:eH/aWlCRM23dmRHbNpeKltSTNLindiFm1k7FwbIWCMM', 'source': 'jarvis-2'}
+{'type': 'auth', 'timestamp': 1607441173, 'log': 'Dec  8 16:26:13 jarvis-2 sshd[2941]: pam_unix(sshd:session): session opened for user pi by (uid=0)', 'source': 'jarvis-2'}
+{'type': 'auth', 'timestamp': 1607441173, 'log': 'Dec  8 16:26:13 jarvis-2 systemd-logind[445]: New session 2831 of user pi.', 'source': 'jarvis-2'}
+{'type': 'auth', 'timestamp': 1607441173, 'log': 'Dec  8 16:26:13 jarvis-2 systemd: pam_unix(systemd-user:session): session opened for user pi by (uid=0)', 'source': 'jarvis-2'}
+{'type': 'auth', 'source': 'jarvis-2', 'timestamp': 1607441184, 'log': 'Dec  8 16:26:24 jarvis-2 sudo:       pi : TTY=pts/0 ; PWD=/home/pi ; USER=root ; COMMAND=/usr/bin/supervisorctl status'}
+{'type': 'auth', 'source': 'jarvis-2', 'timestamp': 1607441184, 'log': 'Dec  8 16:26:24 jarvis-2 sudo: pam_unix(sudo:session): session opened for user root by pi(uid=0)'}
+{'type': 'auth', 'source': 'jarvis-2', 'timestamp': 1607441185, 'log': 'Dec  8 16:26:24 jarvis-2 sudo: pam_unix(sudo:session): session closed for user root'}
+{'type': 'auth', 'source': 'jarvis-2', 'log': 'Dec  8 16:26:36 jarvis-2 sudo:       pi : TTY=pts/0 ; PWD=/home/pi ; USER=root ; COMMAND=/usr/bin/supervisorctl restart pihole', 'timestamp': 1607441196}
+{'type': 'auth', 'source': 'jarvis-2', 'log': 'Dec  8 16:26:36 jarvis-2 sudo: pam_unix(sudo:session): session opened for user root by pi(uid=0)', 'timestamp': 1607441196}
+{'type': 'auth', 'source': 'jarvis-2', 'timestamp': 1607441198, 'log': 'Dec  8 16:26:38 jarvis-2 sudo: pam_unix(sudo:session): session closed for user root'}
+{'type': 'auth', 'source': 'jarvis-2', 'timestamp': 1607441202, 'log': 'Dec  8 16:26:42 jarvis-2 sudo:       pi : TTY=pts/0 ; PWD=/home/pi ; USER=root ; COMMAND=/usr/bin/docker ps'}
+{'type': 'auth', 'source': 'jarvis-2', 'timestamp': 1607441202, 'log': 'Dec  8 16:26:42 jarvis-2 sudo: pam_unix(sudo:session): session opened for user root by pi(uid=0)'}
+{'type': 'auth', 'source': 'jarvis-2', 'timestamp': 1607441202, 'log': 'Dec  8 16:26:42 jarvis-2 sudo: pam_unix(sudo:session): session closed for user root'}
+{'type': 'auth', 'source': 'jarvis-2', 'timestamp': 1607441206, 'log': 'Dec  8 16:26:46 jarvis-2 sudo:       pi : TTY=pts/0 ; PWD=/home/pi ; USER=root ; COMMAND=/usr/bin/docker ps'}
+{'type': 'auth', 'source': 'jarvis-2', 'timestamp': 1607441206, 'log': 'Dec  8 16:26:46 jarvis-2 sudo: pam_unix(sudo:session): session opened for user root by pi(uid=0)'}
+{'type': 'auth', 'source': 'jarvis-2', 'timestamp': 1607441206, 'log': 'Dec  8 16:26:46 jarvis-2 sudo: pam_unix(sudo:session): session closed for user root'}
+{'type': 'auth', 'source': 'jarvis-2', 'timestamp': 1607441209, 'log': 'Dec  8 16:26:49 jarvis-2 sudo:       pi : TTY=pts/0 ; PWD=/home/pi ; USER=root ; COMMAND=/usr/bin/supervisorctl status'}
+{'type': 'auth', 'source': 'jarvis-2', 'timestamp': 1607441209, 'log': 'Dec  8 16:26:49 jarvis-2 sudo: pam_unix(sudo:session): session opened for user root by pi(uid=0)'}
+{'type': 'auth', 'source': 'jarvis-2', 'timestamp': 1607441209, 'log': 'Dec  8 16:26:49 jarvis-2 sudo: pam_unix(sudo:session): session closed for user root'}
+{'type': 'auth', 'source': 'jarvis-2', 'timestamp': 1607441213, 'log': 'Dec  8 16:26:53 jarvis-2 sudo:       pi : TTY=pts/0 ; PWD=/home/pi ; USER=root ; COMMAND=/usr/bin/docker ps'}
+{'type': 'auth', 'source': 'jarvis-2', 'timestamp': 1607441213, 'log': 'Dec  8 16:26:53 jarvis-2 sudo: pam_unix(sudo:session): session opened for user root by pi(uid=0)'}
+{'type': 'auth', 'source': 'jarvis-2', 'timestamp': 1607441213, 'log': 'Dec  8 16:26:53 jarvis-2 sudo: pam_unix(sudo:session): session closed for user root'}
+{'type': 'auth', 'timestamp': 1607441225, 'log': 'Dec  8 16:27:05 jarvis-2 sudo:       pi : TTY=pts/0 ; PWD=/home/pi ; USER=root ; COMMAND=/usr/bin/supervisorctl stop pihole', 'source': 'jarvis-2'}
+{'type': 'auth', 'timestamp': 1607441225, 'log': 'Dec  8 16:27:05 jarvis-2 sudo: pam_unix(sudo:session): session opened for user root by pi(uid=0)', 'source': 'jarvis-2'}
+{'type': 'auth', 'timestamp': 1607441226, 'log': 'Dec  8 16:27:06 jarvis-2 sudo: pam_unix(sudo:session): session closed for user root', 'source': 'jarvis-2'}
+{'type': 'auth', 'timestamp': 1607441229, 'log': 'Dec  8 16:27:09 jarvis-2 sudo:       pi : TTY=pts/0 ; PWD=/home/pi ; USER=root ; COMMAND=/usr/bin/docker ps', 'source': 'jarvis-2'}
+{'type': 'auth', 'timestamp': 1607441229, 'log': 'Dec  8 16:27:09 jarvis-2 sudo: pam_unix(sudo:session): session opened for user root by pi(uid=0)', 'source': 'jarvis-2'}
+{'type': 'auth', 'timestamp': 1607441229, 'log': 'Dec  8 16:27:09 jarvis-2 sudo: pam_unix(sudo:session): session closed for user root', 'source': 'jarvis-2'}
+{'type': 'auth', 'timestamp': 1607441231, 'log': 'Dec  8 16:27:11 jarvis-2 sudo:       pi : TTY=pts/0 ; PWD=/home/pi ; USER=root ; COMMAND=/usr/bin/docker ps', 'source': 'jarvis-2'}
+{'type': 'auth', 'timestamp': 1607441231, 'log': 'Dec  8 16:27:11 jarvis-2 sudo: pam_unix(sudo:session): session opened for user root by pi(uid=0)', 'source': 'jarvis-2'}
+{'type': 'auth', 'timestamp': 1607441231, 'log': 'Dec  8 16:27:11 jarvis-2 sudo: pam_unix(sudo:session): session closed for user root', 'source': 'jarvis-2'}
+{'type': 'auth', 'timestamp': 1607441241, 'log': 'Dec  8 16:27:21 jarvis-2 sudo:       pi : TTY=pts/0 ; PWD=/home/pi ; USER=root ; COMMAND=/usr/bin/supervisorctl restart pihole', 'source': 'jarvis-2'}
+{'type': 'auth', 'timestamp': 1607441241, 'log': 'Dec  8 16:27:21 jarvis-2 sudo: pam_unix(sudo:session): session opened for user root by pi(uid=0)', 'source': 'jarvis-2'}
+{'type': 'auth', 'timestamp': 1607441243, 'log': 'Dec  8 16:27:23 jarvis-2 sudo: pam_unix(sudo:session): session closed for user root', 'source': 'jarvis-2'}
+{'type': 'auth', 'timestamp': 1607441246, 'log': 'Dec  8 16:27:26 jarvis-2 sudo:       pi : TTY=pts/0 ; PWD=/home/pi ; USER=root ; COMMAND=/usr/bin/docker ps', 'source': 'jarvis-2'}
+{'type': 'auth', 'timestamp': 1607441246, 'log': 'Dec  8 16:27:26 jarvis-2 sudo: pam_unix(sudo:session): session opened for user root by pi(uid=0)', 'source': 'jarvis-2'}
+{'type': 'auth', 'timestamp': 1607441246, 'log': 'Dec  8 16:27:26 jarvis-2 sudo: pam_unix(sudo:session): session closed for user root', 'source': 'jarvis-2'}
+{'type': 'auth', 'timestamp': 1607441248, 'log': 'Dec  8 16:27:28 jarvis-2 sudo:       pi : TTY=pts/0 ; PWD=/home/pi ; USER=root ; COMMAND=/usr/bin/docker ps', 'source': 'jarvis-2'}
+{'type': 'auth', 'timestamp': 1607441248, 'log': 'Dec  8 16:27:28 jarvis-2 sudo: pam_unix(sudo:session): session opened for user root by pi(uid=0)', 'source': 'jarvis-2'}
+{'type': 'auth', 'timestamp': 1607441248, 'log': 'Dec  8 16:27:28 jarvis-2 sudo: pam_unix(sudo:session): session closed for user root', 'source': 'jarvis-2'}
+{'type': 'auth', 'timestamp': 1607441249, 'log': 'Dec  8 16:27:29 jarvis-2 sudo:       pi : TTY=pts/0 ; PWD=/home/pi ; USER=root ; COMMAND=/usr/bin/docker ps', 'source': 'jarvis-2'}
+{'type': 'auth', 'timestamp': 1607441249, 'log': 'Dec  8 16:27:29 jarvis-2 sudo: pam_unix(sudo:session): session opened for user root by pi(uid=0)', 'source': 'jarvis-2'}
+{'type': 'auth', 'timestamp': 1607441249, 'log': 'Dec  8 16:27:29 jarvis-2 sudo: pam_unix(sudo:session): session closed for user root', 'source': 'jarvis-2'}
+{'type': 'auth', 'source': 'jarvis-2', 'log': 'Dec  8 16:27:38 jarvis-2 sudo:       pi : TTY=pts/0 ; PWD=/home/pi ; USER=root ; COMMAND=/usr/bin/docker logs pihole', 'timestamp': 1607441258}
+{'type': 'auth', 'source': 'jarvis-2', 'log': 'Dec  8 16:27:38 jarvis-2 sudo: pam_unix(sudo:session): session opened for user root by pi(uid=0)', 'timestamp': 1607441258}
+{'type': 'auth', 'source': 'jarvis-2', 'log': 'Dec  8 16:27:38 jarvis-2 sudo: pam_unix(sudo:session): session closed for user root', 'timestamp': 1607441258}
+{'type': 'auth', 'source': 'jarvis-2', 'log': 'Dec  8 16:27:54 jarvis-2 sudo:       pi : TTY=pts/0 ; PWD=/home/pi ; USER=root ; COMMAND=/usr/bin/docker logs pihole', 'timestamp': 1607441274}
+{'type': 'auth', 'source': 'jarvis-2', 'log': 'Dec  8 16:27:54 jarvis-2 sudo: pam_unix(sudo:session): session opened for user root by pi(uid=0)', 'timestamp': 1607441274}
+{'type': 'auth', 'source': 'jarvis-2', 'log': 'Dec  8 16:27:54 jarvis-2 sudo: pam_unix(sudo:session): session closed for user root', 'timestamp': 1607441274}
+{'type': 'auth', 'timestamp': 1607441281, 'log': 'Dec  8 16:28:01 jarvis-2 sudo:       pi : TTY=pts/0 ; PWD=/home/pi ; USER=root ; COMMAND=/usr/bin/docker logs pihole', 'source': 'jarvis-2'}
+{'type': 'auth', 'timestamp': 1607441281, 'log': 'Dec  8 16:28:01 jarvis-2 sudo: pam_unix(sudo:session): session opened for user root by pi(uid=0)', 'source': 'jarvis-2'}
+{'type': 'auth', 'timestamp': 1607441281, 'log': 'Dec  8 16:28:01 jarvis-2 sudo: pam_unix(sudo:session): session closed for user root', 'source': 'jarvis-2'}
+{'type': 'auth', 'timestamp': 1607441289, 'log': 'Dec  8 16:28:09 jarvis-2 sudo:       pi : TTY=pts/0 ; PWD=/home/pi ; USER=root ; COMMAND=/usr/bin/docker logs pihole', 'source': 'jarvis-2'}
+{'type': 'auth', 'timestamp': 1607441289, 'log': 'Dec  8 16:28:09 jarvis-2 sudo: pam_unix(sudo:session): session opened for user root by pi(uid=0)', 'source': 'jarvis-2'}
+{'type': 'auth', 'timestamp': 1607441289, 'log': 'Dec  8 16:28:09 jarvis-2 sudo: pam_unix(sudo:session): session closed for user root', 'source': 'jarvis-2'}
+{'type': 'auth', 'source': 'jarvis-2', 'log': 'Dec  8 16:28:12 jarvis-2 sudo:       pi : TTY=pts/0 ; PWD=/home/pi ; USER=root ; COMMAND=/usr/bin/docker logs pihole', 'timestamp': 1607441292}
+{'type': 'auth', 'source': 'jarvis-2', 'log': 'Dec  8 16:28:12 jarvis-2 sudo: pam_unix(sudo:session): session opened for user root by pi(uid=0)', 'timestamp': 1607441292}
+{'type': 'auth', 'source': 'jarvis-2', 'log': 'Dec  8 16:28:13 jarvis-2 sudo: pam_unix(sudo:session): session closed for user root', 'timestamp': 1607441293}
+{'type': 'auth', 'source': 'jarvis-2', 'log': 'Dec  8 16:28:24 jarvis-2 sudo:       pi : TTY=pts/0 ; PWD=/home/pi ; USER=root ; COMMAND=/usr/bin/docker logs pihole', 'timestamp': 1607441304}
+{'type': 'auth', 'source': 'jarvis-2', 'log': 'Dec  8 16:28:24 jarvis-2 sudo: pam_unix(sudo:session): session opened for user root by pi(uid=0)', 'timestamp': 1607441304}
+{'type': 'auth', 'source': 'jarvis-2', 'log': 'Dec  8 16:28:24 jarvis-2 sudo: pam_unix(sudo:session): session closed for user root', 'timestamp': 1607441304}
+{'type': 'auth', 'source': 'jarvis-2', 'log': 'Dec  8 16:28:26 jarvis-2 sudo:       pi : TTY=pts/0 ; PWD=/home/pi ; USER=root ; COMMAND=/usr/bin/docker logs pihole', 'timestamp': 1607441306}
+{'type': 'auth', 'source': 'jarvis-2', 'log': 'Dec  8 16:28:26 jarvis-2 sudo: pam_unix(sudo:session): session opened for user root by pi(uid=0)', 'timestamp': 1607441306}
+{'type': 'auth', 'source': 'jarvis-2', 'log': 'Dec  8 16:28:26 jarvis-2 sudo: pam_unix(sudo:session): session closed for user root', 'timestamp': 1607441306}
+{'type': 'auth', 'source': 'jarvis-2', 'timestamp': 1607441384, 'log': 'Dec  8 16:29:44 jarvis-2 sshd[2958]: Received disconnect from 192.168.0.122 port 51981:11: disconnected by user'}
+{'type': 'auth', 'source': 'jarvis-2', 'timestamp': 1607441384, 'log': 'Dec  8 16:29:44 jarvis-2 sshd[2958]: Disconnected from user pi 192.168.0.122 port 51981'}
+{'type': 'auth', 'source': 'jarvis-2', 'timestamp': 1607441384, 'log': 'Dec  8 16:29:44 jarvis-2 sshd[2941]: pam_unix(sshd:session): session closed for user pi'}
+{'type': 'auth', 'source': 'jarvis-2', 'timestamp': 1607441384, 'log': 'Dec  8 16:29:44 jarvis-2 systemd-logind[445]: Session 2831 logged out. Waiting for processes to exit.'}
+{'type': 'auth', 'source': 'jarvis-2', 'timestamp': 1607441384, 'log': 'Dec  8 16:29:44 jarvis-2 systemd-logind[445]: Removed session 2831.'}

@@ -1,0 +1,66 @@
+# - name : input_file
+#   watch_path : "/input/pihole"
+#   path_pattern : "/input/pihole/jarvis*/dnsmasq.*.log"
+#   remove: True
+#   tag : dnsmask
+
+- name : dummy
+  tag : dnsmask
+  data :
+   - {"log" : '2020-12-02T17:50:22+00:00       pihole.dnsmasq  {"timestamp":1606931422,"log":"query[A] sdk.sascdn.com from 192.168.0.100","type":"dnsmasq","logtime":"Dec  2 18:50:22","tag":"pihole.dnsmasq","source":"jarvis-2"}'}
+
+- name : parser_regex
+  key : log
+  regex : ".+?(?P<json>\\{.+\\})"
+  match : dnsmask
+
+- name : parser_json
+  key : json
+  mode : merge
+  match : dnsmask
+
+- name : remove_keys
+  keys : 
+    - tag
+    - logtime
+    - type
+  match : dnsmask
+
+- name : stdout
+  match : dnsmask
+
+# - name : archive
+#   time_key : timestamp
+#   path_template : "/archives/pihole/{source}/dnsmasq-%Y%m%d.json"
+#   buffer_size : 1000
+#   match : dnsmask
+
+# - name : rethinkdb
+#   time_key : timestamp
+#   table_template : "jarvis-dnsmasq-%Y%m%d"
+#   buffer_size : 1000
+#   database : test
+#   ip : rethink
+#   port : 28015
+#   match : dnsmask
+
+- name : parser_regex
+  key: log
+  regex : "(?P<action>.+) (?P<domain>.+?) (is|to|from) (?P<result>.+)"
+  match : dnsmask
+
+- name : retag
+  match : dnsmask
+  value : dnsmask.parsed
+
+- name : stdout
+  match : dnsmask.parsed
+
+# - name : rethinkdb
+#   time_key : timestamp
+#   table_template : "jarvis-dnsmasq-parsed-%Y%m%d"
+#   buffer_size : 1000
+#   database : test
+#   ip : rethink
+#   port : 28015
+#   match : dnsmask.parsed

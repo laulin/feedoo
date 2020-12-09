@@ -1,0 +1,5 @@
+FROM feed
+
+COPY tests/conf /root/tests/conf
+COPY tests/conf2 /root/tests/conf2
+COPY unittest.sh /root/unittest.sh

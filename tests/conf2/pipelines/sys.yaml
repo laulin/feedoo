@@ -1,0 +1,52 @@
+- name : input_file
+  watch_path : "{SOURCE_PATH}"
+  path_pattern : "{SOURCE_PATH}/jarvis*/sys.*.log"
+  remove: False
+  tag : sys
+
+- name : parser_regex
+  key : log
+  regex : ".+?sys\\.(?P<type>\\w+).+?(?P<json>\\{.+\\})"
+  match : sys
+
+- name : retag
+  match : sys
+  value : sys
+  key : type
+
+- name : parser_json
+  key : json
+  mode : merge
+  match : "*"
+
+- name : remove_keys
+  keys : 
+    - tag
+    - retag
+  match : "*"
+
+- name : remove_keys
+  keys : 
+    - name
+    - type
+  match : temperature
+
+- name : stdout
+  match : "*"
+
+- name : archive
+  time_key : timestamp
+  path_template : "{ARCHIVE_PATH}/{source}/sys.{type}.%Y%m%d.json"
+  buffer_size : 1000
+  match : "*"
+
+# - name : rethinkdb
+#   time_key : timestamp
+#   table_template : "jarvis-{type}-%Y%m%d"
+#   buffer_size : 1000
+#   database : test
+#   ip : rethink
+#   port : 28015
+#   match : "*"
+
+

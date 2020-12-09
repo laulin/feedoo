@@ -1,0 +1,1 @@
+{'type': 'netif', 'eth0.rx.bytes': 39406, 'eth0.rx.packets': 159, 'eth0.rx.errors': 0, 'eth0.tx.bytes': 111926, 'eth0.tx.packets': 207, 'eth0.tx.errors': 0, 'source': 'jarvis-2', 'timestamp': 1606987805}

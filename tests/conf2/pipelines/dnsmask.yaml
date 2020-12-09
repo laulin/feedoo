@@ -1,0 +1,67 @@
+- name : input_file
+  watch_path : "{SOURCE_PATH}"
+  path_pattern : "{SOURCE_PATH}/jarvis*/dnsmasq.*.log"
+  remove: False
+  tag : dnsmask
+
+- name : parser_regex
+  key : log
+  regex : ".+?(?P<json>\\{.+\\})"
+  match : dnsmask
+
+- name : parser_json
+  key : json
+  mode : merge
+  match : dnsmask
+
+- name : remove_keys
+  keys : 
+    - tag
+    - logtime
+    - type
+  match : dnsmask
+
+- name : stdout
+  match : dnsmask
+
+- name : archive
+  time_key : timestamp
+  path_template : "{ARCHIVE_PATH}/{source}/dnsmasq-%Y%m%d.json"
+  buffer_size : 1000
+  match : dnsmask
+
+# - name : rethinkdb
+#   time_key : timestamp
+#   table_template : "jarvis-dnsmasq-%Y%m%d"
+#   buffer_size : 1000
+#   database : test
+#   ip : rethink
+#   port : 28015
+#   match : dnsmask
+
+- name : parser_regex
+  key: log
+  regex : "(?P<action>.+) (?P<domain>.+?) (is|to|from) (?P<result>.+)"
+  match : dnsmask
+
+- name : retag
+  match : dnsmask
+  value : dnsmask.parsed
+
+- name : stdout
+  match : dnsmask.parsed
+
+- name : archive
+  time_key : timestamp
+  path_template : "{ARCHIVE_PATH}/{source}/dnsmasq-parsed-%Y%m%d.json"
+  buffer_size : 1000
+  match : dnsmask
+
+# - name : rethinkdb
+#   time_key : timestamp
+#   table_template : "jarvis-dnsmasq-parsed-%Y%m%d"
+#   buffer_size : 1000
+#   database : test
+#   ip : rethink
+#   port : 28015
+#   match : dnsmask.parsed
