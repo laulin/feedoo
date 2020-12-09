@@ -7,7 +7,6 @@ from .event import Event
 import unittest
 import logging
 from .hash_storage import HashStorage
-from time import time
 
 # push document to db
 
@@ -26,8 +25,8 @@ class ActionRethinkdb(AbstractAction):
 
     def do(self, event):
         record = event.record
-        time = Chronyk(record[self._time_key])
-        tablename = time.timestring(self._table_template)
+        timestamp = Chronyk(record[self._time_key])
+        tablename = timestamp.timestring(self._table_template)
         tablename = tablename.format(**record)
         if tablename not in self._buffer:
             self._buffer[tablename] = list()
@@ -82,50 +81,7 @@ class ActionRethinkdb(AbstractAction):
 
         del self._buffer[tablename]
 
-    def update(self, _time=time):
+    def update(self, _time=time.time):
         for tablename in tuple(self._buffer.get_timeout(_time)):
             self._log.info("Flush (timeout) {}".format(tablename))
             self.flush_one(tablename)
-
-
-# # Enable those tests only if a rethinkDB is up
-# IP = "172.17.0.1"
-# class TestActionRethinkdb(unittest.TestCase):
-#     def test_1(self):
-#         action = ActionRethinkdb("*", "timestamp", "sys-%Y%m%d", ip=IP)
-#         event = Event("mytag", 123456789, {"timestamp":1603373121, "data":"aaaaaa"})
-#         action.do(event)
-#         action.finish()
-
-#     def test_2(self):
-#         action = ActionRethinkdb("*", "timestamp", "sys-%Y%m%d", ip=IP)
-#         event_1 = Event("mytag", 1603373122, {"timestamp":1603373122, "data":"BBBB"})
-#         action.do(event_1)
-#         event_2 = Event("mytag", 1603373123,{"timestamp":1603373123, "data":"ccccc"})
-#         action.do(event_2)
-#         action.finish()
-
-#     def test_force_flush(self):
-#         action = ActionRethinkdb("*", "timestamp", "sys-%Y%m%d", buffer_size=1, ip=IP)
-#         event_1 = Event("mytag", 1603373122, {"timestamp":1603373122, "data":"BBBB"})
-#         action.do(event_1)
-#         event_2 = Event("mytag", 1603373123,{"timestamp":1603373123, "data":"ccccc"})
-#         action.do(event_2)
-
-#     def test_timeout_update(self):
-#         action = ActionRethinkdb("*", "timestamp", "sys-%Y%m%d", buffer_size=100, ip=IP)
-#         event_1 = Event("mytag", 1603373122, {"timestamp":1603373122, "data":"BBBB"})
-#         action.do(event_1)
-#         event_2 = Event("mytag", 1603373123,{"timestamp":1603373123, "data":"ccccc"})
-#         action.do(event_2)
-#         def my_time():
-#             return time() + 3600
-#         action.update(my_time)
-
-
-
-
-
-
-
-
