@@ -1,6 +1,7 @@
 from .abstract_action import AbstractAction
 import time
 from .hash_storage import HashStorage
+from .event import Event
 
 # This action will monitor a certain field and match if that field changes. The field must change with respect to the last event with the same query_key.
 
