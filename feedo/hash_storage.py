@@ -1,6 +1,5 @@
 from collections.abc import MutableMapping
 import json
-import unittest
 from time import time
 
 
@@ -67,20 +66,3 @@ class HashStorage(MutableMapping):
     
     def __len__(self):
         return len(self._store)
-
-class TestHashStorage(unittest.TestCase):
-    def test_no_timeout(self):
-        storage = HashStorage()
-        storage["key"] = "x"
-        result = list(storage.get_timeout())
-
-        self.assertEqual(len(result), 0)
-
-    def test_timeout(self):
-        storage = HashStorage()
-        storage["key"] = "x"
-        def mytime():
-            return time() + 3600
-        result = list(storage.get_timeout(mytime))
-
-        self.assertEqual(result, ["key"])
