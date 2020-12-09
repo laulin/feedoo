@@ -1,0 +1,3 @@
+dist/**
+build/**
+feedo.egg-info/**
