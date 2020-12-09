@@ -1,4 +1,0 @@
-variables:
-  DB_IP: 127.0.0.1
-  DB_PORT: 28015
-include: /root/tests/conf/pipelines/*.yaml
