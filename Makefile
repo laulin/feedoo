@@ -17,3 +17,10 @@ rethinkdb:
 
 clear:
 	docker images -a | grep none | grep -E -o "[0-9a-f]{12,12}" | xargs docker rmi -f
+
+build_pip:
+	python3 setup.py sdist
+	python3 setup.py bdist_wheel
+
+clean_pip:
+	rm -rf dist/ build/ *.egg-info/
