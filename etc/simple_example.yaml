@@ -1,0 +1,8 @@
+pipelines:
+  "pipeline#1":
+    - name : input_dummy
+      tag : "my_pypeline"
+      data : {"log":"my log"}
+
+    - name : output_stdout
+      match : "*"
