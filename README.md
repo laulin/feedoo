@@ -1,6 +1,6 @@
 ![](images/logo_small.png?raw=true) Feedo 
 
-![](images/sponsor.png?raw=true) Sponsored by [Spartan conseil](https://www.spartan-conseil.com)
+![](images/sponsor.png?raw=true) Sponsored by [Spartan conseil](https://www.spartan-conseil.fr/)
 
 
 # What is Feedo ? 
