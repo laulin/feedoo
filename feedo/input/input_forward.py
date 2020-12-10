@@ -11,10 +11,6 @@ from socketserver import ThreadingMixIn
 import threading
 import queue
 
-authentication_factory = partial(FluentbitAuthentication, shared_key="my_shared_key", server_hostname="server.com")
-transport_factory = partial(FluentbitTransport, callback=print)
-ssl = FluentbitSSL(key_file="etc/toto.com.key", crt_file="etc/toto.com.cert")
-
 class ThreadingFluentbitServer(ThreadingMixIn, FluentbitServer):
     allow_reuse_address = True
 
