@@ -2,6 +2,9 @@ import pkgutil
 import logging
 
 import feedo.input
+import feedo.output
+import feedo.filter
+import feedo.parser
 
 
 class Plugins:
@@ -32,7 +35,10 @@ class Plugins:
     def load_vanilla(self):
         # load all packages related to feedo processing
         packages = {
-            feedo.input : "input_"
+            feedo.input : "input_",
+            feedo.output : "output_",
+            feedo.parser : "parser_",
+            feedo.filter : "filter_"
         }
         output = {}
         for package, prefix in packages.items():
@@ -41,4 +47,4 @@ class Plugins:
             self._log.info("Loaded : {}".format(tmp))
             output.update(tmp)
 
-        return tmp
+        return output

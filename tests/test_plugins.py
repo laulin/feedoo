@@ -2,6 +2,7 @@ from feedo.plugins import Plugins
 import feedo.input
 
 import unittest
+from pprint import pprint
 import logging
 
 
@@ -20,11 +21,11 @@ class TestPlugins(unittest.TestCase):
         p = Plugins()
         result = p.load_from_package(feedo.input, "input_")
 
-        self.assertEqual(len(result), 2)
+        self.assertNotEqual(len(result), 0)
 
     def test_load_vanilla(self):
         p = Plugins()
         result = p.load_vanilla()
-
+        pprint(result)
 
     
