@@ -1,15 +1,15 @@
 import shutil
 import unittest
-from feedo.action_archive import ActionArchive
+from feedo.output.output_archive import OutputArchive
 from feedo.event import Event
 from time import time
 
-class TestActionArchive(unittest.TestCase):
+class TestOutputArchive(unittest.TestCase):
     def tearDown(self):
         shutil.rmtree("/tmp/archive/")
 
     def test_1(self):
-        action = ActionArchive("*", "timestamp", "/tmp/archive/{source}/sys-%Y%m%d")
+        action = OutputArchive("*", "timestamp", "/tmp/archive/{source}/sys-%Y%m%d")
         event_1 = Event("my_tag", 1603373121, {"timestamp":1603373121, "data":"aaaaaa", "source":"j2"})
         action.do(event_1)
         action.finish()
@@ -18,7 +18,7 @@ class TestActionArchive(unittest.TestCase):
         
 
     def test_2(self):
-        action = ActionArchive("*", "timestamp", "/tmp/archive/{source}/sys-%Y%m%d")
+        action = OutputArchive("*", "timestamp", "/tmp/archive/{source}/sys-%Y%m%d")
         event_1 = Event("my_tag", 1603373122, {"timestamp":1603373122, "data":"BBBB", "source":"j2"})
         event_2 = Event("my_tag", 1603373123, {"timestamp":1603373123, "data":"ccccc", "source":"j2"})
         action.do(event_1)
@@ -28,7 +28,7 @@ class TestActionArchive(unittest.TestCase):
             data = f.read()
 
     def test_force_flush(self):
-        action = ActionArchive("*", "timestamp", "/tmp/archive/{source}/sys-%Y%m%d", buffer_size=1)
+        action = OutputArchive("*", "timestamp", "/tmp/archive/{source}/sys-%Y%m%d", buffer_size=1)
         event_1 = Event("my_tag", 1603373122, {"timestamp":1603373122, "data":"ddd", "source":"j2"})
         event_2 = Event("my_tag", 1603373123, {"timestamp":1603373123, "data":"eee", "source":"j2"})
         action.do(event_1)
@@ -37,7 +37,7 @@ class TestActionArchive(unittest.TestCase):
             data = f.read()
 
     def test_existing_dir(self):
-        action = ActionArchive("*", "timestamp", "/tmp/archive/{source}/sys-%Y%m%d", buffer_size=1)
+        action = OutputArchive("*", "timestamp", "/tmp/archive/{source}/sys-%Y%m%d", buffer_size=1)
         event_1 = Event("my_tag", 1603373122, {"timestamp":1603373122, "data":"ddd", "source":"j2"})
         event_2 = Event("my_tag", 1603373123, {"timestamp":1603373123, "data":"eee", "source":"j2"})
         event_3 = Event("my_tag", 1603373122, {"timestamp":1603373124, "data":"ff", "source":"j2"})
@@ -48,7 +48,7 @@ class TestActionArchive(unittest.TestCase):
         action.do(event_4) 
 
     def test_timeout(self):
-        action = ActionArchive("*", "timestamp", "/tmp/archive/{source}/sys-%Y%m%d", buffer_size=1)
+        action = OutputArchive("*", "timestamp", "/tmp/archive/{source}/sys-%Y%m%d", buffer_size=1)
         event_1 = Event("my_tag", 1603373122, {"timestamp":1603373122, "data":"ddd", "source":"j2"})
         action.do(event_1)
         def my_time():
