@@ -1,4 +1,4 @@
-Feedo ![](images/logo.png?raw=true)
+Feedo ![](images/logo_small.png?raw=true)
 
 
 # What is Feedo ? 
