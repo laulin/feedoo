@@ -1,10 +1,10 @@
 import unittest
-from feedo.action_parser_json import ActionParserJson
+from feedo.parser.parser_json import ParserJson
 from feedo.event import Event
 
-class TestActionParserJson(unittest.TestCase):
+class TestParserJson(unittest.TestCase):
     def test_dict_tree(self):
-        action = ActionParserJson("*", "value", "tree")
+        action = ParserJson("*", "value", "tree")
         event = Event("tag", 123456789, {"key":"Z", "value":'{"aaa": "bb"}'})
         result = action.do(event)
         expected = {"key":"Z", "value":{"aaa":"bb"}}
@@ -12,7 +12,7 @@ class TestActionParserJson(unittest.TestCase):
         self.assertEqual(result.record, expected)
 
     def test_dict_add(self):
-        action = ActionParserJson("*", "value", "add")
+        action = ParserJson("*", "value", "add")
         event = Event("tag", 123456789, {"key":"Z", "value":'{"aaa": "bb"}'})
         result = action.do(event)
         expected = {"key":"Z", "value":'{"aaa": "bb"}', "aaa":"bb"}
@@ -20,7 +20,7 @@ class TestActionParserJson(unittest.TestCase):
         self.assertEqual(result.record, expected)
 
     def test_dict_merge(self):
-        action = ActionParserJson("*", "value", "merge")
+        action = ParserJson("*", "value", "merge")
         event = Event("tag", 123456789, {"key":"Z", "value":'{"aaa": "bb"}'})
         result = action.do(event)
         expected = {"key":"Z", "aaa":"bb"}
@@ -29,7 +29,7 @@ class TestActionParserJson(unittest.TestCase):
 
     def test_dict_merge_2(self):
         parameters = {"key":"value", "mode":"merge"}
-        action = ActionParserJson("*", **parameters)
+        action = ParserJson("*", **parameters)
         event = Event("tag", 123456789, {"key":"Z", "value":'{"aaa": "bb"}'})
         result = action.do(event)
         expected = {"key":"Z", "aaa":"bb"}
