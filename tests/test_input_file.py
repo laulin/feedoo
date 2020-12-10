@@ -1,6 +1,6 @@
 import logging
 import unittest
-from feedo.input_file import InputFile
+from feedo.input.input_file import InputFile
 from unittest.mock import Mock
 
 class TestInputFile(unittest.TestCase):
