@@ -85,6 +85,8 @@ Input produces events in the pipeline, including tag.
 
 It is useful for testing purpose and forward events base on dicts. 
 
+parameters : 
+
 * tag : events' tag
 * data : a dict or a list of dict with fact
 
@@ -103,6 +105,8 @@ It watch a path and load file if :
 * The file exists on the startup
 * The file was create (written and closed)
 
+parameters :
+
 * tag : events' tag
 * watch_path : the path watched, typically a directory
 * path_pattern : provide a pattern which must match when a file is found with watch_path
@@ -115,6 +119,36 @@ example:
   tag : "logs"
   watch_path : /var/log
   path_pattern : /var/log/stuff.*.log
+```
+
+### input_forward
+
+Based on [Fluentbit-server-py](https://github.com/laulin/fluentbit-server-py), it allow to received event from Fluentbit agent using the forward protocol.
+It support authentication using shared key and TLS. No tag parameter is available since it is provided by the agent.
+
+parameters :
+
+* host="localhost" : Used to bind socket server
+* port=24224 : Port used to bind the server
+* tls_enable=False : Used to enable TLS support
+* key_file=None : if TLS enabled, path to the key file
+* crt_file=None : if TLS enabled, path to the certificate file
+* shared_key=None : defined a shared key between servers an nodes. If set, enable authentication
+* server_hostname="" : define the hostname, useful for shared_key authentication
+
+**Warning** : if you exposed the port to internet, use authentication and TLS. If you can, add firewall rule to decrease surface attack. BE CAREFUL !
+
+example:
+
+```yaml
+- name : input_forward
+  port: 24224
+  host : 0.0.0.0
+  tls_enable : true
+  key_file : /etc/tls/foo.key
+  crt_file : /etc/tls/foo.crt
+  shared_key : my_pr1vate_sh4red_K3y
+  server_hostname : foo.com
 ```
 
 # icons
