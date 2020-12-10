@@ -225,6 +225,63 @@ Example:
   match : my_log
 ```
 
+
+## Parser
+
+A parser take an event et parse one field with a specific format : regex, json, etc.
+
+### parser_json
+
+Read a field and add new fields to existing event.
+
+Parameters :
+
+* match : pattern to match tag
+* key : Key to be parsed
+* mode="merge" : A string that can be "merge", "tree" or "add"
+
+Example of modes :
+
+* merge :  {"key":"Z", "value":'{"aaa": "bb"}'} -> {"key":"Z", "aaa":"bb"}
+* add :  {"key":"Z", "value":'{"aaa": "bb"}'} -> {"key":"Z", "value":'{"aaa": "bb"}', "aaa":"bb"}
+* tree :  {"key":"Z", "value":'{"aaa": "bb"}'} -> {"key":"Z", "value":{"aaa":"bb"}}
+
+Example :
+
+```yaml
+- name : parser_json
+  match : my_log
+  key : json_log
+  mode : add
+```
+
+### parser_regex
+
+Read a field and add new fields to existing event.
+
+Parameters :
+
+* match : pattern to match tag
+* key : Key to be parsed
+* regex : define the behaviour. Use name group to create field
+* mode="merge" : A string that can be "merge", "tree" or "add"
+
+Example of modes :
+
+* merge :  {"key":"Z", "value":'{"aaa": "bb"}'} -> {"key":"Z", "aaa":"bb"}
+* add :  {"key":"Z", "value":'{"aaa": "bb"}'} -> {"key":"Z", "value":'{"aaa": "bb"}', "aaa":"bb"}
+* tree :  {"key":"Z", "value":'{"aaa": "bb"}'} -> {"key":"Z", "value":{"aaa":"bb"}}
+
+Example :
+
+```yaml
+- name : parser_regex
+  match : my_log
+  key : line
+  mode : merge
+  regex : ".+?(?P<name>\\{.+\\})"
+```
+
 # icons
 
 Thanks to flaticon.com !
