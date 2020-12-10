@@ -16,9 +16,15 @@ class TestPlugins(unittest.TestCase):
 
         self.assertEqual(result, expected)
 
-    def test_test(self):
+    def test_load_from_package(self):
         p = Plugins()
-        modules = p.load_from_package(feedo.input)
+        result = p.load_from_package(feedo.input, "input_")
 
-        for basename, func in modules.items():
-            print("{} : {} -> {}".format(basename, func, func()))
+        self.assertEqual(len(result), 2)
+
+    def test_load_vanilla(self):
+        p = Plugins()
+        result = p.load_vanilla()
+
+
+    

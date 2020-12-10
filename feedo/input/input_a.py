@@ -1,2 +1,2 @@
-def A():
+def InputA():
     return "aaaa"

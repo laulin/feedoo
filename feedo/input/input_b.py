@@ -1,2 +1,2 @@
-def B():
+def InputB():
     return "bbbb"
