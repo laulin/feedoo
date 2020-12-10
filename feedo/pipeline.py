@@ -1,39 +1,10 @@
 import logging
 
-from .event import Event
-
-from .action_date import ActionDate
-from .action_parser_json import ActionParserJson
-from .action_parser_regex import ActionParserRegex
-from .action_remove_keys import ActionRemoveKeys
-from .action_rethinkdb import ActionRethinkdb
-from .action_archive import ActionArchive
-from .action_stdout import ActionStdout
-from .action_dummy import ActionDummy
-from .action_tee import ActionTee
-from .action_retag import ActionRetag
-from .action_change import ActionChange
-from .input_file import InputFile
-
-CLASS_TABLE = {
-    "date": ActionDate,
-    "parser_json": ActionParserJson,
-    "parser_regex": ActionParserRegex,
-    "remove_keys": ActionRemoveKeys,
-    "rethinkdb": ActionRethinkdb,
-    "archive": ActionArchive,
-    "dummy": ActionDummy,
-    "stdout": ActionStdout,
-    "tee": ActionTee,
-    "retag": ActionRetag,
-    "change": ActionChange,
-    "input_file": InputFile
-}
-
 class Pipeline:
-    def __init__(self):
+    def __init__(self, actions):
         self._log = logging.getLogger("Pipeline")
         self._pipeline = []
+        self._actions = actions
 
     def create(self, actions):
         pipeline = list()
@@ -41,10 +12,10 @@ class Pipeline:
         for action in actions:
             name = action["name"]
             del action["name"]
-            if name not in CLASS_TABLE:
+            if name not in self._actions:
                 self._log.error(name + " is not an available action")
                 raise Exception(name + " is not an available action")
-            action_class = CLASS_TABLE[name]
+            action_class = self._actions[name]
 
             try:
                 action = action_class(**action)
