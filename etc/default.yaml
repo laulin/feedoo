@@ -1,0 +1,2 @@
+variables:
+include: /etc/feedo/pipelines/*.yaml

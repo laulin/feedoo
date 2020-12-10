@@ -1,4 +1,5 @@
-from .pipeline import Pipeline
+from feedo.pipeline import Pipeline
+from feedo.plugins import Plugins
 import time
 import sys
 import logging
@@ -10,9 +11,11 @@ class FeedManager:
         self._log = logging.getLogger(str(self.__class__.__name__))
 
     def setup(self):
+        plugins = Plugins()
+        action_modules = plugins.load_vanilla()
         for pipeline_id, pipeline_actions in self._configuration.iterate_pipelines():
             self._log.info("Create pipeline {}".format(pipeline_id))
-            new_pipeline = Pipeline()
+            new_pipeline = Pipeline(action_modules)
             new_pipeline.create(pipeline_actions)
 
             self._pipelines.append(new_pipeline)

@@ -1,0 +1,6 @@
+- name : input_dummy
+  tag : "my_pypeline"
+  data : {"log":"my log"}
+
+- name : output_stdout
+  match : "my_*"

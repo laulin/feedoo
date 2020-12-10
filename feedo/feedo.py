@@ -1,6 +1,6 @@
-from .configuration import Configuration
-from .feed_manager import FeedManager 
-from .cli import get_args
+from feedo.configuration import Configuration
+from feedo.feed_manager import FeedManager 
+from feedo.cli import get_args
 import logging
 import sys
 
