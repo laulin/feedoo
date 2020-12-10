@@ -1,4 +1,5 @@
 from feedo.abstract_action import AbstractAction
+from feedo.event import Event
 
 from fluentbit_server.fluentbit_authentication import FluentbitAuthentication
 from fluentbit_server.fluentbit_transport import FluentbitTransport
@@ -50,7 +51,8 @@ class InputForward(AbstractAction):
         while(1):
             try:
                 event = self._queue.get_nowait()
-                self.call_next(event)
+                new_event = Event(event[0].decode("ascii"), event[1], event[2])
+                self.call_next(new_event)
             except queue.Empty:
                 return
 

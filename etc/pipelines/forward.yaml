@@ -1,0 +1,5 @@
+- name : input_forward
+  port : 24000
+
+- name : output_stdout
+  match : "*"
