@@ -81,18 +81,18 @@ Actions are categorized in four case : input, output, filter and parser.
 
 ## Input
 
-Input produces events in the pipeline, including tag.
+Input produces events in the pipeline, including tag. If an input receives a event it forwards it to next action.
 
 ### input_dummy
 
 It is useful for testing purpose and forward events base on dicts. 
 
-parameters : 
+Parameters : 
 
 * tag : events' tag
 * data : a dict or a list of dict with fact
 
-example:
+Example:
 
 ```yaml
 - name : input_dummy
@@ -107,14 +107,14 @@ It watch a path and load file if :
 * The file exists on the startup
 * The file was create (written and closed)
 
-parameters :
+Parameters :
 
 * tag : events' tag
 * watch_path : the path watched, typically a directory
 * path_pattern : provide a pattern which must match when a file is found with watch_path
 * remove=False : remove the file once read
 
-example:
+Example:
 
 ```yaml
 - name : input_file
@@ -125,10 +125,10 @@ example:
 
 ### input_forward
 
-Based on [Fluentbit-server-py](https://github.com/laulin/fluentbit-server-py), it allow to received event from Fluentbit agent using the forward protocol.
+Based on [Fluentbit-server-py](https://github.com/laulin/fluentbit-server-py), it allows to received event from Fluentbit agent using the forward protocol.
 It support authentication using shared key and TLS. No tag parameter is available since it is provided by the agent.
 
-parameters :
+Parameters :
 
 * host="localhost" : Used to bind socket server
 * port=24224 : Port used to bind the server
@@ -140,7 +140,7 @@ parameters :
 
 **Warning** : if you exposed the port to internet, use authentication and TLS. If you can, add firewall rule to decrease surface attack. BE CAREFUL !
 
-example:
+Example:
 
 ```yaml
 - name : input_forward
@@ -151,6 +151,78 @@ example:
   crt_file : /etc/tls/foo.crt
   shared_key : my_pr1vate_sh4red_K3y
   server_hostname : foo.com
+```
+
+## Output
+
+It exports events out of the pipeline. It can be file, database, etc.
+
+### output_archive
+
+It stores in buffer event and it writes buffer in file. 
+
+Parameters :
+
+* match : pattern to match tag
+* time_key : used to extract time to interpolate path_template
+* path_template : Template of the file path
+* buffer_size=1000 : Number of event stored before flush
+* timeout_flush=60 : Flush buffer after timeout, in second
+
+Example :
+
+```yaml
+- name : output_archive
+  time_key : timestamp
+  path_template : "/archives/{source}/log-%Y%m%d.json"
+  match : mylog
+```
+
+Notes :
+
+* if the example received the event contains record {"timestamp":1607618046, "source":foo, "data":"test"}, the path will be /archives/foo/log-20201210.json
+
+### output_rethinkdb
+
+Store events in RethinkDB as time serie.
+
+Parameters
+
+* match : pattern to match tag
+* time_key : used to extract time to interpolate table_template
+* table_template : Template of the table name
+* buffer_size=1000 : Number of event stored before flush
+* database="test" : database name
+* ip="localhost" : f set, change the database destination ip
+* port=None : if set, change the database destination port
+* wait_connection=30 : used to wait the database warmup
+* timeout_flush=60 : Flush buffer after timeout, in second
+
+Example:
+
+```yaml
+- name : output_rethinkdb
+  time_key : timestamp
+  table_template : "log-%Y%m%d"
+  database : test
+  ip : rethink.com
+  port : 28015
+  match : my_log
+```
+
+### output_stdout
+
+Display event in stdout.
+
+Parameters
+
+* match : pattern to match tag
+
+Example:
+
+```yaml
+- name : output_stdout
+  match : my_log
 ```
 
 # icons
