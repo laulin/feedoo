@@ -1,1 +1,0 @@
-cd /root && python3 -m unittest discover -s feed/ -p "*.py"
