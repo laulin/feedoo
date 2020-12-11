@@ -1,8 +1,14 @@
 build: build_pip
 	sudo docker build -t feedoo .
 
+build_fast:
+	sudo docker build -t feedoofast .
+
 unittest: build
 	sudo docker run -it --rm --net=host --name feedoo feedoo python3 -m unittest discover -s /root/tests -p "test_*.py"
+
+fast_unittest: build_fast
+	sudo docker run -it --rm --net=host -v $(shell pwd)/tests:/root/tests -v $(shell pwd)/feedoo:/usr/local/lib/python3.8/dist-packages/feedoo --name feedoo feedoofast python3 -m unittest discover -s /root/tests -p "test_*.py"
 
 run: build
 	sudo docker run -it --rm --net=host --name feedoo feedoo feedoo
