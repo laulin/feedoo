@@ -67,3 +67,9 @@ class Configuration:
                 self._log.info("Fail to interpolate '{}' ({})".format(input_structure, e))
 
         return input_structure
+
+    def get_privileges(self):
+        if "privileges" in self._structure and "user" in self._structure["privileges"] and "group" in self._structure["privileges"]:
+            return self._structure["privileges"]["user"], self._structure["privileges"]["group"]
+        else:
+            return None, None

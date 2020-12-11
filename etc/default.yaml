@@ -1,2 +1,5 @@
 variables:
+privileges:
+  user: user
+  group: user
 include: /etc/feedoo/pipelines/*.yaml

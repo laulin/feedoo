@@ -21,4 +21,5 @@ def main():
 
     feed_manager = FeedManager(configuration)
     feed_manager.setup()
+    feed_manager.drop_privileges()
     feed_manager.loop()
