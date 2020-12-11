@@ -1,3 +1,4 @@
 dist/**
 build/**
 feedoo.egg-info/**
+**/__pycache__
