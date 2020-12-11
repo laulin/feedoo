@@ -290,13 +290,13 @@ This action will monitor a certain field and match if that field changes. The fi
 
 Parameters :
 
-* match : pattern to match tag
-* tag : tag used to generate new event on change
-* alert : dict used to generate new event on change
-* compare_key : key monitored to find change
-* query_key : key used to group type of event
-* ignore_null=True : ignore if compare_key is missing. If ignore_null if false, missing compare_key is a valid state
-* db_path=None : file path to store internal state. None means only RAM is used.
+* `match` : pattern to match tag
+* `tag` : tag used to generate new event on change
+* `alert` : dict used to generate new event on change
+* `compare_key` : key monitored to find change
+* `query_key` : key used to group type of event
+* `ignore_null=True` : ignore if compare_key is missing. If ignore_null if false, missing compare_key is a valid state
+* `db_path=None` : file path to store internal state. None means only RAM is used.
 
 Example :
 
@@ -313,8 +313,8 @@ Example :
 
 if events are :
 
-* {"hostname":"foo.bar", "status":"on"}
-* {"hostname":"foo.bar", "status":"off"}
+* `{"hostname":"foo.bar", "status":"on"}`
+* `{"hostname":"foo.bar", "status":"off"}`
 
 Then a new event will be created on second event
 
@@ -324,9 +324,9 @@ This action performs a time parsing and allows to change the time format. Under 
 
 Parameters :
 
-* match : pattern to match tag
-* key : define the key to be parsed
-* format=None : define the output format of key's value. None means unix timestamps
+* `match` : pattern to match tag
+* `key` : define the key to be parsed
+* `format=None` : define the output format of key's value. None means unix timestamps
 
 Example :
 
@@ -335,7 +335,7 @@ Example :
   match : date
 ```
 
-Event likes *{"date":"Fri, 11 Dec 2020 08:30:13 +0000"}* become *{"date":1607675413}*
+Event likes `{"date":"Fri, 11 Dec 2020 08:30:13 +0000"}` become `{"date":1607675413}`
 
 It takes a date and convert it to timestamp
 
@@ -345,8 +345,8 @@ This action remove one or more key in event.
 
 Parameters :
 
-* match : pattern to match tag
-* keys : on string or a list of string to describe keys to be removed.
+* `match` : pattern to match tag
+* `keys` : on string or a list of string to describe keys to be removed.
 
 Example :
 
@@ -358,7 +358,7 @@ Example :
     - B
 ```
 
-Event likes *{"A":1, "B":2, "C":3}* become *{"C":3}*
+Event likes `{"A":1, "B":2, "C":3}` become `{"C":3}`
 
 ### filter_retag
 
@@ -366,9 +366,9 @@ This action change the event's tag with a value in event or with a constant valu
 
 Parameters :
 
-* match : pattern to match tag
-* value : New tag if key doesn't exist or if key=None
-* key=None: event value used to retag event. Use value parameter if missing
+* `match` : pattern to match tag
+* `value` : New tag if key doesn't exist or if key=None
+* `key=None`: event value used to retag event. Use value parameter if missing
 
 Example :
 
@@ -379,8 +379,8 @@ Example :
   key : source
 ```
 
-If event looks like *{"source":"auth", "data":"xxx"}*, the new tag will be "auth".
-If event looks like *{"data":"xxx"}*, the new tag will be "generic_log".
+If event looks like `{"source":"auth", "data":"xxx"}`, the new tag will be "auth".
+If event looks like `{"data":"xxx"}`, the new tag will be "generic_log".
 
 # icons
 
