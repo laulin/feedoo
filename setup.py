@@ -14,8 +14,11 @@ setup(name='feedoo',
     zip_safe=False,
     classifiers=[
       "Programming Language :: Python :: 3",
-      "License :: OSI Approved :: GNU GPL V3 License",
-       "Operating System :: OS Independent",
+      "License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)",
+      "Operating System :: OS Independent",
+      "Development Status :: 4 - Beta",
+      "Intended Audience :: Information Technology",
+      "Topic :: Internet :: Log Analysis"
     ],
     python_requires='>=3',
       entry_points={
