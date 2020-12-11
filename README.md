@@ -391,9 +391,9 @@ Parameters :
 * `match` : pattern to match tag
 * `tag` : tag used to generate new event on change
 * `alert` : dict used to generate new event on change
-* `query_key` : key used to group type of event
 * `num_events` : match if number of event during the time frame if higher or equal to this value
 * `timeframe` : duration of the time windows in seconds
+* `query_key=None` : key used to group type of event
 
 Example :
 
