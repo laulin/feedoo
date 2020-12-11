@@ -6,9 +6,9 @@ import logging
 from rethinkdb import r as Rethinkdb
 from chronyk import Chronyk
 
-from feedo.abstract_action import AbstractAction
-from feedo.event import Event
-from feedo.hash_storage import HashStorage
+from feedoo.abstract_action import AbstractAction
+from feedoo.event import Event
+from feedoo.hash_storage import HashStorage
 
 # push document to db
 

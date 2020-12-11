@@ -1,5 +1,5 @@
-from feedo.plugins import Plugins
-import feedo.input
+from feedoo.plugins import Plugins
+import feedoo.input
 
 import unittest
 from pprint import pprint
@@ -19,7 +19,7 @@ class TestPlugins(unittest.TestCase):
 
     def test_load_from_package(self):
         p = Plugins()
-        result = p.load_from_package(feedo.input, "input_")
+        result = p.load_from_package(feedoo.input, "input_")
 
         self.assertNotEqual(len(result), 0)
 

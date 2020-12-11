@@ -1,5 +1,5 @@
-from feedo.filter.filter_change import FilterChange
-from feedo.event import Event
+from feedoo.filter.filter_change import FilterChange
+from feedoo.event import Event
 import time
 import unittest
 import os

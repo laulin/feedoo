@@ -1,13 +1,13 @@
-![](images/logo_small.png?raw=true) Feedo 
+![](images/logo_small.png?raw=true) feedoo 
 
 ![](images/sponsor.png?raw=true) Sponsored by [Spartan conseil](https://www.spartan-conseil.fr/)
 
 
-# What is Feedo ? 
+# What is feedoo ? 
 
-Feedo is an ETL, for Extract, Transform and Load. Basically, it gets data from files or database, process it thanks to pipelines and store data to a file or a database. It is very versatile and processing brick can be added without pain.
+feedoo is an ETL, for Extract, Transform and Load. Basically, it gets data from files or database, process it thanks to pipelines and store data to a file or a database. It is very versatile and processing brick can be added without pain.
 
-The purpose of Feedo is generic :
+The purpose of feedoo is generic :
 
 * ETL to convert database to another one
 * Alerting like elastalert
@@ -16,11 +16,11 @@ The purpose of Feedo is generic :
 * Intrusion detection thanks AI
 * ...
 
-The Feedo's design is for **S**ecurity **O**perational **C**enter (**SOC**). But if you need to play with data, you need Feedo as friend :)
+The feedoo's design is for **S**ecurity **O**perational **C**enter (**SOC**). But if you need to play with data, you need feedoo as friend :)
 
 # Why ?
 
-They are many reasons why I decided to build Feedo.
+They are many reasons why I decided to build feedoo.
 
 Firstly, I work with [RethinkDB](https://rethinkdb.com/) as main database. It is amazingly easy to use, with enough performance for my needs. But the main drawback is about community tools. Briefly, they are no connector to work with, especially with Fluentd, Fluentbit or a clone of Elastalert. 
 
@@ -33,14 +33,14 @@ So a *sort* of **Python** version a Fluent with rules and easy extension seems t
 The installation is very easy :
 
 ```bash
-pip3 install feedo
+pip3 install feedoo
 ```
 
 # First run
 
-You just install Feedo and you want to test ? Let's do a basic example !
+You just install feedoo and you want to test ? Let's do a basic example !
 
-Create a file at `/etc/feedo/default.yaml` and copy-paste that :
+Create a file at `/etc/feedoo/default.yaml` and copy-paste that :
 
 ```yaml
 pipelines:
@@ -52,10 +52,10 @@ pipelines:
     - name : output_stdout
       match : "*"
 ```
-Now execute feedo :
+Now execute feedoo :
 
 ```bash
-you@computer:>feedo
+you@computer:>feedoo
 my_pypeline[1607608082]: {'log': 'my log'}
 ```
 It works ! :tada: You ran your first _**pipeline**_.
@@ -71,7 +71,7 @@ The heart of the processing is based on _**pipeline**_. It is similar to _**pipe
 you@computer:>cat /var/log/auth.log | head | grep "sudo"
 ```
 
-Feedo do processing like this but add a _tag_ to data. This way following action can decide to process the data (if it _match_) or just forward it to the next action. Tag is added by the data producer ("my_pipeline" in input_dummy) and other action will try to match (" * " in output_stdout). In the Feedo context, we call data *Event*. Indeed diffent : Event contains data, called record (dict), an unix timestamp and the tag.
+feedoo do processing like this but add a _tag_ to data. This way following action can decide to process the data (if it _match_) or just forward it to the next action. Tag is added by the data producer ("my_pipeline" in input_dummy) and other action will try to match (" * " in output_stdout). In the feedoo context, we call data *Event*. Indeed diffent : Event contains data, called record (dict), an unix timestamp and the tag.
 
 Actions are categorized in four cases : 
 1. input

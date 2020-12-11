@@ -1,6 +1,6 @@
 import unittest
-from feedo.parser.parser_json import ParserJson
-from feedo.event import Event
+from feedoo.parser.parser_json import ParserJson
+from feedoo.event import Event
 
 class TestParserJson(unittest.TestCase):
     def test_dict_tree(self):

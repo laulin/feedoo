@@ -5,9 +5,9 @@ import os.path
 import shutil
 import logging
 from contextlib import suppress
-from feedo.abstract_action import AbstractAction
-from feedo.event import Event
-from feedo.hash_storage import HashStorage
+from feedoo.abstract_action import AbstractAction
+from feedoo.event import Event
+from feedoo.hash_storage import HashStorage
 from time import time
 
 # push document to archive files

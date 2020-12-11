@@ -1,5 +1,5 @@
-from feedo.abstract_action import AbstractAction
-from feedo.event import Event
+from feedoo.abstract_action import AbstractAction
+from feedoo.event import Event
 
 # remove one or more keys of the document
 

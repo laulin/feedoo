@@ -1,6 +1,6 @@
 import unittest
-from feedo.parser.parser_regex import ParserRegex
-from feedo.event import Event
+from feedoo.parser.parser_regex import ParserRegex
+from feedoo.event import Event
 
 
 class TestParserRegex(unittest.TestCase):

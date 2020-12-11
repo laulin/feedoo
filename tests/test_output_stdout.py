@@ -1,5 +1,5 @@
-from feedo.output.output_stdout import OutputStdout
-from feedo.event import Event
+from feedoo.output.output_stdout import OutputStdout
+from feedoo.event import Event
 import unittest
 
 

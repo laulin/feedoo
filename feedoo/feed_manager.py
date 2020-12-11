@@ -1,5 +1,5 @@
-from feedo.pipeline import Pipeline
-from feedo.plugins import Plugins
+from feedoo.pipeline import Pipeline
+from feedoo.plugins import Plugins
 import time
 import sys
 import logging

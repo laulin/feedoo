@@ -1,6 +1,6 @@
 from chronyk import Chronyk
-from feedo.abstract_action import AbstractAction
-from feedo.event import Event
+from feedoo.abstract_action import AbstractAction
+from feedoo.event import Event
 
 # parse a date field and transform it
 

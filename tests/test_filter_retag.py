@@ -1,5 +1,5 @@
-from feedo.filter.filter_retag import FilterRetag
-from feedo.event import Event
+from feedoo.filter.filter_retag import FilterRetag
+from feedoo.event import Event
 import unittest
 
 class TestFilterRetag(unittest.TestCase):

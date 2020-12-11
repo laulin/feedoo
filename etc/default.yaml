@@ -1,2 +1,2 @@
 variables:
-include: /etc/feedo/pipelines/*.yaml
+include: /etc/feedoo/pipelines/*.yaml

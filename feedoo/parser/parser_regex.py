@@ -1,7 +1,7 @@
 import re
 import logging
-from feedo.abstract_action import AbstractAction
-from feedo.event import Event
+from feedoo.abstract_action import AbstractAction
+from feedoo.event import Event
 
 # parse a string and return a dict
 # dict' keys is defines by tag (?P<name>)

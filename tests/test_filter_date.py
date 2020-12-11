@@ -1,5 +1,5 @@
-from feedo.filter.filter_date import FilterDate
-from feedo.event import Event
+from feedoo.filter.filter_date import FilterDate
+from feedoo.event import Event
 import unittest
 
 # parse a date field and transform it

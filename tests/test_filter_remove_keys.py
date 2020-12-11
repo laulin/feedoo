@@ -1,5 +1,5 @@
-from feedo.filter.filter_remove_keys import FilterRemoveKeys
-from feedo.event import Event
+from feedoo.filter.filter_remove_keys import FilterRemoveKeys
+from feedoo.event import Event
 import unittest
 
 class TestFilterRemoveKeys(unittest.TestCase):

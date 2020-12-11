@@ -1,7 +1,7 @@
 import shutil
 import unittest
-from feedo.output.output_archive import OutputArchive
-from feedo.event import Event
+from feedoo.output.output_archive import OutputArchive
+from feedoo.event import Event
 from time import time
 
 class TestOutputArchive(unittest.TestCase):

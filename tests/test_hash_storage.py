@@ -1,6 +1,6 @@
 import unittest
 from time import time
-from feedo.hash_storage import HashStorage
+from feedoo.hash_storage import HashStorage
 
 class TestHashStorage(unittest.TestCase):
     def test_no_timeout(self):

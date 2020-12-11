@@ -1,13 +1,13 @@
 from setuptools import setup, find_packages
  
-setup(name='feedo',
+setup(name='feedoo',
     version='0.1.0',
-    url='https://github.com/laulin/feedo',
+    url='https://github.com/laulin/feedoo',
     license='GPLV3',
     author='Laurent MOULIN',
     author_email='gignops@gmail.com',
     description='General purpose data processor',
-    packages=find_packages(exclude=['tests', "etc", "build", "dist", "feedo.egg-info"]),
+    packages=find_packages(exclude=['tests', "etc", "build", "dist", "feedoo.egg-info"]),
     install_requires=["rethinkdb", "chronyk", "inotify", "pyyaml", "fluentbit-server-py>=1.0.2"],
     long_description=open('README.md').read(),
     long_description_content_type="text/markdown",
@@ -20,7 +20,7 @@ setup(name='feedo',
     python_requires='>=3',
       entry_points={
             'console_scripts': [ 
-            'feedo = feedo.feedo:main' 
+            'feedoo = feedoo.feedoo:main' 
             ] 
       }
 )

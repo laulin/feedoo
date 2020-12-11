@@ -1,7 +1,7 @@
-from feedo.abstract_action import AbstractAction
+from feedoo.abstract_action import AbstractAction
 import time
-from feedo.hash_storage import HashStorage
-from feedo.event import Event
+from feedoo.hash_storage import HashStorage
+from feedoo.event import Event
 
 # This action will monitor a certain field and match if that field changes. The field must change with respect to the last event with the same query_key.
 

@@ -3,8 +3,8 @@ import os.path
 import os
 import fnmatch
 from glob import glob
-from feedo.abstract_action import AbstractAction
-from feedo.event import Event
+from feedoo.abstract_action import AbstractAction
+from feedoo.event import Event
 from time import time
 
 

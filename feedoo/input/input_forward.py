@@ -1,5 +1,5 @@
-from feedo.abstract_action import AbstractAction
-from feedo.event import Event
+from feedoo.abstract_action import AbstractAction
+from feedoo.event import Event
 
 from fluentbit_server.fluentbit_authentication import FluentbitAuthentication
 from fluentbit_server.fluentbit_transport import FluentbitTransport

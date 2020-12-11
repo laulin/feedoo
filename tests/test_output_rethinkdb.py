@@ -1,5 +1,5 @@
-from feedo.output.output_rethinkdb import OutputRethinkdb
-from feedo.event import Event
+from feedoo.output.output_rethinkdb import OutputRethinkdb
+from feedoo.event import Event
 import unittest
 from time import time
 

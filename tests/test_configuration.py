@@ -1,8 +1,8 @@
 import yaml
 import string
 import unittest
-from feedo.configuration import Configuration
-from feedo.configuration import FormatDict
+from feedoo.configuration import Configuration
+from feedoo.configuration import FormatDict
 
 
 EXAMPLE = """

@@ -1,5 +1,5 @@
 import unittest
-from feedo.cli import get_args
+from feedoo.cli import get_args
 
 
 class TestCli(unittest.TestCase):

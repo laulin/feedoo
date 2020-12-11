@@ -1,10 +1,10 @@
 import pkgutil
 import logging
 
-import feedo.input
-import feedo.output
-import feedo.filter
-import feedo.parser
+import feedoo.input
+import feedoo.output
+import feedoo.filter
+import feedoo.parser
 
 
 class Plugins:
@@ -33,12 +33,12 @@ class Plugins:
         return output
 
     def load_vanilla(self):
-        # load all packages related to feedo processing
+        # load all packages related to feedoo processing
         packages = {
-            feedo.input : "input_",
-            feedo.output : "output_",
-            feedo.parser : "parser_",
-            feedo.filter : "filter_"
+            feedoo.input : "input_",
+            feedoo.output : "output_",
+            feedoo.parser : "parser_",
+            feedoo.filter : "filter_"
         }
         output = {}
         for package, prefix in packages.items():

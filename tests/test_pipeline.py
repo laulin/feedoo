@@ -1,5 +1,5 @@
-from feedo.pipeline import Pipeline
-from feedo.plugins import Plugins
+from feedoo.pipeline import Pipeline
+from feedoo.plugins import Plugins
 import unittest
 
 DOCUMENT_TEST = '2020-10-22T08:50:03+00:00       pihole.dnsmasq  {"type":"dnsmasq","tag":"pihole.dnsmasq","logtime":"Oct 22 10:50:03","log":"reply weu1-authgw.cloudapp.net is 13.94.251.244","source":"jarvis-2"}'
