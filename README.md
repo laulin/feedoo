@@ -3,7 +3,7 @@
 ![](images/sponsor.png?raw=true) Sponsored by [Spartan conseil](https://www.spartan-conseil.fr/)
 
 
-# What is feedoo ? 
+# What is feedoo ? 
 
 feedoo is an ETL, for Extract, Transform and Load. Basically, it gets data from files or database, process it thanks to pipelines and store data to a file or a database. It is very versatile and processing brick can be added without pain.
 
@@ -381,6 +381,33 @@ Example :
 
 If event looks like `{"source":"auth", "data":"xxx"}`, the new tag will be "auth".
 If event looks like `{"data":"xxx"}`, the new tag will be "generic_log".
+
+### filter_frequency
+
+This action matches when there are at least a certain number of events in a given time frame. This may be counted on a per-query_key basis.
+
+Parameters :
+
+* `match` : pattern to match tag
+* `tag` : tag used to generate new event on change
+* `alert` : dict used to generate new event on change
+* `query_key` : key used to group type of event
+* `num_events` : match if number of event during the time frame if higher or equal to this value
+* `timeframe` : duration of the time windows in seconds
+
+Example :
+
+```yaml
+- name : filter_frequency
+  match : my_log
+  tag : my_alert
+  alert : 
+    title : The hostname change of status too often
+    priority : 1
+  query_key : hostname
+  num_events : 10
+  timeframe : 60
+```
 
 # icons
 
