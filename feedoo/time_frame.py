@@ -1,4 +1,5 @@
 from time import time
+import pprint
 
 class TimeFrame:
     def __init__(self, windows:int):
@@ -22,4 +23,7 @@ class TimeFrame:
 
     def __len__(self):
         return len(self._fifo)
+
+    def __repr__(self):
+        return pprint.pformat(self._fifo)
         
