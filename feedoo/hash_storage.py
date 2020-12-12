@@ -40,7 +40,9 @@ class HashStorage(MutableMapping):
         cursor = self._connection.cursor()
         cursor.execute('SELECT value FROM HashStore WHERE key = ?', (blob_key,))
         row = cursor.fetchone()
-
+        if row is None:
+            raise KeyError(key)
+        
         return pickle.loads(row[0])
 
     def __setitem__(self, key, value):

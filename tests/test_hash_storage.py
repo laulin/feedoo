@@ -34,6 +34,20 @@ class TestHashStorage(unittest.TestCase):
 
         self.assertEqual(result, "y")
 
+    def test_in(self):
+        storage = HashStorage(DB_PATH)
+        storage["x"] = "y"
+        result = "x" in storage
+
+        self.assertTrue(result)
+
+    def test_in(self):
+        storage = HashStorage(DB_PATH)
+        storage["x"] = "y"
+        result = "y" in storage
+
+        self.assertFalse(result)
+
     def test_get_2(self):
         storage = HashStorage(DB_PATH)
         storage["x"] = "z"
