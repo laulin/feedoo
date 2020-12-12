@@ -90,7 +90,7 @@ class TestHashStorage(unittest.TestCase):
         t = storage["x"]
         t.add_event("event")
         storage["x"] = t
-        print(repr(storage["x"]))
+
         result = len(storage["x"])
 
         self.assertEqual(result, 1)
