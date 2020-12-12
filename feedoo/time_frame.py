@@ -7,16 +7,31 @@ class TimeFrame:
         self._windows = windows
         self._fifo = []
 
-    def add_event(self, event, _time=time):
-        timestamp = int(_time())
-        tmp = (timestamp, event)
+    def add_event(self, event, timestamp=None, _time=time):
+        if timestamp is None:
+            ts = int(_time())
+        else:
+            ts = timestamp
+
+        tmp = (ts, event)
         self._fifo.append(tmp)
-        self.update(_time)
+
+        return self.update(_time)
+ 
 
     def update(self, _time=time):
         reference_time = int(_time()) - self._windows
-        filtered = filter(lambda x : x[0]>reference_time, self._fifo)
-        self._fifo = list(filtered)
+        output = list()
+        new_fifo = list()
+
+        for element in self._fifo:
+            if element[0] >reference_time:
+                new_fifo.append(element)
+            else:
+                output.append(element)
+
+        self._fifo = new_fifo
+        return output
 
     def flush(self):
         self._fifo = []
