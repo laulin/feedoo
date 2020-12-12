@@ -2,7 +2,7 @@ build: build_pip
 	sudo docker build -t feedoo .
 
 build_fast:
-	sudo docker build -t feedoofast .
+	sudo docker build -t feedoofast -f dockerfile_fast .
 
 unittest: build
 	sudo docker run -it --rm --net=host --name feedoo feedoo python3 -m unittest discover -s /root/tests -p "test_*.py"
