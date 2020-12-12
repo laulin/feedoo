@@ -28,6 +28,7 @@ class TestFilterFrequency(unittest.TestCase):
         event2 = Event("log", 123456790, {"data":"xxxx"})
         result = ff.do(event2)
         expected = 2
+        print(result)
         # event + alerts
         self.assertEqual(len(result), expected)
 

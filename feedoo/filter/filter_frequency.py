@@ -33,7 +33,10 @@ class FilterFrequency(AbstractAction):
         if query_key not in self._state:
             self._state[query_key] = TimeFrame(self._timeframe)
 
-        self._state[query_key].add_event(event)
+        time_frame = self._state[query_key]
+        time_frame.add_event(event)
+        self._state[query_key] = time_frame
+
         if len(self._state[query_key]) >= self._num_events:
             timestamp = int(time.time())
             new_record = {
