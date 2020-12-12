@@ -168,6 +168,7 @@ Parameters :
 * `path_template` : Template of the file path
 * `buffer_size=1000` : Number of event stored before flush
 * `timeout_flush=60` : Flush buffer after timeout, in second
+* `db_path=None` : file path to store internal state. None means only RAM is used.
 
 Example :
 
@@ -197,6 +198,7 @@ Parameters
 * `port=None` : if set, change the database destination port
 * `wait_connection=30` : used to wait the database warmup
 * `timeout_flush=60` : Flush buffer after timeout, in second
+* `db_path=None` : file path to store internal state. None means only RAM is used.
 
 Example:
 
@@ -394,6 +396,7 @@ Parameters :
 * `num_events` : match if number of event during the time frame if higher or equal to this value
 * `timeframe` : duration of the time windows in seconds
 * `query_key=None` : key used to group type of event
+* `db_path=None` : file path to store internal state. None means only RAM is used.
 
 Example :
 

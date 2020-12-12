@@ -13,11 +13,11 @@ from feedoo.hash_storage import HashStorage
 # push document to db
 
 class OutputRethinkdb(AbstractAction):
-    def __init__(self, match, time_key, table_template, buffer_size=1000, database="test", ip="localhost", port=None, wait_connection=30, timeout_flush=60):
+    def __init__(self, match, time_key, table_template, buffer_size=1000, database="test", ip="localhost", port=None, wait_connection=30, timeout_flush=60, db_path=None):
         AbstractAction.__init__(self, match)
         self._time_key = time_key
         self._table_template = table_template
-        self._buffer = HashStorage(timeout=timeout_flush)
+        self._buffer = HashStorage(db_path, timeout=timeout_flush)
         self._database = database
         self._ip = ip
         self._port = port

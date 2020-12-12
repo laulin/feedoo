@@ -13,11 +13,11 @@ from time import time
 # push document to archive files
 
 class OutputArchive(AbstractAction):
-    def __init__(self, match, time_key, path_template, buffer_size=1000, timeout_flush=60):
+    def __init__(self, match, time_key, path_template, buffer_size=1000, timeout_flush=60, db_path=None):
         AbstractAction.__init__(self, match)
         self._time_key = time_key
         self._path_template = path_template
-        self._buffer = HashStorage(timeout=timeout_flush)
+        self._buffer = HashStorage(db_path, timeout=timeout_flush)
         self._buffer_size = buffer_size
 
     def do(self, event):
@@ -39,7 +39,7 @@ class OutputArchive(AbstractAction):
 
     def finish(self):
         self._log.debug("finish")
-        
+
         for k in tuple(self._buffer.keys()):
             self._log.info("Flush (finish) {}".format(k))
             self.flush_one(k)
