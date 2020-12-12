@@ -28,7 +28,9 @@ class OutputArchive(AbstractAction):
         if path not in self._buffer:
             self._buffer[path] = list()
 
-        self._buffer[path].append(record)
+        buffer = self._buffer[path] 
+        buffer.append(record)
+        self._buffer[path] = buffer
 
         if len(self._buffer[path]) > self._buffer_size:
             self.flush_one(path)
@@ -37,13 +39,13 @@ class OutputArchive(AbstractAction):
 
     def finish(self):
         self._log.debug("finish")
-
+        
         for k in tuple(self._buffer.keys()):
             self._log.info("Flush (finish) {}".format(k))
             self.flush_one(k)
 
     def flush_one(self, path):
-        self._log.debug("flush to "+path)
+        self._log.debug("flush to {}".format(path))
 
         with suppress(FileExistsError):
             directory = os.path.dirname(path)
