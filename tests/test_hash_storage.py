@@ -1,6 +1,7 @@
 import unittest
 from time import time
 from feedoo.hash_storage import HashStorage
+from feedoo.time_frame import TimeFrame
 import os
 
 DB_PATH = "/tmp/db.bin"
@@ -82,3 +83,14 @@ class TestHashStorage(unittest.TestCase):
         result = list(storage.get_timeout(mytime))
 
         self.assertEqual(result, ["key"])
+
+    def test_get_time_frame(self):
+        storage = HashStorage(DB_PATH)
+        storage["x"] = TimeFrame(60)
+        t = storage["x"]
+        t.add_event("event")
+        storage["x"] = t
+        print(repr(storage["x"]))
+        result = len(storage["x"])
+
+        self.assertEqual(result, 1)
