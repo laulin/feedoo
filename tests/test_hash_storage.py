@@ -1,8 +1,55 @@
 import unittest
 from time import time
 from feedoo.hash_storage import HashStorage
+import os
 
+DB_PATH = "/tmp/db.bin"
 class TestHashStorage(unittest.TestCase):
+    def setUp(self):
+        try:
+            os.remove(DB_PATH)
+        except:
+            pass
+
+    def test_init(self):
+        storage = HashStorage(DB_PATH)
+
+    def test_double_init(self):
+        storage = HashStorage(DB_PATH)
+        storage2 = HashStorage(DB_PATH)
+
+    def test_set(self):
+        storage = HashStorage(DB_PATH)
+        storage["x"] = "y"
+
+    def test_double_set(self):
+        storage = HashStorage(DB_PATH)
+        storage["x"] = "y"
+        storage["x"] = "z"
+
+    def test_get(self):
+        storage = HashStorage(DB_PATH)
+        storage["x"] = "y"
+        result = storage["x"]
+
+        self.assertEqual(result, "y")
+
+    def test_get_2(self):
+        storage = HashStorage(DB_PATH)
+        storage["x"] = "z"
+        storage["x"] = "y"
+        result = storage["x"]
+
+        self.assertEqual(result, "y")
+
+    def test_len(self):
+        storage = HashStorage(DB_PATH)
+        storage["x"] = "y"
+        storage["y"] = "z"
+        result = len(storage)
+
+        self.assertEqual(result, 2)
+
     def test_no_timeout(self):
         storage = HashStorage()
         storage["key"] = "x"
@@ -13,8 +60,11 @@ class TestHashStorage(unittest.TestCase):
     def test_timeout(self):
         storage = HashStorage()
         storage["key"] = "x"
+
         def mytime():
-            return time() + 3600
+            t =  time() + 3600
+            return t
+
         result = list(storage.get_timeout(mytime))
 
         self.assertEqual(result, ["key"])

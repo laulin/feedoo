@@ -1,68 +1,85 @@
 from collections.abc import MutableMapping
 import json
 from time import time
+import sqlite3
+import pickle
+
+"""
+Store key:str, timestamp:int, value:bytes in table HashStore
+""" 
 
 
 class HashStorage(MutableMapping):
     """A dictionary that store any change and can be loaded/stored with a timeout management"""
 
     def __init__(self, path=None, timeout=60):
-        self._changed = False
-        self._store = dict()
-        self._last_update = dict()
-        self._path = path
+        if not path:
+            path = ":memory:"
+
+        self._connection = sqlite3.connect(path)
+        self._create_table()
         self._timeout = timeout
 
-    def load(self, ignore_missing=True):
-        if self._path is not None:
-            self._changed = False
-            
-            try:
-                with open(self._path) as f:
-                    raw_data = f.read()
-                    data = json.loads(raw_data)
-                    self._store = data["store"]
-                    self._last_update = data["last_update"]
-            except IOError as e: 
-                # ignore is file is not available
-                if not ignore_missing:
-                    raise e
-
-    def store(self):
-        if self._path is not None and self._changed:
-            self._changed = False
-            
-            with open(self._path, "w") as f:
-                data = dict()
-                data["store"] = self._store
-                data["last_update"] = self._last_update
-                raw_data = json.dumps(data, sort_keys=True, indent=4)
-                f.write(raw_data)
+    def _create_table(self):
+        cursor = self._connection.cursor()
+        cursor.execute("CREATE TABLE IF NOT EXISTS HashStore (key BLOB UNIQUE, timestamp INTEGER, value BLOB);")
+        self._connection.commit()
 
     def get_timeout(self, _time=time):
-        current_time = _time()
-        reference_time = current_time - self._timeout
-        tmp = filter(lambda t: t[1] < reference_time, self._last_update.items()) # get outdated key, value by value (time)
-        return map(lambda x: x[0], tmp) # return outdated keys
-            
-    def is_changed(self):
-        return self._changed
+        timestamp = int(_time()) - self._timeout
+        
+        cursor = self._connection.cursor()
+        cursor.execute('SELECT key FROM HashStore WHERE timestamp < ?', (timestamp,))
+        row = cursor.fetchall()
 
+        return map(lambda x : pickle.loads(x[0]), row)
+            
     def __getitem__(self, key):
-        return self._store[key]
+        blob_key = pickle.dumps(key)
+
+        cursor = self._connection.cursor()
+        cursor.execute('SELECT value FROM HashStore WHERE key = ?', (blob_key,))
+        row = cursor.fetchone()
+
+        return pickle.loads(row[0])
 
     def __setitem__(self, key, value):
-        if key not in self._store or self._store[key] != value:
-            self._changed = True
-        self._store[key] = value
-        self._last_update[key] = time()
+        timestamp = int(time())
+        blop_value = pickle.dumps(value)
+        blob_key = pickle.dumps(key)
+        fields = (blob_key, timestamp, blop_value)
+        cursor = self._connection.cursor()
+        cursor.execute('''DELETE FROM HashStore WHERE key = ?''', (blob_key,))
+        cursor.execute('''INSERT INTO HashStore(key, timestamp, value) VALUES(?, ?, ?)''', fields)
+
+        self._connection.commit()
 
     def __delitem__(self, key):
-        del self._store[key]
-        del self._last_update[key]
+        blob_key = pickle.dumps(key)
+        cursor = self._connection.cursor()
+        cursor.execute('''DELETE FROM HashStore WHERE key = ?''', (blob_key,))
+
+        self._connection.commit()
 
     def __iter__(self):
-        return iter(self._store)
+        cursor = self._connection.cursor()
+        cursor.execute('SELECT value FROM HashStore')
+        row = cursor.fetchone()
+
+        yield pickle.loads(row[0])
     
     def __len__(self):
-        return len(self._store)
+        cursor = self._connection.cursor()
+        cursor.execute('SELECT count(value) FROM HashStore')
+        row = cursor.fetchone()
+        return row[0]
+
+    def __repr__(self):
+        output = "key;timestamp;value\n"
+        cursor = self._connection.cursor()
+        cursor.execute('SELECT * FROM HashStore')
+        rows = cursor.fetchall()
+
+        tmp = ["{};{};{}".format(pickle.loads(k),t,pickle.loads(v)) for k,t,v in rows]
+
+        return output + "\n".join(tmp)
