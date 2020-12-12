@@ -33,7 +33,9 @@ class OutputRethinkdb(AbstractAction):
         if tablename not in self._buffer:
             self._buffer[tablename] = list()
 
-        self._buffer[tablename].append(record)
+        buffer = self._buffer[tablename]
+        buffer.append(record)
+        self._buffer[tablename] = buffer
 
         if len(self._buffer[tablename]) > self._buffer_size:
             self.flush_one(tablename)
