@@ -94,3 +94,30 @@ class TestHashStorage(unittest.TestCase):
         result = len(storage["x"])
 
         self.assertEqual(result, 1)
+
+    def test_keys(self):
+        storage = HashStorage(DB_PATH)
+        storage["x"] = 1
+        storage["y"] = 2
+        result = list(storage.keys())
+        expected = ["x", "y"]
+
+        self.assertEqual(result, expected)
+
+    def test_values(self):
+        storage = HashStorage(DB_PATH)
+        storage["x"] = 1
+        storage["y"] = 2
+        result = list(storage.values())
+        expected = [1,2]
+
+        self.assertEqual(result, expected)
+
+    def test_items(self):
+        storage = HashStorage(DB_PATH)
+        storage["x"] = 1
+        storage["y"] = 2
+        result = list(storage.items())
+        expected = [("x", 1),("y", 2)]
+
+        self.assertEqual(result, expected)

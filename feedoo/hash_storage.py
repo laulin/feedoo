@@ -65,10 +65,10 @@ class HashStorage(MutableMapping):
 
     def __iter__(self):
         cursor = self._connection.cursor()
-        cursor.execute('SELECT value FROM HashStore')
-        row = cursor.fetchone()
+        cursor.execute('SELECT key FROM HashStore')
+        rows = cursor.fetchall()
 
-        yield pickle.loads(row[0])
+        return map(lambda x : pickle.loads(x[0]), rows)
     
     def __len__(self):
         cursor = self._connection.cursor()
@@ -85,3 +85,24 @@ class HashStorage(MutableMapping):
         tmp = ["{};{};{}".format(pickle.loads(k),t,pickle.loads(v)) for k,t,v in rows]
 
         return output + "\n".join(tmp)
+
+    def keys(self):
+        cursor = self._connection.cursor()
+        cursor.execute('SELECT key FROM HashStore')
+        rows = cursor.fetchall()
+
+        return map(lambda x : pickle.loads(x[0]), rows)
+
+    def values(self):
+        cursor = self._connection.cursor()
+        cursor.execute('SELECT value FROM HashStore')
+        rows = cursor.fetchall()
+
+        return map(lambda x : pickle.loads(x[0]), rows)
+
+    def items(self):
+        cursor = self._connection.cursor()
+        cursor.execute('SELECT key,value FROM HashStore')
+        rows = cursor.fetchall()
+
+        return map(lambda x : (pickle.loads(x[0]), pickle.loads(x[1])), rows)
