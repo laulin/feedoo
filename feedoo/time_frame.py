@@ -2,12 +2,14 @@ from time import time
 import pprint
 
 class TimeFrame:
-    def __init__(self, windows:int):
+    def __init__(self, windows:int, next_timeframe=None):
         # windows is the number of second
+        # next_timeframe is the next time frame to be used when update timeout element
         self._windows = windows
         self._fifo = []
+        self._next_timeframe = next_timeframe
 
-    def add_event(self, event, timestamp=None, _time=time):
+    def add_event(self, event, timestamp=None, _time=time, _update=True):
         if timestamp is None:
             ts = int(_time())
         else:
@@ -16,9 +18,11 @@ class TimeFrame:
         tmp = (ts, event)
         self._fifo.append(tmp)
 
-        return self.update(_time)
+        if _update:
+            return self.update(_time)
+        else:
+            return []
  
-
     def update(self, _time=time):
         reference_time = int(_time()) - self._windows
         output = list()
@@ -31,6 +35,12 @@ class TimeFrame:
                 output.append(element)
 
         self._fifo = new_fifo
+
+        if self._next_timeframe is not None:
+            for ts, v in output:
+                self._next_timeframe.add_event(v, ts, _time, False)
+            return self._next_timeframe.update(_time)
+
         return output
 
     def average(self):
