@@ -4,6 +4,8 @@ import time
 from functools import partial
 from feedoo.event import Event
 from feedoo.time_frame import TimeFrame
+from pprint import pprint
+
 
 # This action matches when the volume of events during a given time period is spike_height times
 # larger or smaller than during the previous time period. It uses two sliding windows to compare 
@@ -29,15 +31,15 @@ class FilterSpike(AbstractAction):
 
         self._state = HashStorage(db_path, timeout=timeframe*2)
 
-    def do(self, event):
+    def do(self, event, _time=time.time):
         query_key = self.get_query_key_value(event)       
         if  query_key is None:
             return event
 
-        self._push_event_or_field(event, query_key)
+        self._push_event_or_field(query_key, event, _time)
         matched = (False, None, None)
         try:
-            matched = self._compare_current_and_reference()
+            matched = self._compare_current_and_reference(query_key)
         except ZeroDivisionError:
             pass
 
@@ -67,9 +69,9 @@ class FilterSpike(AbstractAction):
         else:
             query_key = event.record.get(self._query_key)
 
-        return event
+        return query_key
 
-    def _push_event_or_field(self, query_key, event):
+    def _push_event_or_field(self, query_key, event, _time=time.time):
 
         value = event
         if self._field_value is not None :
@@ -81,7 +83,7 @@ class FilterSpike(AbstractAction):
             self._state[query_key] = [time_frame_1, time_frame_2]
 
         time_frames = self._state[query_key]
-        timeouted = time_frame[0].add_event(value)
+        timeouted = time_frames[0].add_event(value, _time=_time)
         self._state[query_key] = time_frames
 
     def _compare_current_and_reference(self, query_key):
@@ -96,8 +98,8 @@ class FilterSpike(AbstractAction):
             current_value = current_length
             reference_value = reference_length
         else:
-            current_value = self._current_state[query_key][0].average()
-            reference_value = self._refence_state[query_key][1].average()
+            current_value = self._state[query_key][0].average()
+            reference_value = self._state[query_key][1].average()
 
         ratio = current_value / reference_value
         if self._spike_type in ["up", "both"]:
