@@ -447,6 +447,36 @@ Example :
   timeframe : 60
 ```
 
+### filter_flatline
+
+This action matches when the total number of events is under a given threshold for a time period.
+
+Parameters :
+
+* `match` : pattern to match tag
+* `tag` : tag used to generate new event on change
+* `alert` : dict used to generate new event on change
+* `threshold` : minimum number of event in the frame (other wise, rise an alert)
+* `timeframe` : duration of the time windows in seconds
+* `query_key=None` : key used to group type of event
+* `forget_keys=True` : set to false to keep tracking existing query key (emit alert for ever if no event come back).
+* `db_path=None` : file path to store internal state. None means only RAM is used.
+
+
+Example :
+
+```yaml
+- name : filter_flaline
+  match : my_log
+  tag : heartbeat_down
+  alert : 
+    title : No more heartbeat !
+    priority : 3
+  threshold : 1
+  field_value : source
+  timeframe : 60
+```
+
 # icons
 
 Thanks to flaticon.com !
