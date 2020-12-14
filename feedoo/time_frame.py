@@ -33,6 +33,9 @@ class TimeFrame:
         self._fifo = new_fifo
         return output
 
+    def average(self):
+        return sum(map(lambda x : x[1], self._fifo)) / len(self._fifo)
+
     def flush(self):
         self._fifo = []
 

@@ -22,6 +22,15 @@ class TestTimeFrame(unittest.TestCase):
         tf.add_event(event)
 
         event2 = {"data":"yyyy"}
-        tf.add_event(event2, my_time(3600))
+        tf.add_event(event2, _time=my_time(3600))
 
         self.assertEqual(len(tf), 1)
+
+    def test_average(self):
+        tf = TimeFrame(60)
+        tf.add_event(1)
+        tf.add_event(3)
+        result = tf.average()
+        expected = 2
+
+        self.assertEqual(result, expected)
