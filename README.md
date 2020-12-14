@@ -362,7 +362,7 @@ Example :
 
 Event likes `{"A":1, "B":2, "C":3}` become `{"C":3}`
 
-### filter_retag
+### filter_retag
 
 This action change the event's tag with a value in event or with a constant value.
 
@@ -384,7 +384,7 @@ Example :
 If event looks like `{"source":"auth", "data":"xxx"}`, the new tag will be "auth".
 If event looks like `{"data":"xxx"}`, the new tag will be "generic_log".
 
-### filter_frequency
+### filter_frequency
 
 This action matches when there are at least a certain number of events in a given time frame. This may be counted on a per-query_key basis.
 
@@ -412,7 +412,7 @@ Example :
   timeframe : 60
 ```
 
-### filter_spike
+### filter_spike
 
 This action matches when the volume of events during a given time period is spike_height times larger or smaller than during the previous time period. 
 It uses two sliding windows to compare the current and reference frequency of events. We will call this two windows “reference” and “current”. A query
@@ -447,7 +447,7 @@ Example :
   timeframe : 60
 ```
 
-### filter_flatline
+### filter_flatline
 
 This action matches when the total number of events is under a given threshold for a time period.
 
