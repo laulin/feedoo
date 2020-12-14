@@ -412,6 +412,41 @@ Example :
   timeframe : 60
 ```
 
+### filter_spike
+
+This action matches when the volume of events during a given time period is spike_height times larger or smaller than during the previous time period. 
+It uses two sliding windows to compare the current and reference frequency of events. We will call this two windows “reference” and “current”. A query
+key and a field value can be defined. 
+
+Parameters :
+
+* `match` : pattern to match tag
+* `tag` : tag used to generate new event on change
+* `alert` : dict used to generate new event on change
+* `spike_height` : define the factor between current and reference that create an event
+* `spike_type` : define the spike direction : up, down or both
+* `timeframe` : duration of the time windows in seconds
+* `query_key=None` : key used to group type of event
+* `field_value=None` : When set, uses the value of the field in the document and not the number of matching documents. This is useful to monitor for example a temperature sensor and raise an alarm if the temperature grows too fast. Note that the means of the field on the reference and current windows are used to determine if the spike_height value is reached
+* `db_path=None` : file path to store internal state. None means only RAM is used.
+* `threshold_ref=10` : minimum number of event in the reference frame to be evaluated
+* `threshold_cur=10` : minimum number of event in the current frame to be evaluated
+
+Example :
+
+```yaml
+- name : filter_spike
+  match : my_log
+  tag : temperature_alert
+  alert : 
+    title : The temperature rise to quickly
+    priority : 1
+  spike_height : 2
+  spike_type : up
+  field_value : temperature
+  timeframe : 60
+```
+
 # icons
 
 Thanks to flaticon.com !
