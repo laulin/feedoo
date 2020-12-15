@@ -9,11 +9,17 @@ class SqliteAdapter:
         self._field_names = sorted(self._fields.keys())
         self._connection = None
         self._log = logging.getLogger("SqliteAdapter")
+        self._is_connected = False
+
+    def is_connected(self):
+        return self._is_connected
 
     def connect(self):
+        self._is_connected = True
         self._connection = sqlite3.connect(self._filename)
 
     def close(self):
+        self._is_connected = False
         self._connection.close()
 
     def create_table_unique(self, table_name:str):
@@ -70,6 +76,16 @@ class SqliteAdapter:
 
         output = [dict(zip(self._field_names, v)) for v in cursor.fetchall()]
         return output
+
+    def list_tables(self):
+        cursor = self._connection.cursor()
+        cursor.execute("SELECT name FROM sqlite_master WHERE type='table';")
+        tables = [
+            v[0] for v in cursor.fetchall()
+            if v[0] != "sqlite_sequence"
+        ]
+
+        return tables
 
 
     

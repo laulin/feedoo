@@ -26,7 +26,7 @@ class TestSqliteAdapter(unittest.TestCase):
 
     def test_insert_bulk_bad_type(self):
         # SQLITE allows that #fun
-        sa = SqliteAdapter("/tmp/db/example.db", {"name":"TEXT", "age":"INTEGER"})
+        sa = SqliteAdapter(":memory:", {"name":"TEXT", "age":"INTEGER"})
         sa.connect()
         sa.create_table_unique("first_table")
         result = sa.insert_bulk("first_table", [{"name":20, "age":"toto"}])
@@ -54,5 +54,15 @@ class TestSqliteAdapter(unittest.TestCase):
             {'age': 20, 'name': 'foo', 'timestamp': 30},
             {'age': 20, 'name': 'bar', 'timestamp': 40}
             ]
-
+        sa.close()
         self.assertEqual(time_serie_docs, expected)
+
+    def test_list_tables(self):
+        sa = SqliteAdapter(":memory:", {"name":"TEXT", "age":"INTEGER"})
+        sa.connect()
+        sa.create_table_unique("first_table")
+        result = sa.list_tables()
+        sa.close()
+
+        expected = ["first_table"]
+        self.assertEqual(result, expected)
