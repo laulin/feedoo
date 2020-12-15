@@ -87,5 +87,14 @@ class SqliteAdapter:
 
         return tables
 
+    def is_table_empty(self, table_name):
+        cursor = self._connection.cursor()
+        cursor.execute("SELECT count(*) FROM {} LIMIT 1;".format(table_name))
+        
+        if cursor.fetchone() == (0,):
+            return True
+        else:
+            return False
+
 
     

@@ -66,3 +66,22 @@ class TestSqliteAdapter(unittest.TestCase):
 
         expected = ["first_table"]
         self.assertEqual(result, expected)
+
+    def test_is_table_empty_true(self):
+        sa = SqliteAdapter(":memory:", {"name":"TEXT", "age":"INTEGER"})
+        sa.connect()
+        sa.create_table_unique("first_table")
+        result = sa.is_table_empty("first_table")
+        sa.close()
+
+        self.assertTrue(result)
+
+    def test_is_table_empty_false(self):
+        sa = SqliteAdapter(":memory:", {"name":"TEXT", "age":"INTEGER"})
+        sa.connect()
+        sa.create_table_unique("first_table")
+        sa.insert_bulk("first_table", [{"name":"toto", "age":20}])
+        result = sa.is_table_empty("first_table")
+        sa.close()
+
+        self.assertFalse(result)
