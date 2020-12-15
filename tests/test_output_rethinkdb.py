@@ -1,19 +1,26 @@
-from feedoo.output.output_rethinkdb import OutputRethinkdb
+from feedoo.output.output_rethinkdb import OutputRethinkDB
 from feedoo.event import Event
 import unittest
 from time import time
+from rethinkdb import r as Rethinkdb
 
 # # Enable those tests only if a rethinkDB is up
-# IP = "172.17.0.1"
-# class TestOutputRethinkdb(unittest.TestCase):
+# IP = "172.17.0.2"
+# class TestOutputRethinkDB(unittest.TestCase):
+#     def tearDown(self):
+#         conn = Rethinkdb.connect(IP, 28015)
+#         Rethinkdb.db("test").table("first_table").delete().run(conn)
+#         conn.close()
+
+
 #     def test_1(self):
-#         action = OutputRethinkdb("*", "timestamp", "sys-%Y%m%d", ip=IP)
+#         action = OutputRethinkDB("*", "timestamp", "sys-%Y%m%d", ip=IP)
 #         event = Event("mytag", 123456789, {"timestamp":1603373121, "data":"aaaaaa"})
 #         action.do(event)
 #         action.finish()
 
 #     def test_2(self):
-#         action = OutputRethinkdb("*", "timestamp", "sys-%Y%m%d", ip=IP)
+#         action = OutputRethinkDB("*", "timestamp", "sys-%Y%m%d", ip=IP)
 #         event_1 = Event("mytag", 1603373122, {"timestamp":1603373122, "data":"BBBB"})
 #         action.do(event_1)
 #         event_2 = Event("mytag", 1603373123,{"timestamp":1603373123, "data":"ccccc"})
@@ -21,14 +28,14 @@ from time import time
 #         action.finish()
 
 #     def test_force_flush(self):
-#         action = OutputRethinkdb("*", "timestamp", "sys-%Y%m%d", buffer_size=1, ip=IP)
+#         action = OutputRethinkDB("*", "timestamp", "sys-%Y%m%d", buffer_size=1, ip=IP)
 #         event_1 = Event("mytag", 1603373122, {"timestamp":1603373122, "data":"BBBB"})
 #         action.do(event_1)
 #         event_2 = Event("mytag", 1603373123,{"timestamp":1603373123, "data":"ccccc"})
 #         action.do(event_2)
 
 #     def test_timeout_update(self):
-#         action = OutputRethinkdb("*", "timestamp", "sys-%Y%m%d", buffer_size=100, ip=IP)
+#         action = OutputRethinkDB("*", "timestamp", "sys-%Y%m%d", buffer_size=100, ip=IP)
 #         event_1 = Event("mytag", 1603373122, {"timestamp":1603373122, "data":"BBBB"})
 #         action.do(event_1)
 #         event_2 = Event("mytag", 1603373123,{"timestamp":1603373123, "data":"ccccc"})
@@ -36,11 +43,3 @@ from time import time
 #         def my_time():
 #             return time() + 3600
 #         action.update(my_time)
-
-
-
-
-
-
-
-
