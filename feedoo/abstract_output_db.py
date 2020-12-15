@@ -1,6 +1,7 @@
 from feedoo.abstract_action import AbstractAction
 from feedoo.hash_storage import HashStorage
 from chronyk import Chronyk
+import time
 
 class AbstractOutputDB(AbstractAction):
     def __init__(self, match, time_key, table_template, buffer_size=1000, timeout_flush=60, db_path=None):
@@ -35,7 +36,7 @@ class AbstractOutputDB(AbstractAction):
     def flush_one(self, tablename):
         self._log.info("flush "+tablename)
         try:
-            if not self._database_adapter.is_connected()
+            if not self._database_adapter.is_connected():
                 self._database_adapter.connect()
 
             self._database_adapter.create_table_unique(tablename)
@@ -59,7 +60,7 @@ class AbstractOutputDB(AbstractAction):
             self._log.info("Flush (finish) {}".format(k))
             self.flush_one(k)
 
-        if self._database_adapter.is_connected()
+        if self._database_adapter.is_connected():
                 self._database_adapter.close()
         
 
