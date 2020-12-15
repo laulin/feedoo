@@ -121,3 +121,10 @@ class TestHashStorage(unittest.TestCase):
         expected = [("x", 1),("y", 2)]
 
         self.assertEqual(result, expected)
+
+    def test_get(self):
+        storage = HashStorage(DB_PATH)
+        result = storage.get("x", "???")
+        expected = "???"
+
+        self.assertEqual(result, expected)
