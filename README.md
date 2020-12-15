@@ -234,7 +234,7 @@ Store events in Sqlite database. Only defined fields are stored in event, others
 Parameters
 
 * `match` : pattern to match tag
-* `time_key` : field use for time serie. None value means event timestamp
+* `time_key` : field use for time serie.
 * `table_template` : template string used to generate table names
 * `fields` : dict of field name / Sqlite type. Sqlite types are REAL, TEXT, INTEGER or BLOB. 
 * `filename` : Sqlite filename. Can be :memory: to save in RAM.
