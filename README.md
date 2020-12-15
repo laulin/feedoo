@@ -227,6 +227,34 @@ Example:
   match : my_log
 ```
 
+### output_sqlite
+
+Store events in Sqlite database. Only defined fields are stored in event, others are dropped. If a field is missing, the document is dropped.
+
+Parameters
+
+* `match` : pattern to match tag
+* `time_key` : field use for time serie. None value means event timestamp
+* `table_template` : template string used to generate table names
+* `fields` : dict of field name / Sqlite type. Sqlite types are REAL, TEXT, INTEGER or BLOB. 
+* `filename` : Sqlite filename. Can be :memory: to save in RAM.
+* `buffer_size=1000` : Number of event stored before flush
+* `timeout_flush=60` : Flush buffer after timeout, in second
+* `db_path=None` : file path to store internal state. None means only RAM is used.
+
+Example:
+
+```yaml
+- name : output_sqlite
+  match : my_log
+  table_template: "log_%Y%m%d"
+  fields:
+    timestamp: INTEGER
+    line: TEXT
+  filename: "/tmp/test.db"
+  db_path : "/tmp/test.pos.db"
+```
+
 ## Parser
 
 A parser take an event et parse one field with a specific format : `regex`, `json`, etc.
