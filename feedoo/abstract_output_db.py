@@ -19,11 +19,12 @@ class AbstractOutputDB(AbstractAction):
 
         return tablename
 
-    def do(event):
+    def do(self, event, _time=time.time):
         tablename = self._create_table_name(event)
         if tablename not in self._buffer:
             self._buffer[tablename] = list()
 
+        
         buffer = self._buffer[tablename]
         buffer.append(event.record)
         self._buffer[tablename] = buffer
