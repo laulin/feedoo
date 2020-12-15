@@ -1,4 +1,4 @@
-from feedoo.rethinkdb_adapter import RethinkDBAdapter
+from feedoo.rethinkdb_adapter import RethinkdbAdapter
 import unittest
 from pprint import pprint
 from rethinkdb import r as Rethinkdb
@@ -12,30 +12,30 @@ from rethinkdb import r as Rethinkdb
 #         pass
 
 #     def test_connection(self):
-#         rethink = RethinkDBAdapter(IP)
+#         rethink = RethinkdbAdapter(IP)
 #         rethink.connect()
 #         rethink.close()
 
 #     # def test_connection_bad_ip(self):
-#     #     rethink = RethinkDBAdapter("10.11.12.13", wait_connection=1)
+#     #     rethink = RethinkdbAdapter("10.11.12.13", wait_connection=1)
 #     #     rethink.connect()
 #     #     rethink.close()
 
 #     def test_create_table(self):
-#         rethink = RethinkDBAdapter(IP)
+#         rethink = RethinkdbAdapter(IP)
 #         rethink.connect()
 #         rethink.create_table_unique("first_table")
 #         rethink.close()
 
 #     def test_create_table_double(self):
-#         rethink = RethinkDBAdapter(IP)
+#         rethink = RethinkdbAdapter(IP)
 #         rethink.connect()
 #         rethink.create_table_unique("first_table")
 #         rethink.create_table_unique("first_table")
 #         rethink.close()
 
 #     def test_insert_bulk(self):
-#         rethink = RethinkDBAdapter(IP)
+#         rethink = RethinkdbAdapter(IP)
 #         rethink.connect()
 #         rethink.create_table_unique("first_table")
 #         rethink.insert_bulk("first_table", [{"name":"toto", "age":20}])
@@ -43,14 +43,14 @@ from rethinkdb import r as Rethinkdb
 
 #     def test_insert_bulk_bad_type(self):
 #         # SQLITE allows that #fun
-#         rethink = RethinkDBAdapter(IP)
+#         rethink = RethinkdbAdapter(IP)
 #         rethink.connect()
 #         rethink.create_table_unique("first_table")
 #         result = rethink.insert_bulk("first_table", [{"name":20, "age":"toto"}])
 #         rethink.close()
 
 #     def test_get_time_serie(self):
-#         rethink = RethinkDBAdapter(IP)
+#         rethink = RethinkdbAdapter(IP)
 #         rethink.connect()
 #         rethink.create_table_unique("first_table")
 #         docs = [
@@ -75,7 +75,7 @@ from rethinkdb import r as Rethinkdb
 #         self.assertEqual(time_serie_docs, expected)
 
 #     def test_list_tables(self):
-#         rethink = RethinkDBAdapter(IP)
+#         rethink = RethinkdbAdapter(IP)
 #         rethink.connect()
 #         rethink.create_table_unique("first_table")
 #         result = rethink.list_tables()
@@ -85,7 +85,7 @@ from rethinkdb import r as Rethinkdb
 #         self.assertEqual(result, expected)
 
 #     def test_is_table_empty_true(self):
-#         rethink = RethinkDBAdapter(IP)
+#         rethink = RethinkdbAdapter(IP)
 #         rethink.connect()
 #         rethink.create_table_unique("first_table")
 #         result = rethink.is_table_empty("first_table")
@@ -94,7 +94,7 @@ from rethinkdb import r as Rethinkdb
 #         self.assertTrue(result)
 
 #     def test_is_table_empty_false(self):
-#         rethink = RethinkDBAdapter(IP)
+#         rethink = RethinkdbAdapter(IP)
 #         rethink.connect()
 #         rethink.create_table_unique("first_table")
 #         rethink.insert_bulk("first_table", [{"name":"toto", "age":20}])

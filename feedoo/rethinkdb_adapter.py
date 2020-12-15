@@ -3,7 +3,7 @@ import logging
 import time
 
 
-class RethinkDBAdapter:
+class RethinkdbAdapter:
     def __init__(self, ip:str="localhost", port:int=28015, database_name:str="test", wait_connection:int=30, timestamp_index="timestamp"):
         self._ip = ip
         self._port = int(port)
