@@ -6,12 +6,11 @@ from fnmatch import fnmatch
 from feedoo.event import Event
 
 class AbstractInputDB(AbstractAction):
-    def __init__(self, tag:str, windows:int, time_key:str, table_name_template:str, table_name_match:str, offset:int=0, remove=False, reload_position=False, db_path=None):
+    def __init__(self, tag:str, windows:int, time_key:str, table_name_match:str, offset:int=0, remove=False, reload_position=False, db_path=None):
         AbstractAction.__init__(self)
         self._database_adapter = None
         self._time_key = time_key
         self._windows = windows
-        self._table_name_template = table_name_template
         self._table_name_match = table_name_match
         self._offset = offset
         self._remove = remove
