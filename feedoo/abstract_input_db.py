@@ -74,12 +74,13 @@ class AbstractInputDB(AbstractAction):
 
         for document in documents:
             event = Event(self._tag, int(_time()), document)
-            self._log.debug("send event {}".format(event))
             self.call_next(event)
 
         if self._remove:
+            #self._log.info("Delete {} documents from {} to {} in {}".format(len(documents), min_ts, max_ts, table))
             self._database_adapter.delete_time_serie(table, self._time_key, min_ts, max_ts)
             if self._database_adapter.is_table_empty(table):
+                self._log.info("Delete table {}".format(table))
                 self._database_adapter.delete_table(table)
 
 
