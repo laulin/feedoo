@@ -35,6 +35,15 @@ class SqliteAdapter:
         cursor.execute(sql_cmd)
         self._connection.commit()
 
+    def delete_table(self, table_name:str):
+        cursor = self._connection.cursor()
+
+        sql_cmd = "DROP TABLE IF EXISTS {};".format(table_name)
+        self._log.debug("Execute : " + sql_cmd)
+
+        cursor.execute(sql_cmd)
+        self._connection.commit()
+
     def _prepare_data(self, document):
         output = list()
         for k in self._field_names:
@@ -96,5 +105,31 @@ class SqliteAdapter:
         else:
             return False
 
+    def get_ops(self, table_name, field, ops):
+        cursor = self._connection.cursor()
+        cursor.execute("SELECT {}({}) FROM {};".format(ops, field, table_name))
+        
+        result = cursor.fetchone()
+        return result[0]
 
-    
+    def get_max(self, table_name, field):
+        return self.get_ops(table_name, field, "MAX")
+
+    def get_min(self, table_name, field):
+        return self.get_ops(table_name, field, "MIN")
+
+
+    def delete_time_serie(self, table_name:str, time_field:str, from_timestamp:int, to_timestamp:int):
+        context = {
+            "table" : table_name,
+            "ts" : time_field,
+            "min" : int(from_timestamp),
+            "max" : int(to_timestamp)
+        }
+        sql_cmd = "DELETE FROM {table} WHERE {ts} >= {min} AND {ts} < {max}".format(**context)
+        self._log.debug("Delete command : " + sql_cmd)
+
+        cursor = self._connection.cursor()
+        cursor.execute(sql_cmd)
+
+        self._connection.commit()
