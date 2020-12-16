@@ -16,6 +16,9 @@ class AbstractInputDB(AbstractAction):
         self._remove = remove
         self._reload_position = reload_position
         self._position = HashStorage(db_path)
+        self._tag = tag
+
+        self._start = True
     
     def do(self, event):
         # directly forward
@@ -31,8 +34,8 @@ class AbstractInputDB(AbstractAction):
         time_range = list()
 
         for table in tables:
-            min_ts = self._database_adapter.get_min(table)
-            max_ts = self._database_adapter.get_max(table)
+            min_ts = self._database_adapter.get_min(table, self._time_key)
+            max_ts = self._database_adapter.get_max(table, self._time_key)
             time_range.append((table, min_ts, max_ts))
 
         time_range = sorted(time_range, key=lambda x : x[2])
@@ -47,16 +50,16 @@ class AbstractInputDB(AbstractAction):
             else:            
                 for window_start in range(min_ts, max_ts, self._windows):
                     window_end =  window_start+self._windows - 1
-                    self._log.debug("window_start", window_start)
+                    #self._log.debug("window_start {}".format(window_start))
                     # windows is too last
                     if window_start >= stop_time:
-                        self._log.debug("window_start", window_start, "> stop_time", stop_time, ": end")
+                        # self._log.debug("window_start {} > stop_time {} : end".format(window_start, stop_time))
                         # because time_range is monotonic in term of time, 
                         # nothing *must* appear after that point
                         return
                     # windows is too early
                     elif window_end < start_time:
-                        self._log.debug("window_end", window_end, "< start_time", start_time, ": continue")
+                        # self._log.debug("window_end {} < start_time {} : continue".format(window_end, start_time))
                         pass
                     else:
                         # shrink to the minimum interval
@@ -67,9 +70,11 @@ class AbstractInputDB(AbstractAction):
 
     def process_window(self, min_ts, max_ts, table, _time=time.time):
         documents = self._database_adapter.get_time_serie(table, self._time_key, min_ts, max_ts)
+        self._log.debug("Process windows [{}, {}] in table {} with {} documents".format(min_ts, max_ts, table, len(documents)))
 
         for document in documents:
             event = Event(self._tag, int(_time()), document)
+            self._log.debug("send event {}".format(event))
             self.call_next(event)
 
         if self._remove:
@@ -82,24 +87,34 @@ class AbstractInputDB(AbstractAction):
         all_tables = self._database_adapter.list_tables()
         tables = self.get_table_matching(all_tables)
         time_range = self.get_time_range(tables)
-        for min_ts, max_ts, table in self.iterate_time_range(time_range, from_timestamp, to_timestamp):
+        for table, min_ts, max_ts in self.iterate_time_range(time_range, from_timestamp, to_timestamp):
+
             self.process_window(min_ts, max_ts, table)
 
         return max_ts
 
     def update(self, _time=time.time):
 
-        current_time = _time()
-        # on first time :
-        if self._reload_position:
-            self._reload_position = False
-            position = self._position.get("position", 0)
-            self._position["position"] = self.process_multiple_windows(position, current_time+self._offset)
-            
+        current_time = _time() + self._offset
+        if self._start:
+            self._start = False
+            self._database_adapter.connect()
 
-        if current_time+self._offset - self._position.get("position", 0) >= self._windows:
-            self._position["position"] = self.process_multiple_windows(self._position.get("position", 0), current_time+self._offset)
-            
+            if self._reload_position:
+                position = self._position.get("position", 0)
+                self._log.info("Reload from timestamp {}".format(position))
+                self._position["position"] = self.process_multiple_windows(position, current_time)
+            else:
+                self._position["position"] = current_time
+                self._log.info("Reload at current time + offset {}".format(current_time))
+        else:
+            if current_time - self._position["position"] >= self._windows:
+                self._log.debug("current_time {}, position {}".format(current_time, self._position["position"]))
+                self._position["position"] = self.process_multiple_windows(self._position.get("position", 0), current_time) +1
+
+    def finish(self):
+        self._database_adapter.close()
+                
 
             
                 
