@@ -48,6 +48,10 @@ class RethinkdbAdapter:
             
             self._log.info("create table "+table_name)
 
+    def delete_table(self, table_name:str):
+        if table_name in self.list_tables():
+            Rethinkdb.db(self._database_name).table_drop(table_name).run(self._connection)
+
     def insert_bulk(self, table_name:str, documents:list):
         Rethinkdb.db(self._database_name).table(table_name).index_wait().run(self._connection)
         Rethinkdb.db(self._database_name).table(table_name).insert(documents).run(self._connection)
@@ -64,7 +68,6 @@ class RethinkdbAdapter:
         tables = list(Rethinkdb.db(self._database_name).table_list().run(self._connection))
 
         return tables
-
 
     def is_table_empty(self, table_name):
         counter = Rethinkdb.db(self._database_name).table(table_name).limit(1).count().run(self._connection)
