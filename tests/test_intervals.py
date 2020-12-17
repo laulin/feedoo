@@ -1,4 +1,5 @@
 import unittest
+from pprint import pprint
 from feedoo.intervals import * # ok for testing
 
 class TestInterval(unittest.TestCase):
@@ -41,5 +42,19 @@ class TestInterval(unittest.TestCase):
         expected = [
             [(5, 7), (8, 10), (11, 13), (14, 14)], 
             [(15, 17), (18, 19)]
+        ]
+        self.assertEqual(result, expected)
+
+    def test_8(self):
+        segments = [
+            (5,14),
+            (15,24),
+            (25,30)
+        ]
+        result = iterate_intervals(0,19,3,segments)
+        expected = [
+            [(5, 7), (8, 10), (11, 13), (14, 14)], 
+            [(15, 17), (18, 19)],
+            None
         ]
         self.assertEqual(result, expected)

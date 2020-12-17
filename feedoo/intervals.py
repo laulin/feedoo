@@ -27,5 +27,7 @@ def iterate_intervals(start_global:int, end_global:int, interval:int, segments:l
         start_tmp, end_tmp = intersect(start_global, end_global, start_segment, end_segment)
         if start_tmp is not None:
             output.append(_func(start_tmp, end_tmp, interval))
+        else:
+            output.append(None)
 
     return output
