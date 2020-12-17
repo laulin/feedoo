@@ -58,7 +58,7 @@ class RethinkdbAdapter:
 
     def get_time_serie(self, table_name:str, time_field:str, from_timestamp:int, to_timestamp:int):
         Rethinkdb.db(self._database_name).table(table_name).index_wait().run(self._connection)
-        return list(Rethinkdb.db(self._database_name).table(table_name).between(from_timestamp, to_timestamp, index=time_field, right_bound="open").without("id").order_by(time_field).run(self._connection))
+        return list(Rethinkdb.db(self._database_name).table(table_name).between(from_timestamp, to_timestamp, index=time_field, right_bound="closed").without("id").order_by(time_field).run(self._connection))
 
     def list_tables(self):
         tables = list(Rethinkdb.db(self._database_name).table_list().run(self._connection))
@@ -73,6 +73,20 @@ class RethinkdbAdapter:
             return True
         else:
             return False
+
+    def get_max(self, table_name, field):
+        tmp = Rethinkdb.db(self._database_name).table(table_name).max(field).pluck(field).run(self._connection)
+        return tmp[field]
+
+    def get_min(self, table_name, field):
+        tmp = Rethinkdb.db(self._database_name).table(table_name).min(field).pluck(field).run(self._connection)
+        return tmp[field]
+
+
+    def delete_time_serie(self, table_name:str, time_field:str, from_timestamp:int, to_timestamp:int):
+        Rethinkdb.db(self._database_name).table(table_name).index_wait().run(self._connection)
+        return list(Rethinkdb.db(self._database_name).table(table_name).between(from_timestamp, to_timestamp, index=time_field, right_bound="closed").delete().run(self._connection))
+
 
 
     
