@@ -26,7 +26,6 @@ class TestInputSqlite(unittest.TestCase):
         sqlite_adapter.connect()
 
         docs = [{"timestamp":1607904000+i, "line":"line of time {}".format(1607904000 + i)} for i in range(0, 3600*24, 1800)]
-        #pprint(docs)
         sqlite_adapter.create_table_unique("log_20201214")
         sqlite_adapter.insert_bulk("log_20201214", docs)
 
@@ -155,9 +154,12 @@ class TestInputSqlite(unittest.TestCase):
         sqlite_adapter = SqliteAdapter(FILENAME, FIELDS)
         sqlite_adapter.connect()
 
-        tables = sqlite_adapter.list_tables()
-        print(sqlite_adapter.get_time_serie("log_20201214", "timestamp", 0, 1608055200))
+        # table should not exist !
+        result = sqlite_adapter.list_tables()
+        #pprint(sqlite_adapter.get_time_serie("log_20201214", "timestamp", 0, 1608055200)) # zero to dec 15 18h00
         sqlite_adapter.close()
+        expected = ["log_20201215"]
+        self.assertEqual(result, expected)
 
 
 

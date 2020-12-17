@@ -4,6 +4,8 @@ import time
 from functools import partial
 from fnmatch import fnmatch
 from feedoo.event import Event
+from feedoo.intervals import iterate_intervals
+from pprint import pprint
 
 class AbstractInputDB(AbstractAction):
     def __init__(self, tag:str, windows:int, time_key:str, table_name_match:str, offset:int=0, remove=False, reload_position=False, db_path=None):
@@ -41,37 +43,18 @@ class AbstractInputDB(AbstractAction):
         time_range = sorted(time_range, key=lambda x : x[2])
         return time_range
 
-    def iterate_time_range(self, time_range, start_time, stop_time):
-        # return time window and table to be processed
-        for table, min_ts, max_ts in time_range:
-            if min_ts > stop_time or max_ts < start_time:
-                # table is out of range
-                pass
-            else:            
-                for window_start in range(min_ts, max_ts, self._windows):
-                    window_end =  window_start+self._windows - 1
-                    #self._log.debug("window_start {}".format(window_start))
-                    # windows is too last
-                    if window_start >= stop_time:
-                        # self._log.debug("window_start {} > stop_time {} : end".format(window_start, stop_time))
-                        # because time_range is monotonic in term of time, 
-                        # nothing *must* appear after that point
-                        return
-                    # windows is too early
-                    elif window_end < start_time:
-                        # self._log.debug("window_end {} < start_time {} : continue".format(window_end, start_time))
-                        pass
-                    else:
-                        # shrink to the minimum interval
-                        clamp_start = max(window_start, start_time, min_ts)
-                        clamp_end = min(window_end, stop_time, max_ts)
-                        yield table, clamp_start, clamp_end
-     
+    def iterate_time_range(self, time_range:list, start_time:int, stop_time:int):
+        segments = map(lambda x : (x[1], x[2]), time_range)
+        tables = map(lambda x : x[0], time_range)
+        windows = iterate_intervals(start_time, stop_time-1, self._windows, segments)
+        intervals = filter(lambda x : x[1] is not None, zip(tables, windows))
+        for table, interval_list in intervals:
+            for start, end in interval_list:
+                yield table, start, end     
 
-    def process_window(self, min_ts, max_ts, table, _time=time.time):
+    def process_window(self, table, min_ts, max_ts, _time=time.time):
         documents = self._database_adapter.get_time_serie(table, self._time_key, min_ts, max_ts)
-        self._log.debug("Process windows [{}, {}] in table {} with {} documents".format(min_ts, max_ts, table, len(documents)))
-
+        #self._log.debug("Process windows [{}, {}] in table {} with {} documents".format(min_ts, max_ts, table, len(documents)))
         for document in documents:
             event = Event(self._tag, int(_time()), document)
             self.call_next(event)
@@ -90,7 +73,7 @@ class AbstractInputDB(AbstractAction):
         time_range = self.get_time_range(tables)
         for table, min_ts, max_ts in self.iterate_time_range(time_range, from_timestamp, to_timestamp):
 
-            self.process_window(min_ts, max_ts, table)
+            self.process_window(table, min_ts, max_ts)
 
         return max_ts
 
