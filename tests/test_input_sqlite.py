@@ -41,7 +41,7 @@ class TestInputSqlite(unittest.TestCase):
 
     def test_init(self):
         input_sqlite = InputSqlite(tag="log", 
-                                    windows=3600, 
+                                    window=3600, 
                                     time_key="timestamp", 
                                     table_name_match="log_*", 
                                     filename=FILENAME, 
@@ -52,7 +52,7 @@ class TestInputSqlite(unittest.TestCase):
         next_action = Next()
 
         input_sqlite = InputSqlite(tag="log", 
-                                    windows=3600, 
+                                    window=3600, 
                                     time_key="timestamp", 
                                     table_name_match="log_*", 
                                     filename=FILENAME, 
@@ -73,7 +73,7 @@ class TestInputSqlite(unittest.TestCase):
         next_action = Next()
 
         input_sqlite = InputSqlite(tag="log", 
-                                    windows=3600, 
+                                    window=3600, 
                                     time_key="timestamp", 
                                     table_name_match="log_*", 
                                     filename=FILENAME, 
@@ -93,7 +93,7 @@ class TestInputSqlite(unittest.TestCase):
         next_action = Next()
 
         input_sqlite = InputSqlite(tag="log", 
-                                    windows=3600, 
+                                    window=3600, 
                                     time_key="timestamp", 
                                     table_name_match="log_*", 
                                     filename=FILENAME, 
@@ -117,7 +117,7 @@ class TestInputSqlite(unittest.TestCase):
         next_action = Next()
 
         input_sqlite = InputSqlite(tag="log", 
-                                    windows=3600, 
+                                    window=3600, 
                                     time_key="timestamp", 
                                     table_name_match="log_*", 
                                     filename=FILENAME, 
@@ -140,7 +140,7 @@ class TestInputSqlite(unittest.TestCase):
     def test_reload_and_remove(self):
 
         input_sqlite = InputSqlite(tag="log", 
-                                    windows=3600, 
+                                    window=3600, 
                                     time_key="timestamp", 
                                     table_name_match="log_*", 
                                     filename=FILENAME, 
@@ -166,7 +166,7 @@ class TestInputSqlite(unittest.TestCase):
         next_action = Next()
 
         input_sqlite = InputSqlite(tag="log", 
-                                    windows=3600, 
+                                    window=3600, 
                                     time_key="timestamp", 
                                     table_name_match="log_*", 
                                     filename=FILENAME, 
@@ -187,7 +187,7 @@ class TestInputSqlite(unittest.TestCase):
         next_action = Next()
 
         input_sqlite = InputSqlite(tag="log", 
-                                    windows=3600, 
+                                    window=3600, 
                                     time_key="timestamp", 
                                     table_name_match="log_*", 
                                     filename=FILENAME, 
