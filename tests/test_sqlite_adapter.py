@@ -46,13 +46,14 @@ class TestSqliteAdapter(unittest.TestCase):
         ]
         sa.insert_bulk("first_table", docs)
 
-        time_serie_docs = sa.get_time_serie("first_table", "timestamp", 20, 50) # expect 20, 30, 40
+        time_serie_docs = sa.get_time_serie("first_table", "timestamp", 20, 50) # expect 20, 30, 40, 50
         sa.close()
 
         expected = [
             {'age': 20, 'name': 'titi', 'timestamp': 20},
             {'age': 20, 'name': 'foo', 'timestamp': 30},
-            {'age': 20, 'name': 'bar', 'timestamp': 40}
+            {'age': 20, 'name': 'bar', 'timestamp': 40},
+            {"timestamp":50, "name":"stuff", "age":20}
             ]
         self.assertEqual(time_serie_docs, expected)
 
@@ -99,8 +100,8 @@ class TestSqliteAdapter(unittest.TestCase):
         ]
         sa.insert_bulk("first_table", docs)
 
-        sa.delete_time_serie("first_table", "timestamp", 20, 50) # delete 20, 30, 40
-        time_serie_docs = sa.get_time_serie("first_table", "timestamp", 20, 50) # expect 20, 30, 40
+        sa.delete_time_serie("first_table", "timestamp", 20, 50) # delete 20, 30, 40, 50
+        time_serie_docs = sa.get_time_serie("first_table", "timestamp", 20, 50) # expect 20, 30, 40, 50 not existing
         sa.close()
         expected = []
         

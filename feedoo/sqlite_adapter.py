@@ -77,7 +77,7 @@ class SqliteAdapter:
             "min" : int(from_timestamp),
             "max" : int(to_timestamp)
         }
-        sql_cmd = "SELECT {fields} FROM {table} WHERE {ts} >= {min} AND {ts} < {max} ORDER BY {ts}".format(**context)
+        sql_cmd = "SELECT {fields} FROM {table} WHERE {ts} >= {min} AND {ts} <= {max} ORDER BY {ts}".format(**context)
         self._log.debug("Select command : " + sql_cmd)
 
         cursor = self._connection.cursor()
@@ -123,12 +123,14 @@ class SqliteAdapter:
         context = {
             "table" : table_name,
             "ts" : time_field,
-            "min" : int(from_timestamp),
-            "max" : int(to_timestamp)
+            "min" : from_timestamp,
+            "max" : to_timestamp
         }
-        sql_cmd = "DELETE FROM {table} WHERE {ts} >= {min} AND {ts} < {max}".format(**context)
-        self._log.debug("Delete command : " + sql_cmd)
+        if from_timestamp != to_timestamp:
+            sql_cmd = "DELETE FROM {table} WHERE {ts} >= {min} AND {ts} <= {max}".format(**context)
 
+        self._log.debug("Delete command : " + sql_cmd)
+        print("Delete command : " + sql_cmd)
         cursor = self._connection.cursor()
         cursor.execute(sql_cmd)
 
