@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
  
 setup(name='feedoo',
-    version='0.3.0',
+    version='0.4.0',
     url='https://github.com/laulin/feedoo',
     license='GPLV3',
     author='Laurent MOULIN',
