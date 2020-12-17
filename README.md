@@ -153,6 +153,37 @@ Example:
   server_hostname : foo.com
 ```
 
+### input_sqlite
+
+This input use a SQLite database as input. It works with time serie : each table is base on time (ex : log_%Y%m%d) and a field is an 
+unix timestamp (int or float). 
+
+Parameters :
+
+* `tag` : tag used for generated event
+* `window` : time in second of processing window
+* `time_key` : field use in database as timestamp
+* `table_name_match` : Pattern (unix style) for find table (ex : log_*)
+* `filename` : SQLite database path
+* `fields` : dict of field name and sql type as value (ie TEXT, FLOAT, INTEGER, BLOB)
+* `offset=0` : Time in second of working time offset. Can be useful to process data in an other time zone or remove old tables
+* `remove=False` : If True, remove data once read
+* `reload_position=False` : If True, reload data from the last known time (0 by default). Otherwise, start at current time.
+* `db_path=None` : file path to store internal state. None means only RAM is used.
+
+Example:
+
+```yaml
+- name : input_sqlite
+  tag: "log"
+  table_name_match : "log_*"
+  filename : "/my/path/test.db"
+  fields :
+    timestamp : INTEGER
+    line : TEXT
+  time_key : timestamp
+```
+
 ## Output
 
 It exports events out of the pipeline. It can be file, database, etc.
