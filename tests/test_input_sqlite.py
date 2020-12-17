@@ -161,6 +161,52 @@ class TestInputSqlite(unittest.TestCase):
         expected = ["log_20201215"]
         self.assertEqual(result, expected)
 
+    def test_no_reload_with_offset(self):
+
+        next_action = Next()
+
+        input_sqlite = InputSqlite(tag="log", 
+                                    windows=3600, 
+                                    time_key="timestamp", 
+                                    table_name_match="log_*", 
+                                    filename=FILENAME, 
+                                    fields=FIELDS,
+                                    reload_position=False,
+                                    offset=-3600)
+        input_sqlite.set_next(next_action)
+
+        input_sqlite.update(absolute_time(1608055200))# dec 15 18h00
+        input_sqlite.finish()
+
+        result = next_action.events
+        expected = []
+        self.assertEqual(result, expected)
+
+    def test_2_updates_with_offset(self):
+
+        next_action = Next()
+
+        input_sqlite = InputSqlite(tag="log", 
+                                    windows=3600, 
+                                    time_key="timestamp", 
+                                    table_name_match="log_*", 
+                                    filename=FILENAME, 
+                                    fields=FIELDS,
+                                    reload_position=False,
+                                    offset=-3600)
+        input_sqlite.set_next(next_action)
+
+        input_sqlite.update(absolute_time(1608055200))# dec 15 18h00 -> 17h
+        # get the last windows
+        input_sqlite.update(absolute_time(1608055200+3600))# dec 15 19h00 -> 18h
+
+
+        tmp = next_action.events
+        result = tmp[0].record, tmp[1].record
+
+        expected = {'line': 'line of time 1608051600', 'timestamp': 1608051600}, {'line': 'line of time 1608053400', 'timestamp': 1608053400}
+        self.assertEqual(result, expected)
+
 
 
         
