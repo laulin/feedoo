@@ -1,14 +1,14 @@
 from setuptools import setup, find_packages
  
 setup(name='feedoo',
-    version='0.4.0',
+    version='0.4.1',
     url='https://github.com/laulin/feedoo',
     license='GPLV3',
     author='Laurent MOULIN',
     author_email='gignops@gmail.com',
     description='General purpose data processor',
     packages=find_packages(exclude=['tests', "etc", "build", "dist", "feedoo.egg-info"]),
-    install_requires=["rethinkdb", "chronyk", "inotify", "pyyaml", "fluentbit-server-py>=1.0.2"],
+    install_requires=["rethinkdb", "chronyk", "inotify", "pyyaml", "fluentbit-server-py>=1.0.4"],
     long_description=open('README.md').read(),
     long_description_content_type="text/markdown",
     zip_safe=False,
