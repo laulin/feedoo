@@ -17,7 +17,7 @@ class ThreadingFluentbitServer(ThreadingMixIn, FluentbitServer):
 
 
 class InputForward(AbstractAction):
-    def __init__(self, host="localhost", port=24224, tls_enable=False, key_file=None, crt_file=None, shared_key=None, server_hostname="", buffer_size=32768):
+    def __init__(self, host="localhost", port=24224, tls_enable=False, key_file=None, crt_file=None, shared_key=None, server_hostname="", buffer_size=32768, _start_server=True):
         AbstractAction.__init__(self)
         transport_factory = partial(FluentbitTransport, callback=self.callback, buffer_size=buffer_size)
 
@@ -32,9 +32,11 @@ class InputForward(AbstractAction):
             ssl = None
 
         self._queue = queue.Queue()
-        self._server = ThreadingFluentbitServer((host, port), FluentbitRequestHandler, transport_factory, authentication_factory, ssl)
-        self._thread = threading.Thread(target=self._server.serve_forever)
-        self._thread.start()
+        self._server = None
+        if _start_server:
+            self._server = ThreadingFluentbitServer((host, port), FluentbitRequestHandler, transport_factory, authentication_factory, ssl)
+            self._thread = threading.Thread(target=self._server.serve_forever)
+            self._thread.start()
 
     def callback(self, event):
         self._log.debug("Forward received event {}".format(event))
@@ -43,17 +45,37 @@ class InputForward(AbstractAction):
     def do(self, event):
         return event
 
+    def format_record(self, record):
+        output = dict()
+
+        for k, v in record.items():
+            try:
+                new_k = k.decode("utf8")
+            except Exception as e:
+                #self._log.warning("Can't decode {} ({})".format(k, repr(e)))
+                new_k = k
+
+            try:
+                new_v = v.decode("utf8")
+            except:
+                new_v = v
+
+            output[new_k] = new_v
+        return output
+
     def update(self):
         while(1):
             try:
                 event = self._queue.get_nowait()
-                new_event = Event(event[0].decode("ascii"), event[1], event[2])
+                record = self.format_record(event[2])
+                new_event = Event(event[0].decode("utf8"), event[1], record)
                 self.call_next(new_event)
             except queue.Empty:
                 return
 
     def finish(self):
         self._log.info("Shutdown the server")
-        self._server.shutdown()
+        if self._server is not None:
+            self._server.shutdown()
         self._log.info("Purge the queue")
         self.update()
