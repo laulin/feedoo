@@ -17,9 +17,9 @@ class ThreadingFluentbitServer(ThreadingMixIn, FluentbitServer):
 
 
 class InputForward(AbstractAction):
-    def __init__(self, host="localhost", port=24224, tls_enable=False, key_file=None, crt_file=None, shared_key=None, server_hostname=""):
+    def __init__(self, host="localhost", port=24224, tls_enable=False, key_file=None, crt_file=None, shared_key=None, server_hostname="", buffer_size=32768):
         AbstractAction.__init__(self)
-        transport_factory = partial(FluentbitTransport, callback=self.callback)
+        transport_factory = partial(FluentbitTransport, callback=self.callback, buffer_size=buffer_size)
 
         if shared_key is not None:
              authentication_factory = partial(FluentbitAuthentication, shared_key=shared_key, server_hostname=server_hostname)
