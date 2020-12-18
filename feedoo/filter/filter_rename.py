@@ -5,7 +5,7 @@ from feedoo.event import Event
 # rename fields
 
 class FilterRename(AbstractAction):
-    def __init__(self, match:str, keys:dict, format=None):
+    def __init__(self, match:str, keys:dict):
         AbstractAction.__init__(self, match)
         self._keys = keys
 
