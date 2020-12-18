@@ -432,6 +432,26 @@ Event likes `{"date":"Fri, 11 Dec 2020 08:30:13 +0000"}` become `{"date":1607675
 
 It takes a date and convert it to timestamp
 
+### filter_rename
+
+This action rename fields. Useful to insert in database if the name is not compatible.
+
+Parameters :
+
+* `match` : pattern to match tag
+* `keys` : dict of old name / new name
+
+Example :
+
+```yaml
+- name : filter_rename
+  match : date
+  keys:
+    date : timestamp
+```
+
+Event likes `{"date":1607675413}` become `{"timestamp":1607675413}`
+
 ### filter_remove_keys
 
 This action remove one or more key in event.
