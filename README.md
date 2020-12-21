@@ -597,6 +597,42 @@ Example :
   timeframe : 60
 ```
 
+### filter_dnsbl
+
+This action use [DNSBL](https://en.wikipedia.org/wiki/Domain_Name_System-based_Blackhole_List) mecanism to emit alert. To prevent negative false, 
+many domains can be used; This way can have a major drawback in term of performance. Nevertheless, we use multiprocessing approach to the the overhead low.
+
+Parameters :
+
+* `match` : pattern to match tag
+* `tag` : tag used to generate new event on change
+* `key` : key used to catch an ip value. If the value is not a valid ip, no processing is done.
+* `threshold_percent` : minimum percent of trigged blacklist to rise an alert
+* `domains` : list of domains uses for DNSBL
+* `alert` : dict used to generate new event on change
+* `db_path=None` : file path to store internal state. None means only RAM is used.
+* `db_table="default_table"` : Table name used to store data.
+* `timeout=3600` : Duration in second of the cache. Prevent too many request on DNSBL.
+
+
+Example :
+
+```yaml
+- name : filter_dnsbl
+  match : netflow
+  tag : ip_blacklist
+  alert : 
+    title : you reach a bad server
+    priority : 3
+  threshold : 50
+  key : destination_address
+  domains:
+    - aaa.dns.com
+    - bbb.dns.com
+    - ccc.dns.com
+  timeout : 36000
+```
+
 # icons
 
 Thanks to flaticon.com !
