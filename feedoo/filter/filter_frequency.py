@@ -8,7 +8,7 @@ from feedoo.time_frame import TimeFrame
 # This rule matches when there are at least a certain number of events in a given time frame. This may be counted on a per-query_key basis.
 
 class FilterFrequency(AbstractAction):
-    def __init__(self, match, tag, alert, num_events, timeframe, query_key=None, db_path=None):
+    def __init__(self, match, tag, alert, num_events, timeframe, query_key=None, db_path=None, db_table="default_table"):
         AbstractAction.__init__(self, match)
         
         self._query_key = query_key
@@ -17,7 +17,7 @@ class FilterFrequency(AbstractAction):
         self._alert = alert
         self._num_events = num_events
         self._timeframe = timeframe
-        self._state = HashStorage(db_path, timeout=timeframe)
+        self._state = HashStorage(db_path, timeframe, db_table)
 
     def do(self, event):
         record = event.record

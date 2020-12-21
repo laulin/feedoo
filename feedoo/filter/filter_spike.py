@@ -13,7 +13,7 @@ from pprint import pprint
 
 class FilterSpike(AbstractAction):
     SPIKE_TYPE = ["up", "down", "both"]
-    def __init__(self, match, tag, alert, spike_height, spike_type, timeframe, query_key=None, field_value=None, threshold_ref=10, threshold_cur=10, db_path=None):
+    def __init__(self, match, tag, alert, spike_height, spike_type, timeframe, query_key=None, field_value=None, threshold_ref=10, threshold_cur=10, db_path=None, db_table="default_table"):
         AbstractAction.__init__(self, match)
         
         self._tag = tag
@@ -29,7 +29,7 @@ class FilterSpike(AbstractAction):
         self._threshold_ref = threshold_ref
         self._threshold_cur = threshold_cur
 
-        self._state = HashStorage(db_path, timeout=timeframe*2)
+        self._state = HashStorage(db_path, timeframe*2, db_table)
 
     def do(self, event, _time=time.time):
         query_key = self.get_query_key_value(event)       

@@ -7,7 +7,7 @@ from feedoo.event import Event
 # This action matches when the total number of events is under a given threshold for a time period.
 
 class FilterFlatline(AbstractAction):
-    def __init__(self, match, tag, alert, threshold, timeframe, query_key=None, forget_keys=True, db_path=None):
+    def __init__(self, match, tag, alert, threshold, timeframe, query_key=None, forget_keys=True, db_path=None, db_table="default_table"):
         # match defines the pattern to be matched
         # tag is the alert tag
         # alert is a dict used to create alert
@@ -27,7 +27,7 @@ class FilterFlatline(AbstractAction):
         self._last_trigger = time.time() + timeframe
         self._forget_keys = forget_keys
 
-        self._state = HashStorage(db_path, timeframe)
+        self._state = HashStorage(db_path, timeframe, db_table)
 
     def do(self, event, _time=time.time):
         

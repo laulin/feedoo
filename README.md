@@ -171,6 +171,7 @@ Parameters :
 * `remove=False` : If True, remove data once read
 * `reload_position=False` : If True, reload data from the last known time (0 by default). Otherwise, start at current time.
 * `db_path=None` : file path to store internal state. None means only RAM is used.
+* `db_table="default_table"` : Table name used to store data.
 
 Example:
 
@@ -204,6 +205,7 @@ Parameters :
 * `remove=False` : If True, remove data once read
 * `reload_position=False` : If True, reload data from the last known time (0 by default). Otherwise, start at current time.
 * `db_path=None` : file path to store internal state. None means only RAM is used.
+* `db_table="default_table"` : Table name used to store data.
 
 Example:
 
@@ -232,6 +234,7 @@ Parameters :
 * `buffer_size=1000` : Number of event stored before flush
 * `timeout_flush=60` : Flush buffer after timeout, in second
 * `db_path=None` : file path to store internal state. None means only RAM is used.
+* `db_table="default_table"` : Table name used to store data.
 
 Example :
 
@@ -262,6 +265,7 @@ Parameters
 * `wait_connection=30` : used to wait the database warmup
 * `timeout_flush=60` : Flush buffer after timeout, in second
 * `db_path=None` : file path to store internal state. None means only RAM is used.
+* `db_table="default_table"` : Table name used to store data.
 
 Example:
 
@@ -304,6 +308,7 @@ Parameters
 * `buffer_size=1000` : Number of event stored before flush
 * `timeout_flush=60` : Flush buffer after timeout, in second
 * `db_path=None` : file path to store internal state. None means only RAM is used.
+* `db_table="default_table"` : Table name used to store data.
 
 Example:
 
@@ -390,6 +395,7 @@ Parameters :
 * `query_key` : key used to group type of event
 * `ignore_null=True` : ignore if compare_key is missing. If ignore_null if false, missing compare_key is a valid state
 * `db_path=None` : file path to store internal state. None means only RAM is used.
+* `db_table="default_table"` : Table name used to store data.
 
 Example :
 
@@ -508,6 +514,7 @@ Parameters :
 * `timeframe` : duration of the time windows in seconds
 * `query_key=None` : key used to group type of event
 * `db_path=None` : file path to store internal state. None means only RAM is used.
+* `db_table="default_table"` : Table name used to store data.
 
 Example :
 
@@ -540,6 +547,7 @@ Parameters :
 * `query_key=None` : key used to group type of event
 * `field_value=None` : When set, uses the value of the field in the document and not the number of matching documents. This is useful to monitor for example a temperature sensor and raise an alarm if the temperature grows too fast. Note that the means of the field on the reference and current windows are used to determine if the spike_height value is reached
 * `db_path=None` : file path to store internal state. None means only RAM is used.
+* `db_table="default_table"` : Table name used to store data.
 * `threshold_ref=10` : minimum number of event in the reference frame to be evaluated
 * `threshold_cur=10` : minimum number of event in the current frame to be evaluated
 
@@ -572,6 +580,7 @@ Parameters :
 * `query_key=None` : key used to group type of event
 * `forget_keys=True` : set to false to keep tracking existing query key (emit alert for ever if no event come back).
 * `db_path=None` : file path to store internal state. None means only RAM is used.
+* `db_table="default_table"` : Table name used to store data.
 
 
 Example :

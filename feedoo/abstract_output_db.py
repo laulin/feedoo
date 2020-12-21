@@ -4,12 +4,12 @@ from chronyk import Chronyk
 import time
 
 class AbstractOutputDB(AbstractAction):
-    def __init__(self, match, time_key, table_template, buffer_size=1000, timeout_flush=60, db_path=None):
+    def __init__(self, match, time_key, table_template, buffer_size=1000, timeout_flush=60, db_path=None, db_table="default"):
         AbstractAction.__init__(self, match)
         self._database_adapter = None
         self._time_key = time_key
         self._table_template = table_template
-        self._buffer = HashStorage(db_path, timeout=timeout_flush)
+        self._buffer = HashStorage(db_path, timeout_flush, db_table)
         self._buffer_size = buffer_size
 
     def _create_table_name(self, event):

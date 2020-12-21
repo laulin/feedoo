@@ -13,11 +13,11 @@ from time import time
 # push document to archive files
 
 class OutputArchive(AbstractAction):
-    def __init__(self, match, time_key, path_template, buffer_size=1000, timeout_flush=60, db_path=None):
+    def __init__(self, match, time_key, path_template, buffer_size=1000, timeout_flush=60, db_path=None, db_table="default_table"):
         AbstractAction.__init__(self, match)
         self._time_key = time_key
         self._path_template = path_template
-        self._buffer = HashStorage(db_path, timeout=timeout_flush)
+        self._buffer = HashStorage(db_path, timeout_flush, db_table)
         self._buffer_size = buffer_size
 
     def do(self, event):
