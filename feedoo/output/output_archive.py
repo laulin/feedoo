@@ -67,7 +67,3 @@ class OutputArchive(AbstractAction):
                 self._log.info("Flush {}".format(path))
                 self.flush_one(path)
 
-        else:
-            for path in tuple(self._buffer.get_timeout(_time)):
-                self._log.info("Flush (timeout) {}".format(path))
-                self.flush_one(path)

@@ -58,10 +58,6 @@ class AbstractOutputDB(AbstractAction):
             for tablename in tuple(self._buffer.keys()):
                 self._log.info("Flush to {}".format(tablename))
                 self.flush_one(tablename)
-        else:
-            for tablename in tuple(self._buffer.get_timeout(_time)):
-                self._log.info("Flush to (timeout) {}".format(tablename))
-                self.flush_one(tablename)
 
     def finish(self):
         self._log.debug("finish")
