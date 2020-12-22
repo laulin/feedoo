@@ -20,6 +20,9 @@ class OutputArchive(AbstractAction):
         self._buffer = HashStorage(db_path, timeout_flush, db_table)
         self._buffer_size = buffer_size
 
+        self._last_flush = 0
+        self._timeout_flush = timeout_flush
+
     def do(self, event):
         record = event.record
         time = Chronyk(record[self._time_key])
@@ -58,6 +61,13 @@ class OutputArchive(AbstractAction):
             del self._buffer[path]
 
     def update(self, _time=time):
-        for path in tuple(self._buffer.get_timeout(_time)):
-            self._log.info("Flush (timeout) {}".format(path))
-            self.flush_one(path)
+        if _time() - self._last_flush > self._timeout_flush:
+            self._last_flush = _time()
+            for path in tuple(self._buffer.keys()):
+                self._log.info("Flush {}".format(path))
+                self.flush_one(path)
+
+        else:
+            for path in tuple(self._buffer.get_timeout(_time)):
+                self._log.info("Flush (timeout) {}".format(path))
+                self.flush_one(path)
