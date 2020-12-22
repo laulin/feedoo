@@ -633,6 +633,37 @@ Example :
   timeout : 36000
 ```
 
+### filter_matching_list
+
+This action performs a multiple string matching using aho corasick algorithm. It can be used for *darklist* or *lightlist*. 
+
+Parameters :
+
+* `match` : pattern to match tag
+* `tag` : tag used to generate new event on change
+* `key` : key used to catch an ip value. If the value is not a valid ip, no processing is done.
+* `alert` : dict used to generate new event on change
+* `mode` : define the way the detection is performed. `present` acts as darklist, `absent` acts as lightlist.
+* `matching_list` : define the list of word to be detected (or not). Mutually exclusive with `matching_list_file`.
+* `matching_list_file` : define the filename containing the list of word to be detected (or not). Each line of the file is a word. Mutually exclusive with `matching_list`.
+
+Example :
+
+```yaml
+- name : filter_matching_list
+  match : netflow
+  tag : bad_protocol
+  alert : 
+    title : protocol is not allowed
+    priority : 3
+  key : protocol
+  mode: absent
+  matching_list:
+    - TCP
+    - UDP
+    - ARP
+```
+
 # icons
 
 Thanks to flaticon.com !
