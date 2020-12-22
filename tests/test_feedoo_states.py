@@ -1,4 +1,5 @@
 from feedoo.feedoo_states import StatesServer
+from feedoo.feedoo_states import FeedooStates
 
 import unittest
 import time
@@ -28,5 +29,18 @@ class TestFeedooStates(unittest.TestCase):
         server.shutdown()
 
         self.assertEqual(result, expected)
+
+    def test_3(self):
+        def callback():
+            return {"timestamp":123456, "pipelines":{}}
+
+        server = FeedooStates("127.0.0.1", 4321, callback)
+
+        result = urllib.request.urlopen("http://127.0.0.1:4321").read()
+        expected = b'{\n    "pipelines": {},\n    "timestamp": 123456\n}'
+        server.finish()
+
+        self.assertEqual(result, expected)
+
 
 
