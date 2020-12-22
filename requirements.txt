@@ -4,3 +4,4 @@ inotify
 pyyaml
 fluentbit-server-py
 dnspython
+pyahocorasick
