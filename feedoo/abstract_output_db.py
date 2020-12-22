@@ -12,6 +12,9 @@ class AbstractOutputDB(AbstractAction):
         self._buffer = HashStorage(db_path, timeout_flush, db_table)
         self._buffer_size = buffer_size
 
+        self._last_flush = 0
+        self._timeout_flush = timeout_flush
+
     def _create_table_name(self, event):
         timestamp = Chronyk(event.record[self._time_key])
         tablename = timestamp.timestring(self._table_template)
@@ -50,9 +53,15 @@ class AbstractOutputDB(AbstractAction):
         del self._buffer[tablename]
 
     def update(self, _time=time.time):
-        for tablename in tuple(self._buffer.get_timeout(_time)):
-            self._log.info("Flush (timeout) {}".format(tablename))
-            self.flush_one(tablename)
+        if _time() - self._last_flush > self._timeout_flush:
+            self._last_flush = _time()
+            for tablename in tuple(self._buffer.keys()):
+                self._log.info("Flush to {}".format(tablename))
+                self.flush_one(tablename)
+        else:
+            for tablename in tuple(self._buffer.get_timeout(_time)):
+                self._log.info("Flush to (timeout) {}".format(tablename))
+                self.flush_one(tablename)
 
     def finish(self):
         self._log.debug("finish")
