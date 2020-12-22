@@ -19,7 +19,7 @@ class FeedManager:
         for pipeline_id, pipeline_actions in self._configuration.iterate_pipelines():
             self._log.info("Create pipeline {}".format(pipeline_id))
             new_pipeline = Pipeline(action_modules)
-            new_pipeline.create(pipeline_actions)
+            new_pipeline.create(pipeline_id, pipeline_actions)
 
             self._pipelines.append(new_pipeline)
 

@@ -5,9 +5,11 @@ class Pipeline:
         self._log = logging.getLogger("Pipeline")
         self._pipeline = []
         self._actions = actions
+        self._pipeline_id = None
 
-    def create(self, actions):
+    def create(self, pipeline_id, actions):
         pipeline = list()
+        self._pipeline_id = pipeline_id
 
         for action in actions:
             name = action["name"]
