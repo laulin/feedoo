@@ -27,3 +27,6 @@ class InputDummy(AbstractAction):
                 self.call_next(event)
                 
             self._data = None
+
+    def info(self):
+        return "Dummy[{}]".format(self._tag)
