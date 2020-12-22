@@ -2,4 +2,7 @@ variables:
 privileges:
   user: user
   group: user
+states:
+  ip : 127.0.01
+  port : 4321 
 include: /etc/feedoo/pipelines/*.yaml

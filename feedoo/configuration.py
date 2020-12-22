@@ -73,3 +73,12 @@ class Configuration:
             return self._structure["privileges"]["user"], self._structure["privileges"]["group"]
         else:
             return None, None
+
+    def get_states_parameters(self):
+        if "states" in self._structure:
+            ip = self._structure["states"].get("ip", "127.0.0.1")
+            port = int(self._structure["states"].get("port", 4321))
+
+            return {"ip":ip, "port":port}
+        else:
+            return {"ip":None, "port":None}

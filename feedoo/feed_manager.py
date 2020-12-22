@@ -1,5 +1,6 @@
 from feedoo.pipeline import Pipeline
 from feedoo.plugins import Plugins
+from feedoo.feedoo_states import FeedooStates
 import time
 import sys
 import logging
@@ -12,6 +13,7 @@ class FeedManager:
         self._configuration = configuration
         self._pipelines = []
         self._log = logging.getLogger(str(self.__class__.__name__))
+        self._states = None
 
     def setup(self):
         plugins = Plugins()
@@ -22,6 +24,10 @@ class FeedManager:
             new_pipeline.create(pipeline_id, pipeline_actions)
 
             self._pipelines.append(new_pipeline)
+
+        parameters = self._configuration.get_states_parameters()
+        parameters["callback"] = self.get_states
+        self._states = FeedooStates(**parameters)
 
     def _get_uid(self):
         uid = os.getuid()
@@ -93,6 +99,7 @@ class FeedManager:
         self._log.debug("Call finish()")
         for p in self._pipelines:
             p.finish()
+        self._states.finish()
 
     def loop(self):
         try:
@@ -103,3 +110,12 @@ class FeedManager:
         except KeyboardInterrupt:
             self.finish()
             sys.exit(0)
+
+    def get_states(self):
+        pipeline_states = dict([p.get_states() for p in self._pipelines])
+        timestamp = time.time()
+
+        return {
+            "timestamp" : timestamp,
+            "pipelines" : pipeline_states
+        }
