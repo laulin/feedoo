@@ -11,7 +11,7 @@ class AbstractAction:
         self._next = None
         self._match = match
         self._log = logging.getLogger(str(self.__class__.__name__))
-        self._states = ActionStates(str(self.__class__.__name__), self)
+        self._states = ActionStates(str(self.__class__.__name__), self.info)
 
     def set_next(self, next):
         """
@@ -80,3 +80,6 @@ class AbstractAction:
 
     def get_states(self):
         return self._states.get_states()
+
+    def info(self):
+        return "undefined for {}".format(str(self.__class__.__name__))
