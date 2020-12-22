@@ -1,6 +1,8 @@
 from fnmatch import fnmatch
 import logging
 
+from feedoo.action_states import ActionStates
+
 class AbstractAction:
     """
     this class describe the interface of action
@@ -9,6 +11,7 @@ class AbstractAction:
         self._next = None
         self._match = match
         self._log = logging.getLogger(str(self.__class__.__name__))
+        self._states = ActionStates(str(self.__class__.__name__), self)
 
     def set_next(self, next):
         """
@@ -21,6 +24,15 @@ class AbstractAction:
         send event to the next element if existing
         """
         if self._next is not None:
+            self._states.add_out(event)
+            self._next.receive(event)
+
+    def call_next_bypass(self, event):
+        """
+        send event to the next element if existing
+        """
+        if self._next is not None:
+            self._states.add_bypass(event)
             self._next.receive(event)
 
     def update(self):
@@ -39,12 +51,13 @@ class AbstractAction:
         """
         event containts tag, timestamp and record
         """
-
+        self._states.add_in(event)
         if self._match is None or fnmatch(event.tag, self._match) == False:
             #self._log.debug("{} not matching with {}, shortcut".format(event.tag, self._match))
-            self.call_next(event)
+            self.call_next_bypass(event)
             return
         self._log.debug("{}.do({}) (filter : {})".format(self.__class__.__name__, event, self._match))
+        self._states.add_do(event)
         try:
             new_event = self.do(event)
         except Exception as e:
@@ -64,3 +77,6 @@ class AbstractAction:
     def do(self, event):
         # transparent action
         return event
+
+    def get_states(self):
+        return self._states.get_states()
