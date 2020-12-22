@@ -12,3 +12,6 @@ class OutputStdout(AbstractAction):
         print(to_print)
         self._log.info(to_print)
         return event
+
+    def info(self):
+        return f"Stdout[{self._match}]"
