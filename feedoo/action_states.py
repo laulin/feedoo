@@ -1,7 +1,8 @@
 class ActionStates:
-    def __init__(self, action_class_name):
-        self._action_class_name = action_class_name
+    def __init__(self, action_class_name, parent):
         self._stats = {
+            "name":action_class_name,
+            "repr":repr(parent),
             "in":dict(), # what action receive
             "bypass":dict(), # what is refused by filter "match"
             "do":dict(), # what do action receive
@@ -12,7 +13,7 @@ class ActionStates:
     def __getattribute__(self, name):
         if name.startswith("add_"):
             stat_name = name[4:]
-            if stat_name not in  object.__getattribute__(self, "_stats"):
+            if stat_name not in  object.__getattribute__(self, "_stats") or stat_name == "name":
                 raise AttributeError(name)
 
             def generic_add(event):
