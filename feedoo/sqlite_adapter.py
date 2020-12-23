@@ -60,6 +60,7 @@ class SqliteAdapter:
         self._log.debug("Insert command : " + sql_cmd)
 
         cursor = self._connection.cursor()
+        cursor.execute('BEGIN TRANSACTION')
         for document in documents:
             if field_names.intersection(document) != field_names:
                 self._log.debug("Document not inserted (fields are not compliant) : '{}'".format(document))
