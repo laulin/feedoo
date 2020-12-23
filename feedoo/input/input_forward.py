@@ -17,7 +17,7 @@ class ThreadingFluentbitServer(ThreadingMixIn, FluentbitServer):
 
 
 class InputForward(AbstractAction):
-    def __init__(self, host="localhost", port=24224, tls_enable=False, key_file=None, crt_file=None, shared_key=None, server_hostname="", buffer_size=32768, _start_server=True):
+    def __init__(self, host="localhost", port=24224, tls_enable=False, key_file=None, crt_file=None, shared_key=None, server_hostname="", buffer_size=32768, queue_size=1000, _start_server=True):
         AbstractAction.__init__(self)
         transport_factory = partial(FluentbitTransport, callback=self.callback, buffer_size=buffer_size)
 
@@ -31,7 +31,7 @@ class InputForward(AbstractAction):
         else:
             ssl = None
 
-        self._queue = queue.Queue()
+        self._queue = queue.Queue(queue_size)
         self._server = None
         if _start_server:
             self._server = ThreadingFluentbitServer((host, port), FluentbitRequestHandler, transport_factory, authentication_factory, ssl)
@@ -39,8 +39,11 @@ class InputForward(AbstractAction):
             self._thread.start()
 
     def callback(self, event):
-        self._log.debug("Forward received event {}".format(event))
-        self._queue.put(event)
+        try:
+            self._queue.put(event)
+            self._log.debug("Forward received event {}".format(event))
+        except queue.Full:
+            self._log.warning("Queue is full, drop event")
 
     def do(self, event):
         return event
@@ -63,13 +66,16 @@ class InputForward(AbstractAction):
             output[new_k] = new_v
         return output
 
+    def _update_one_event(self):
+        event = self._queue.get_nowait()
+        record = self.format_record(event[2])
+        new_event = Event(event[0].decode("utf8"), event[1], record)
+        self.call_next(new_event)
+
     def update(self):
-        while(1):
+        for i in range(16):
             try:
-                event = self._queue.get_nowait()
-                record = self.format_record(event[2])
-                new_event = Event(event[0].decode("utf8"), event[1], record)
-                self.call_next(new_event)
+                self._update_one_event()
             except queue.Empty:
                 return
 
@@ -78,4 +84,10 @@ class InputForward(AbstractAction):
         if self._server is not None:
             self._server.shutdown()
         self._log.info("Purge the queue")
-        self.update()
+
+        while(1):
+            try:
+                self._update_one_event()
+            except queue.Empty:
+                return
+

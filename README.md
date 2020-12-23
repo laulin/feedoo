@@ -138,6 +138,7 @@ Parameters :
 * `shared_key=None` : defined a shared key between servers an nodes. If set, enable authentication
 * `server_hostname=""` : define the hostname, useful for shared_key authentication
 * `buffer_size=32768` : define the incoming buffer size
+* `queue_size=1000` : define the queue size.
 
 **Warning** : if you exposed the port to internet, use authentication and TLS. If you can, add firewall rule to decrease surface attack. BE CAREFUL !
 
