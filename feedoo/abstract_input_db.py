@@ -54,13 +54,13 @@ class AbstractInputDB(AbstractAction):
 
     def process_window(self, table, min_ts, max_ts, _time=time.time):
         documents = self._database_adapter.get_time_serie(table, self._time_key, min_ts, max_ts)
-        #self._log.debug("Process windows [{}, {}] in table {} with {} documents".format(min_ts, max_ts, table, len(documents)))
+        self._log.debug("Process windows [{}, {}] in table {} with {} documents".format(min_ts, max_ts, table, len(documents)))
         for document in documents:
             event = Event(self._tag, int(_time()), document)
             self.call_next(event)
 
         if self._remove:
-            #self._log.info("Delete {} documents from {} to {} in {}".format(len(documents), min_ts, max_ts, table))
+            self._log.info("Delete {} documents from {} to {} in {}".format(len(documents), min_ts, max_ts, table))
             self._database_adapter.delete_time_serie(table, self._time_key, min_ts, max_ts)
             if self._database_adapter.is_table_empty(table):
                 self._log.info("Delete table {}".format(table))
@@ -75,7 +75,7 @@ class AbstractInputDB(AbstractAction):
 
             self.process_window(table, min_ts, max_ts)
 
-        return max_ts
+        return
 
     def update(self, _time=time.time):
 
@@ -87,14 +87,15 @@ class AbstractInputDB(AbstractAction):
             if self._reload_position:
                 position = self._position.get("position", 0)
                 self._log.info("Reload from timestamp {}".format(position))
-                self._position["position"] = self.process_multiple_windows(position, current_time)
+                self.process_multiple_windows(position, current_time)
             else:
-                self._position["position"] = current_time
                 self._log.info("Reload at current time + offset {}".format(current_time))
+            self._position["position"] = current_time
         else:
             if current_time - self._position["position"] >= self._windows:
-                self._log.debug("current_time {}, position {}".format(current_time, self._position["position"]))
-                self._position["position"] = self.process_multiple_windows(self._position.get("position", 0), current_time) +1
+                self._log.info("Process window from current_time {} to position {} in {}".format(current_time, self._position["position"], self._table_name_match))
+                self.process_multiple_windows(self._position.get("position", 0), current_time)
+                self._position["position"] = current_time 
 
     def finish(self):
         self._database_adapter.close()
