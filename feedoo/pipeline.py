@@ -43,14 +43,15 @@ class Pipeline:
             try:
                 action.update()
             except Exception as e:
-                self._log.warning("action {} failed to update ({})".format(action.__class__.__name__, e))
+                self._log.warning("action {} failed to update ({})".format(action.__class__.__name__, repr(e)))
+
 
     def finish(self):
         for action in self._pipeline:
             try:
                 action.finish()
             except Exception as e:
-                self._log.warning("action {} failed to finish ({})".format(action.__class__.__name__, e))
+                self._log.warning("action {} failed to finish ({})".format(action.__class__.__name__, repr(e)))
 
     def get_states(self):
         return self._pipeline_id, [a.get_states() for a in self._pipeline]
