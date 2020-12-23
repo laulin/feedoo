@@ -9,6 +9,7 @@ from feedoo.abstract_action import AbstractAction
 from feedoo.event import Event
 from feedoo.hash_storage import HashStorage
 from time import time
+import json
 
 # push document to archive files
 
@@ -56,7 +57,7 @@ class OutputArchive(AbstractAction):
 
         with open(path, "a") as f:
             values = self._buffer[path]
-            data = "\n".join(map(str, values)) + "\n"
+            data = "\n".join(map(json.dumps, values)) + "\n"
             f.write(data)
             del self._buffer[path]
 
