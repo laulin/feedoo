@@ -7,14 +7,15 @@ import sys
 def main():
     args = get_args()
 
+    log_format = '[%(asctime)s] %(levelname)s %(name)s %(message)s'
     if args.verbosity == 0:
-        logging.basicConfig(level=logging.WARNING)
+        logging.basicConfig(level=logging.WARNING, format=log_format)
     elif args.verbosity == 1:
-        logging.basicConfig(level=logging.INFO)
+        logging.basicConfig(level=logging.INFO, format=log_format)
     elif args.verbosity == 2:
-        logging.basicConfig(level=logging.DEBUG)
+        logging.basicConfig(level=logging.DEBUG, format=log_format)
     else:
-        logging.basicConfig(level=logging.NOTSET)
+        logging.basicConfig(level=logging.NOTSET, format=log_format)
 
     configuration = Configuration()
     configuration.load(args.configuration_path)
