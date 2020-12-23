@@ -12,9 +12,9 @@ class AbstractInputDB(AbstractAction):
         AbstractAction.__init__(self)
         self._database_adapter = None
         self._time_key = time_key
-        self._windows = windows
+        self._windows = int(windows)
         self._table_name_match = table_name_match
-        self._offset = offset
+        self._offset = int(offset)
         self._remove = remove
         self._reload_position = reload_position
         self._position = HashStorage(db_path)
@@ -79,13 +79,13 @@ class AbstractInputDB(AbstractAction):
 
     def update(self, _time=time.time):
 
-        current_time = _time() + self._offset
+        current_time = int(_time() + self._offset)
         if self._start:
             self._start = False
             self._database_adapter.connect()
 
             if self._reload_position:
-                position = self._position.get("position", 0)
+                position = int(self._position.get("position", 0))
                 self._log.info("Reload from timestamp {}".format(position))
                 self.process_multiple_windows(position, current_time)
             else:
