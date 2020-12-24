@@ -1,0 +1,49 @@
+pipelines:
+  "pipeline#1":
+    - name : input_file
+      tag : netflow
+      watch_path: /db
+      path_pattern : /db/netflow*.json
+
+    - name : parser_json
+      match : netflow
+      key: log
+
+    # - name : output_stdout
+    #   match : "*"
+
+    # - name : output_archive
+    #   time_key : timestamp
+    #   path_template : "/tmp/netflow-%Y%m%d.json"
+    #   buffer_size : 10
+    #   match : netflow
+    #   db_table: netflow_output_archive
+    #   db_path: /tmp/cache.db
+
+    - name : output_sqlite
+      time_key : timestamp
+      filename : "/tmp/main.db"
+      table_template : "netflow_%Y%m%d"
+      fields :
+        first_switched : INTEGER
+        bytes : INTEGER
+        flow_id : TEXT
+        nexthop : TEXT
+        protocol : TEXT
+        src_addres : TEXT
+        src_port : INTEGER
+        dst_address : TEXT
+        dst_port : INTEGER
+        timestamp : INTEGER
+        TCP_flags : INTEGER
+        client_port : INTEGER
+        client_ip : TEXT
+        TCP_flags_decoded : TEXT
+        source : TEXT
+        last_switched : INTEGER
+        TOS : INTEGER
+        packets : INTEGER
+      buffer_size : 100
+      match : netflow
+      db_table : netflow_output_sqlite
+      db_path: /tmp/cache.db
