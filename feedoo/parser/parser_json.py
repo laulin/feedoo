@@ -18,7 +18,7 @@ class ParserJson(AbstractAction):
             return
         try:
             result = json.loads(to_parse)
-        except JSONDecodeError:
+        except json.JSONDecodeError:
             self._log.debug("Failed to parse '{}'".format(to_parse))
             return 
  
