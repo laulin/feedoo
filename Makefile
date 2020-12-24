@@ -11,7 +11,10 @@ fast_unittest: build_fast
 	sudo docker run -it --rm  -v $(shell pwd)/tests:/root/tests -v $(shell pwd)/feedoo:/usr/local/lib/python3.8/dist-packages/feedoo --name feedoo feedoofast python3 -m unittest discover -s /root/tests -p "test_*.py"
 
 run: build
-	sudo docker run -it --rm --net=host --name feedoo feedoo feedoo
+	sudo docker run -it --rm --net=host -v $(shell pwd)/db:/db --name feedoo feedoo feedoo -v
+
+profile: build
+	sudo docker run -it --rm --net=host -v $(shell pwd)/db:/db --name feedoo feedoo python3 -m cProfile -o /db/out.profile -m feedoo.feedoo -v -c /etc/feedoo/benchmark.yaml
 
 clear:
 	docker images -a | grep none | grep -E -o "[0-9a-f]{12,12}" | xargs docker rmi -f
