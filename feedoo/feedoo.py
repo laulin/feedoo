@@ -24,3 +24,6 @@ def main():
     feed_manager.setup()
     feed_manager.drop_privileges()
     feed_manager.loop()
+
+if __name__ == "__main__":
+    main()
