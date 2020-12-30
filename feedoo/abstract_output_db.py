@@ -4,12 +4,12 @@ from chronyk import Chronyk
 import time
 
 class AbstractOutputDB(AbstractAction):
-    def __init__(self, match, time_key, table_template, buffer_size=1000, timeout_flush=60, db_path=None, db_table="default"):
+    def __init__(self, match, time_key, table_template, buffer_size=1000, timeout_flush=60, db_path=None):
         AbstractAction.__init__(self, match)
         self._database_adapter = None
         self._time_key = time_key
         self._table_template = table_template
-        self._buffer = HashStorage(db_path, timeout_flush, db_table)
+        self._buffer = HashStorage(db_path, timeout_flush)
         self._buffer_size = buffer_size
 
         self._last_flush = 0
@@ -27,10 +27,7 @@ class AbstractOutputDB(AbstractAction):
         if tablename not in self._buffer:
             self._buffer[tablename] = list()
 
-        
-        buffer = self._buffer[tablename]
-        buffer.append(event.record)
-        self._buffer[tablename] = buffer
+        self._buffer[tablename].append(event.record)
 
         if len(self._buffer[tablename]) > self._buffer_size:
             self.flush_one(tablename)
@@ -68,6 +65,8 @@ class AbstractOutputDB(AbstractAction):
 
         if self._database_adapter.is_connected():
                 self._database_adapter.close()
+
+        self._buffer.dump()
         
 
     

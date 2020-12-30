@@ -1,8 +1,8 @@
 from collections.abc import MutableMapping
+from collections import OrderedDict
 import json
 from time import time
 import sqlite3
-import pickle
 
 """
 Store key:str, timestamp:int, value:bytes in table (default : HashStore)
@@ -12,106 +12,97 @@ Store key:str, timestamp:int, value:bytes in table (default : HashStore)
 class HashStorage(MutableMapping):
     """A dictionary that store any change and can be loaded/stored with a timeout management"""
 
-    def __init__(self, path=None, timeout=60, table_name="HashStore"):
-        if not path:
-            path = ":memory:"
-
-        self._table_name = table_name
-        self._connection = None
-        self._timeout = timeout
+    def __init__(self, path:str=None, timeout:int=60):
+        self._data = None  # key:value
+        self._timeout = timeout 
+        self._key_timeout = None  # key:timeout, OrderedDict
         self._path = path
 
-    def _get_connection(self):
-        # post pone the connection to allow right drop
-        if self._connection is None:
-            self._connection = sqlite3.connect(self._path)
-            self._create_table()
+    def _late_init(self):
+        # post pone dict load to allow low right to be applied
+        if self._data is None:
+            if self._path is not None:
+                try:
+                    with open(self._path) as f:
+                        raw_data = f.read()
+                        data = json.loads(raw_data)
+                        self._data = data["data"]
+                        self._key_timeout = OrderedDict(data["key_timeout"])
+                except Exception as e:
+                    # print(e)
+                    self._data = dict()
+                    self._key_timeout = OrderedDict()
+            else:
+                self._data = dict()
+                self._key_timeout = OrderedDict()
 
-        return self._connection
+    def dump(self):
+        self._late_init()
+        #print("dump !!!")
+        if self._path is not None:
+            with open(self._path, "w") as f:
+                data = {"data":self._data, "key_timeout":self._key_timeout}
+                raw_data = json.dumps(data, indent=4)
+                f.write(raw_data)
 
-    def _create_table(self):
-        cursor = self._get_connection().cursor()
-        cursor.execute("CREATE TABLE IF NOT EXISTS {} (key BLOB UNIQUE, timestamp INTEGER, value BLOB);".format(self._table_name))
-        self._get_connection().commit()
 
     def get_timeout(self, _time=time):
+        self._late_init()
         timestamp = int(_time()) - self._timeout
         
-        cursor = self._get_connection().cursor()
-        cursor.execute('SELECT key FROM {} WHERE timestamp < ?'.format(self._table_name), (timestamp,))
-        row = cursor.fetchall()
+        output = []
+        for k, t in self._key_timeout.items():
+            if t < timestamp:
+                output.append(k)
+            else:
+                return output
 
-        return map(lambda x : pickle.loads(x[0]), row)
+        return output
             
     def __getitem__(self, key):
-        blob_key = pickle.dumps(key)
+        self._late_init()
+        return self._data[key]
 
-        cursor = self._get_connection().cursor()
-        cursor.execute('SELECT value FROM {} WHERE key = ?'.format(self._table_name), (blob_key,))
-        row = cursor.fetchone()
-        if row is None:
-            raise KeyError(key)
-        
-        return pickle.loads(row[0])
 
     def __setitem__(self, key, value):
+        self._late_init()
         timestamp = int(time())
-        blop_value = pickle.dumps(value)
-        blob_key = pickle.dumps(key)
-        fields = (blob_key, timestamp, blop_value)
-        cursor = self._get_connection().cursor()
-        cursor.execute('''DELETE FROM {} WHERE key = ?'''.format(self._table_name), (blob_key,))
-        cursor.execute('''INSERT INTO {}(key, timestamp, value) VALUES(?, ?, ?)'''.format(self._table_name), fields)
+        
+        self._data[key] = value
 
-        self._get_connection().commit()
+        if key in self._key_timeout:
+            del self._key_timeout[key]
+        self._key_timeout[key] = timestamp
 
     def __delitem__(self, key):
-        blob_key = pickle.dumps(key)
-        cursor = self._get_connection().cursor()
-        cursor.execute('''DELETE FROM {} WHERE key = ?'''.format(self._table_name), (blob_key,))
-
-        self._get_connection().commit()
+        self._late_init()
+        del self._data[key]
+        del self._key_timeout[key]
 
     def __iter__(self):
-        cursor = self._get_connection().cursor()
-        cursor.execute('SELECT key FROM {}'.format(self._table_name))
-        rows = cursor.fetchall()
-
-        return map(lambda x : pickle.loads(x[0]), rows)
+        self._late_init()
+        return self._data.keys() 
     
     def __len__(self):
-        cursor = self._get_connection().cursor()
-        cursor.execute('SELECT count(value) FROM {}'.format(self._table_name))
-        row = cursor.fetchone()
-        return row[0]
+        self._late_init()
+        return len(self._data)
 
     def __repr__(self):
+        self._late_init()
         output = "key;timestamp;value\n"
-        cursor = self._get_connection().cursor()
-        cursor.execute('SELECT * FROM {}'.format(self._table_name))
-        rows = cursor.fetchall()
 
-        tmp = ["{};{};{}".format(pickle.loads(k),t,pickle.loads(v)) for k,t,v in rows]
+        tmp = ["{};{};{}".format(k,self._data[k], self._key_timeout[k]) for k in self._data]
 
         return output + "\n".join(tmp)
 
     def keys(self):
-        cursor = self._get_connection().cursor()
-        cursor.execute('SELECT key FROM {}'.format(self._table_name))
-        rows = cursor.fetchall()
-
-        return map(lambda x : pickle.loads(x[0]), rows)
+        self._late_init()
+        return self._data.keys()
 
     def values(self):
-        cursor = self._get_connection().cursor()
-        cursor.execute('SELECT value FROM {}'.format(self._table_name))
-        rows = cursor.fetchall()
-
-        return map(lambda x : pickle.loads(x[0]), rows)
+        self._late_init()
+        return self._data.values()
 
     def items(self):
-        cursor = self._get_connection().cursor()
-        cursor.execute('SELECT key,value FROM {}'.format(self._table_name))
-        rows = cursor.fetchall()
-
-        return map(lambda x : (pickle.loads(x[0]), pickle.loads(x[1])), rows)
+        self._late_init()
+        return self._data.items()

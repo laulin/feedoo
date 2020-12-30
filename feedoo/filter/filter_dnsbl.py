@@ -31,10 +31,10 @@ def query_dnsbls(ip:str, domains:list, _query=query):
 
 
 class FilterDnsbl(AbstractAction):
-    def __init__(self, match:str, tag:str, key:str, threshold_percent:int, domains:list, alert:dict, db_path:str=None, db_table:str="default_table", timeout:int=3600):
+    def __init__(self, match:str, tag:str, key:str, threshold_percent:int, domains:list, alert:dict, db_path:str=None, timeout:int=3600):
         AbstractAction.__init__(self, match)
         self._domaines = domains # domains to request
-        self._cache = HashStorage(db_path, timeout, db_table)
+        self._cache = HashStorage(db_path, timeout)
         self._timeout = timeout
         self._last_trigger = 0
         self._key = key
@@ -71,6 +71,10 @@ class FilterDnsbl(AbstractAction):
             self._last_trigger = _time()
             for ip in tuple(self._cache.get_timeout(_time)):
                 del self._cache[ip]
+
+    def finish(self):
+        self.update()
+        self._cache.dump()
 
 
 

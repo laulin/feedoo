@@ -2,8 +2,7 @@
 
 ![](images/sponsor.png?raw=true) Sponsored by [Spartan conseil](https://www.spartan-conseil.fr/)
 
-
-# What is feedoo ? 
+# What is feedoo ?
 
 feedoo is an ETL, for Extract, Transform and Load. Basically, it gets data from files or database, process it thanks to pipelines and store data to a file or a database. It is very versatile and processing brick can be added without pain.
 
@@ -22,7 +21,7 @@ The feedoo's design is for **S**ecurity **O**perational **C**enter (**SOC**). Bu
 
 They are many reasons why I decided to build feedoo.
 
-Firstly, I work with [RethinkDB](https://rethinkdb.com/) as main database. It is amazingly easy to use, with enough performance for my needs. But the main drawback is about community tools. Briefly, they are no connector to work with, especially with Fluentd, Fluentbit or a clone of Elastalert. 
+Firstly, I work with [RethinkDB](https://rethinkdb.com/) as main database. It is amazingly easy to use, with enough performance for my needs. But the main drawback is about community tools. Briefly, they are no connector to work with, especially with Fluentd, Fluentbit or a clone of Elastalert.
 
 Here we are: the second point ! I really appreciate Fluent family, especially Fluentbit fully written in C. Nevertheless, a drawback arrive when we talk about plugins or modifications. I worked many years with Fluentd and it can become painful when you need something was not shipped with.
 
@@ -52,12 +51,14 @@ pipelines:
     - name : output_stdout
       match : "*"
 ```
+
 Now execute feedoo :
 
 ```bash
 you@computer:>feedoo
 my_pypeline[1607608082]: {'log': 'my log'}
 ```
+
 It works ! :tada: You ran your first _**pipeline**_.
 
 # You said pipeline ?
@@ -66,14 +67,14 @@ It works ! :tada: You ran your first _**pipeline**_.
 
 The heart of the processing is based on _**pipeline**_. It is similar to _**pipe**_ operator in Unix system : every action do a basic operation and forward data to the following action :
 
-
 ```bash
 you@computer:>cat /var/log/auth.log | head | grep "sudo"
 ```
 
 feedoo do processing like this but add a _tag_ to data. This way following action can decide to process the data (if it _match_) or just forward it to the next action. Tag is added by the data producer ("my_pipeline" in input_dummy) and other action will try to match (" * " in output_stdout). In the feedoo context, we call data *Event*. Indeed diffent : Event contains data, called record (dict), an unix timestamp and the tag.
 
-Actions are categorized in four cases : 
+Actions are categorized in four cases :
+
 1. input
 1. output
 1. filter
@@ -87,7 +88,7 @@ Input produces events in the pipeline, including tag. If an input receives a eve
 
 It is useful for testing purpose and forward events base on dicts. 
 
-Parameters : 
+Parameters :
 
 * `tag` : events' tag
 * `data` : a dict or a list of dict with fact
@@ -157,8 +158,8 @@ Example:
 
 ### input_sqlite
 
-This input use a SQLite database as input. It works with time serie : each table is base on time (ex : log_%Y%m%d) and a field is an 
-unix timestamp (int or float). 
+This input use a SQLite database as input. It works with time serie : each table is base on time (ex : log_%Y%m%d) and a field is an
+unix timestamp (int or float).
 
 Parameters :
 
@@ -172,7 +173,6 @@ Parameters :
 * `remove=False` : If True, remove data once read
 * `reload_position=False` : If True, reload data from the last known time (0 by default). Otherwise, start at current time.
 * `db_path=None` : file path to store internal state. None means only RAM is used.
-* `db_table="default_table"` : Table name used to store data.
 
 Example:
 
@@ -189,8 +189,8 @@ Example:
 
 ### input_rethinkdb
 
-This input use a RethinkDB database as input. It works with time serie : each table is base on time (ex : log_%Y%m%d) and a field is an 
-unix timestamp (int or float). 
+This input use a RethinkDB database as input. It works with time serie : each table is base on time (ex : log_%Y%m%d) and a field is an
+unix timestamp (int or float).
 
 Parameters :
 
@@ -206,7 +206,6 @@ Parameters :
 * `remove=False` : If True, remove data once read
 * `reload_position=False` : If True, reload data from the last known time (0 by default). Otherwise, start at current time.
 * `db_path=None` : file path to store internal state. None means only RAM is used.
-* `db_table="default_table"` : Table name used to store data.
 
 Example:
 
@@ -225,7 +224,7 @@ It exports events out of the pipeline. It can be file, database, etc.
 
 ### output_archive
 
-It stores in buffer event and it writes buffer in file. 
+It stores in buffer event and it writes buffer in file.
 
 Parameters :
 
@@ -235,7 +234,6 @@ Parameters :
 * `buffer_size=1000` : Number of event stored before flush
 * `timeout_flush=60` : Flush buffer after timeout, in second
 * `db_path=None` : file path to store internal state. None means only RAM is used.
-* `db_table="default_table"` : Table name used to store data.
 
 Example :
 
@@ -266,7 +264,6 @@ Parameters
 * `wait_connection=30` : used to wait the database warmup
 * `timeout_flush=60` : Flush buffer after timeout, in second
 * `db_path=None` : file path to store internal state. None means only RAM is used.
-* `db_table="default_table"` : Table name used to store data.
 
 Example:
 
@@ -304,12 +301,11 @@ Parameters
 * `match` : pattern to match tag
 * `time_key` : field use for time serie.
 * `table_template` : template string used to generate table names
-* `fields` : dict of field name / Sqlite type. Sqlite types are REAL, TEXT, INTEGER or BLOB. 
+* `fields` : dict of field name / Sqlite type. Sqlite types are REAL, TEXT, INTEGER or BLOB.
 * `filename` : Sqlite filename. Can be :memory: to save in RAM.
 * `buffer_size=1000` : Number of event stored before flush
 * `timeout_flush=60` : Flush buffer after timeout, in second
 * `db_path=None` : file path to store internal state. None means only RAM is used.
-* `db_table="default_table"` : Table name used to store data.
 
 Example:
 
@@ -379,6 +375,7 @@ Example :
   mode : merge
   regex : ".+?(?P<name>\\{.+\\})"
 ```
+
 ## Filter
 
 Process event, may create or delete events.
@@ -396,7 +393,6 @@ Parameters :
 * `query_key` : key used to group type of event
 * `ignore_null=True` : ignore if compare_key is missing. If ignore_null if false, missing compare_key is a valid state
 * `db_path=None` : file path to store internal state. None means only RAM is used.
-* `db_table="default_table"` : Table name used to store data.
 
 Example :
 
@@ -515,7 +511,6 @@ Parameters :
 * `timeframe` : duration of the time windows in seconds
 * `query_key=None` : key used to group type of event
 * `db_path=None` : file path to store internal state. None means only RAM is used.
-* `db_table="default_table"` : Table name used to store data.
 
 Example :
 
@@ -533,9 +528,9 @@ Example :
 
 ### filter_spike
 
-This action matches when the volume of events during a given time period is spike_height times larger or smaller than during the previous time period. 
+This action matches when the volume of events during a given time period is spike_height times larger or smaller than during the previous time period.
 It uses two sliding windows to compare the current and reference frequency of events. We will call this two windows “reference” and “current”. A query
-key and a field value can be defined. 
+key and a field value can be defined.
 
 Parameters :
 
@@ -548,7 +543,6 @@ Parameters :
 * `query_key=None` : key used to group type of event
 * `field_value=None` : When set, uses the value of the field in the document and not the number of matching documents. This is useful to monitor for example a temperature sensor and raise an alarm if the temperature grows too fast. Note that the means of the field on the reference and current windows are used to determine if the spike_height value is reached
 * `db_path=None` : file path to store internal state. None means only RAM is used.
-* `db_table="default_table"` : Table name used to store data.
 * `threshold_ref=10` : minimum number of event in the reference frame to be evaluated
 * `threshold_cur=10` : minimum number of event in the current frame to be evaluated
 
@@ -581,8 +575,6 @@ Parameters :
 * `query_key=None` : key used to group type of event
 * `forget_keys=True` : set to false to keep tracking existing query key (emit alert for ever if no event come back).
 * `db_path=None` : file path to store internal state. None means only RAM is used.
-* `db_table="default_table"` : Table name used to store data.
-
 
 Example :
 
@@ -600,7 +592,7 @@ Example :
 
 ### filter_dnsbl
 
-This action use [DNSBL](https://en.wikipedia.org/wiki/Domain_Name_System-based_Blackhole_List) mecanism to emit alert. To prevent negative false, 
+This action use [DNSBL](https://en.wikipedia.org/wiki/Domain_Name_System-based_Blackhole_List) mecanism to emit alert. To prevent negative false,
 many domains can be used; This way can have a major drawback in term of performance. Nevertheless, we use multiprocessing approach to the the overhead low.
 
 Parameters :
@@ -612,9 +604,7 @@ Parameters :
 * `domains` : list of domains uses for DNSBL
 * `alert` : dict used to generate new event on change
 * `db_path=None` : file path to store internal state. None means only RAM is used.
-* `db_table="default_table"` : Table name used to store data.
 * `timeout=3600` : Duration in second of the cache. Prevent too many request on DNSBL.
-
 
 Example :
 
@@ -636,7 +626,7 @@ Example :
 
 ### filter_matching_list
 
-This action performs a multiple string matching using aho corasick algorithm. It can be used for *darklist* or *lightlist*. 
+This action performs a multiple string matching using aho corasick algorithm. It can be used for *darklist* or *lightlist*.
 
 Parameters :
 

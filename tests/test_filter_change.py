@@ -53,7 +53,7 @@ class TestFilterChange(unittest.TestCase):
         old_action = FilterChange("*", "alert.change", {"title":"something changed !"}, "c_key", "q_key", db_path=TEST_DB)
         event = Event("my_tag", 123456789, {"q_key": "XXXX", "c_key":True})
         old_action.do(event)
-        old_action.update()
+        old_action.finish()
 
         action = FilterChange("*", "alert.change", {"title":"something changed !"}, "c_key", "q_key", db_path=TEST_DB)
         event = Event("my_tag", 123456790, {"q_key": "XXXX", "c_key":False})

@@ -14,11 +14,11 @@ import json
 # push document to archive files
 
 class OutputArchive(AbstractAction):
-    def __init__(self, match, time_key, path_template, buffer_size=1000, timeout_flush=60, db_path=None, db_table="default_table"):
+    def __init__(self, match, time_key, path_template, buffer_size=1000, timeout_flush=60, db_path=None):
         AbstractAction.__init__(self, match)
         self._time_key = time_key
         self._path_template = path_template
-        self._buffer = HashStorage(db_path, timeout_flush, db_table)
+        self._buffer = HashStorage(db_path, timeout_flush)
         self._buffer_size = buffer_size
 
         self._last_flush = 0
@@ -32,9 +32,7 @@ class OutputArchive(AbstractAction):
         if path not in self._buffer:
             self._buffer[path] = list()
 
-        buffer = self._buffer[path] 
-        buffer.append(record)
-        self._buffer[path] = buffer
+        self._buffer[path].append(record)
 
         if len(self._buffer[path]) > self._buffer_size:
             self.flush_one(path)
@@ -47,6 +45,7 @@ class OutputArchive(AbstractAction):
         for k in tuple(self._buffer.keys()):
             self._log.info("Flush (finish) {}".format(k))
             self.flush_one(k)
+        self._buffer.dump()
 
     def flush_one(self, path):
         self._log.debug("flush to {}".format(path))

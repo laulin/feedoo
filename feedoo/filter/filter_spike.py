@@ -13,7 +13,7 @@ from pprint import pprint
 
 class FilterSpike(AbstractAction):
     SPIKE_TYPE = ["up", "down", "both"]
-    def __init__(self, match, tag, alert, spike_height, spike_type, timeframe, query_key=None, field_value=None, threshold_ref=10, threshold_cur=10, db_path=None, db_table="default_table"):
+    def __init__(self, match, tag, alert, spike_height, spike_type, timeframe, query_key=None, field_value=None, threshold_ref=10, threshold_cur=10, db_path=None):
         AbstractAction.__init__(self, match)
         
         self._tag = tag
@@ -29,7 +29,7 @@ class FilterSpike(AbstractAction):
         self._threshold_ref = threshold_ref
         self._threshold_cur = threshold_cur
 
-        self._state = HashStorage(db_path, timeframe*2, db_table)
+        self._state = HashStorage(db_path, timeframe*2)
 
     def do(self, event, _time=time.time):
         query_key = self.get_query_key_value(event)       
@@ -84,7 +84,6 @@ class FilterSpike(AbstractAction):
 
         time_frames = self._state[query_key]
         timeouted = time_frames[0].add_event(value, _time=_time)
-        self._state[query_key] = time_frames
 
     def _compare_current_and_reference(self, query_key):
         # ZeroDivisionError must be catched and be considered as false 
@@ -111,5 +110,9 @@ class FilterSpike(AbstractAction):
                 return (True , "down", ratio)
 
         return (False, None, None)
+
+    def finish(self):
+        self.update()
+        self._state.dump()
             
                 

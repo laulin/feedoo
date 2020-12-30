@@ -128,3 +128,25 @@ class TestHashStorage(unittest.TestCase):
         expected = "???"
 
         self.assertEqual(result, expected)
+
+    def test_dump_and_load(self):
+        storage = HashStorage(DB_PATH)
+        storage["x"] = "???"
+        storage.dump()
+
+        storage_2 = HashStorage(DB_PATH)
+        result = storage_2["x"]
+        expected = "???"
+
+        self.assertEqual(result, expected)
+
+    def test_dump_and_load_None(self):
+        storage = HashStorage(None)
+        storage["x"] = "???"
+        storage.dump()
+
+        storage_2 = HashStorage(None)
+        result = storage_2.get("x", "!!!")
+        expected = "!!!"
+
+        self.assertEqual(result, expected)

@@ -6,7 +6,7 @@ from feedoo.event import Event
 # This action will monitor a certain field and match if that field changes. The field must change with respect to the last event with the same query_key.
 
 class FilterChange(AbstractAction):
-    def __init__(self, match, tag, alert, compare_key, query_key, ignore_null=True, db_path=None, db_table="default_table", timeout=60):
+    def __init__(self, match, tag, alert, compare_key, query_key, ignore_null=True, db_path=None, timeout=60):
         # match defines the pattern to be matched
         # tag is the alert tag
         # alert is a dict used to create alert
@@ -23,7 +23,7 @@ class FilterChange(AbstractAction):
         self._match = match
         self._alert = alert
 
-        self._state = HashStorage(db_path, timeout, db_table)
+        self._state = HashStorage(db_path, timeout)
 
     def do(self, event):
         record = event.record
@@ -67,3 +67,7 @@ class FilterChange(AbstractAction):
 
     def get(self, query_key):
         return self._state[query_key]
+
+    def finish(self):
+        self.update()
+        self._state.dump()
