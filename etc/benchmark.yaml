@@ -45,3 +45,43 @@ pipelines:
       buffer_size : 1000
       match : netflow
       db_path: /tmp/cache.db
+
+  "pipeline#2":
+    - name : input_dummy
+      tag : netflow
+      data : {log: '{"TOS": 0, "src_AS": 0, "client_ip": "192.168.0.1", "client_port": 54868, "dst_AS": 0, "first_switched": 2147483647, "last_switched": 2147483647, "bytes": 138, "packets": 2, "src_addres": "8.8.8.8", "src_port": 53572, "dst_address": "192.168.0.251", "source": "jarvis-2", "dst_port": 53, "flow_id": "25cae6003276621bbf8e28c52ac024f2c27edf4a57e19df18a5653d4885dd871", "nexthop": "192.168.1.254", "timestamp": 1608733599, "protocol": "UDP", "TCP_flags": 0, "TCP_flags_decoded": ""}'}
+      repeat : 100000
+
+    - name : parser_json
+      match : netflow
+      key: log
+
+    # - name : output_stdout
+    #   match : "*"
+
+    - name : output_sqlite
+      time_key : timestamp
+      filename : "/tmp/main_2.db"
+      table_template : "netflow_%Y%m%d"
+      fields :
+        first_switched : INTEGER
+        bytes : INTEGER
+        flow_id : TEXT
+        nexthop : TEXT
+        protocol : TEXT
+        src_addres : TEXT
+        src_port : INTEGER
+        dst_address : TEXT
+        dst_port : INTEGER
+        timestamp : INTEGER
+        TCP_flags : INTEGER
+        client_port : INTEGER
+        client_ip : TEXT
+        TCP_flags_decoded : TEXT
+        source : TEXT
+        last_switched : INTEGER
+        TOS : INTEGER
+        packets : INTEGER
+      buffer_size : 1000
+      match : netflow
+      db_path: /tmp/cache.db

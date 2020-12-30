@@ -21,7 +21,7 @@ class FeedManager:
         for pipeline_id, pipeline_actions in self._configuration.iterate_pipelines():
             self._log.info("Create pipeline {}".format(pipeline_id))
             new_pipeline = Pipeline(action_modules)
-            new_pipeline.create(pipeline_id, pipeline_actions)
+            new_pipeline.create_parallel(pipeline_id, pipeline_actions)
 
             self._pipelines.append(new_pipeline)
 
@@ -107,9 +107,7 @@ class FeedManager:
         try:
             self._log.debug("Start processing")
             while(1):
-                updated = self.update()
-                if not updated:
-                    time.sleep(0.25)
+                time.sleep(0.25)
         except KeyboardInterrupt:
             self.finish()
             sys.exit(0)
