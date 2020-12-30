@@ -92,6 +92,7 @@ Parameters :
 
 * `tag` : events' tag
 * `data` : a dict or a list of dict with fact
+* `repeat=1` : number of repeat of data. Set to negative number of infinit loop.
 
 Example:
 
