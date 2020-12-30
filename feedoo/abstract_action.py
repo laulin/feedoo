@@ -83,3 +83,9 @@ class AbstractAction:
 
     def info(self):
         return "undefined for {}".format(str(self.__class__.__name__))
+
+    def get_changed(self):
+        return self._states.get_changed()
+
+    def reset_changed(self):
+        self._states.reset_changed()

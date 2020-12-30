@@ -10,6 +10,7 @@ class ActionStates:
             "ignore":dict(), # what do action ignored or failed events. Ignore must be added in the do function.
             "out":dict() # what action produce (do or update)
         }
+        self._changed = False
 
     def __getattribute__(self, name):
         if name.startswith("add_"):
@@ -24,12 +25,19 @@ class ActionStates:
                     if tag not in local_stats: 
                         local_stats[tag] = 0
                     local_stats[tag] += 1
+                    self._changed = True
                     return local_stats[tag]
                     
             return generic_add
 
         else:
             return object.__getattribute__(self, name)
+
+    def reset_changed(self):
+        self._changed = False
+
+    def get_changed(self):
+        return self._changed
 
     def get_states(self):
         if self._stats["info"] is None:

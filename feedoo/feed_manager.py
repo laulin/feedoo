@@ -92,8 +92,10 @@ class FeedManager:
         self._get_uid()
 
     def update(self):
+        output = False
         for p in self._pipelines:
-            p.update()
+            output |= p.update()
+        return output
 
     def finish(self):
         self._log.debug("Call finish()")
@@ -105,8 +107,9 @@ class FeedManager:
         try:
             self._log.debug("Start processing")
             while(1):
-                self.update()
-                time.sleep(0.25)
+                updated = self.update()
+                if not updated:
+                    time.sleep(0.25)
         except KeyboardInterrupt:
             self.finish()
             sys.exit(0)

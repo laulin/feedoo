@@ -1,4 +1,5 @@
 import logging
+from pprint import pprint
 
 class Pipeline:
     def __init__(self, actions):
@@ -45,6 +46,7 @@ class Pipeline:
             except Exception as e:
                 self._log.warning("action {} failed to update ({})".format(action.__class__.__name__, repr(e)))
 
+        return self._is_changed()
 
     def finish(self):
         for action in self._pipeline:
@@ -55,3 +57,13 @@ class Pipeline:
 
     def get_states(self):
         return self._pipeline_id, [a.get_states() for a in self._pipeline]
+
+    def _is_changed(self):
+        # return True if something happens in actions since last update
+        output = False
+
+        for a in self._pipeline:
+            output |= a.get_changed()
+            a.reset_changed()
+
+        return output
