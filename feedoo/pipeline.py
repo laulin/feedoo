@@ -10,10 +10,13 @@ class Pipeline:
         self._pipeline = []
         self._actions = actions
         self._pipeline_id = None
-        self._running = None
+        self._running = multiprocessing.Event()
+        self._running.clear()
         self._process = None
+        self._manager = multiprocessing.Manager()
+        self._actions_states = self._manager.dict()
 
-    def create(self, pipeline_id, actions):
+    def _create(self, pipeline_id, actions):
         pipeline = list()
         self._pipeline_id = pipeline_id
 
@@ -35,14 +38,17 @@ class Pipeline:
             pipeline.append(action)
             
         self._pipeline = pipeline
-        self.connect_actions()
+        self._connect_actions()
 
-    def _parallel_pipeline(self, pipeline_id, actions):
-        self.create(pipeline_id, actions)
+    def _process_kernel(self, pipeline_id, actions):
+        self._create(pipeline_id, actions)
 
         self._log.info("Pipeline {} is running".format(self._pipeline_id))
         while self._running.is_set():
-            changed = self.update()
+            changed = self._update()
+            
+            self._actions_states["id"] = self._pipeline_id
+            self._actions_states["states"] = [a.get_states() for a in self._pipeline]
             if changed == False:
                 time.sleep(0.25)
         self._finish()
@@ -53,22 +59,21 @@ class Pipeline:
         # it is mandatory to ignore sigint since the main thread must manage it.
         original_sigint_handler = signal.signal(signal.SIGINT, signal.SIG_IGN)
 
-        self._running = multiprocessing.Event()
         self._running.set()
-        self._process = multiprocessing.Process(target=Pipeline._parallel_pipeline, args=(self, pipeline_id, actions))
+        self._process = multiprocessing.Process(target=Pipeline._process_kernel, args=(self, pipeline_id, actions))
         self._process.start()
 
         # restore signal handling
         signal.signal(signal.SIGINT, original_sigint_handler)
 
-    def connect_actions(self):
+    def _connect_actions(self):
         """
         chain each action to the next one
         """
         for action, action_next in zip(self._pipeline[0:-1], self._pipeline[1:]):
             action.set_next(action_next)
 
-    def update(self):
+    def _update(self):
         for action in self._pipeline:
             try:
                 action.update()
@@ -86,13 +91,12 @@ class Pipeline:
                 self._log.warning("action {} failed to finish ({})".format(action.__class__.__name__, repr(e)))
         
     def finish(self):
-        if self._running is not None:
-            self._running.clear()
-            self._process.join()
-            self._log.info("Join process done")
+        self._running.clear()
+        self._process.join()
+        self._log.info("Join process done")
 
     def get_states(self):
-        return self._pipeline_id, [a.get_states() for a in self._pipeline]
+        return self._actions_states["id"], self._actions_states["states"]
 
     def _is_changed(self):
         # return True if something happens in actions since last update
