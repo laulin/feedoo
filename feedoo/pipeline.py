@@ -4,13 +4,16 @@ import multiprocessing
 import time
 import signal
 
-def parallel_pipeline(this, pipeline_id, actions):
+def _parallel_pipeline(this, pipeline_id, actions):
     this.create(pipeline_id, actions)
 
+    this._log.info("Pipeline {} is running".format(this._pipeline_id))
     while this._running.is_set():
         changed = this.update()
         if changed == False:
             time.sleep(0.25)
+    this._finish()
+    this._log.info("Pipeline {} is stopped".format(this._pipeline_id))
 
 class Pipeline:
     def __init__(self, actions):
@@ -52,7 +55,7 @@ class Pipeline:
 
         self._running = multiprocessing.Event()
         self._running.set()
-        self._process = multiprocessing.Process(target=parallel_pipeline, args=(self, pipeline_id, actions))
+        self._process = multiprocessing.Process(target=_parallel_pipeline, args=(self, pipeline_id, actions))
         self._process.start()
 
         # restore signal handling
@@ -74,7 +77,7 @@ class Pipeline:
 
         return self._is_changed()
 
-    def finish(self):
+    def _finish(self):
 
         for action in self._pipeline:
             try:
@@ -82,9 +85,11 @@ class Pipeline:
             except Exception as e:
                 self._log.warning("action {} failed to finish ({})".format(action.__class__.__name__, repr(e)))
         
+    def finish(self):
         if self._running is not None:
             self._running.clear()
             self._process.join()
+            self._log.info("Join process done")
 
     def get_states(self):
         return self._pipeline_id, [a.get_states() for a in self._pipeline]

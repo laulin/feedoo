@@ -1,3 +1,6 @@
+states:
+  ip : 0.0.0.0
+  port : 4321 
 pipelines:
   "pipeline#1":
     - name : input_dummy
@@ -47,10 +50,7 @@ pipelines:
       db_path: /tmp/cache.db
 
   "pipeline#2":
-    - name : input_dummy
-      tag : netflow
-      data : {log: '{"TOS": 0, "src_AS": 0, "client_ip": "192.168.0.1", "client_port": 54868, "dst_AS": 0, "first_switched": 2147483647, "last_switched": 2147483647, "bytes": 138, "packets": 2, "src_addres": "8.8.8.8", "src_port": 53572, "dst_address": "192.168.0.251", "source": "jarvis-2", "dst_port": 53, "flow_id": "25cae6003276621bbf8e28c52ac024f2c27edf4a57e19df18a5653d4885dd871", "nexthop": "192.168.1.254", "timestamp": 1608733599, "protocol": "UDP", "TCP_flags": 0, "TCP_flags_decoded": ""}'}
-      repeat : 100000
+    - name : input_forward
 
     - name : parser_json
       match : netflow
