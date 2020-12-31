@@ -4,9 +4,9 @@ import multiprocessing
 import time
 import signal
 
-class Pipeline:
+class PipelineMP:
     def __init__(self, actions):
-        self._log = logging.getLogger("Pipeline")
+        self._log = logging.getLogger("PipelineMP")
         self._pipeline = []
         self._actions = actions
         self._pipeline_id = None
@@ -60,7 +60,7 @@ class Pipeline:
         original_sigint_handler = signal.signal(signal.SIGINT, signal.SIG_IGN)
 
         self._running.set()
-        self._process = multiprocessing.Process(target=Pipeline._process_kernel, args=(self, pipeline_id, actions))
+        self._process = multiprocessing.Process(target=PipelineMP._process_kernel, args=(self, pipeline_id, actions))
         self._process.start()
 
         # restore signal handling

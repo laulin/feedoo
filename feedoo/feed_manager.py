@@ -1,4 +1,4 @@
-from feedoo.pipeline import Pipeline
+from feedoo.pipeline_mp import PipelineMP
 from feedoo.plugins import Plugins
 from feedoo.feedoo_states import FeedooStates
 import time
@@ -20,7 +20,7 @@ class FeedManager:
         action_modules = plugins.load_vanilla()
         for pipeline_id, pipeline_actions in self._configuration.iterate_pipelines():
             self._log.info("Create pipeline {}".format(pipeline_id))
-            new_pipeline = Pipeline(action_modules)
+            new_pipeline = PipelineMP(action_modules)
             new_pipeline.create_parallel(pipeline_id, pipeline_actions)
 
             self._pipelines.append(new_pipeline)
