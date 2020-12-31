@@ -4,17 +4,6 @@ import multiprocessing
 import time
 import signal
 
-def _parallel_pipeline(this, pipeline_id, actions):
-    this.create(pipeline_id, actions)
-
-    this._log.info("Pipeline {} is running".format(this._pipeline_id))
-    while this._running.is_set():
-        changed = this.update()
-        if changed == False:
-            time.sleep(0.25)
-    this._finish()
-    this._log.info("Pipeline {} is stopped".format(this._pipeline_id))
-
 class Pipeline:
     def __init__(self, actions):
         self._log = logging.getLogger("Pipeline")
@@ -48,6 +37,17 @@ class Pipeline:
         self._pipeline = pipeline
         self.connect_actions()
 
+    def _parallel_pipeline(self, pipeline_id, actions):
+        self.create(pipeline_id, actions)
+
+        self._log.info("Pipeline {} is running".format(self._pipeline_id))
+        while self._running.is_set():
+            changed = self.update()
+            if changed == False:
+                time.sleep(0.25)
+        self._finish()
+        self._log.info("Pipeline {} is stopped".format(self._pipeline_id))
+
     def create_parallel(self, pipeline_id, actions):
 
         # it is mandatory to ignore sigint since the main thread must manage it.
@@ -55,7 +55,7 @@ class Pipeline:
 
         self._running = multiprocessing.Event()
         self._running.set()
-        self._process = multiprocessing.Process(target=_parallel_pipeline, args=(self, pipeline_id, actions))
+        self._process = multiprocessing.Process(target=Pipeline._parallel_pipeline, args=(self, pipeline_id, actions))
         self._process.start()
 
         # restore signal handling
