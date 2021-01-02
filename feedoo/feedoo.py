@@ -7,7 +7,7 @@ import sys
 def main():
     args = get_args()
 
-    log_format = '[%(asctime)s] %(processName)s : %(levelname)s %(name)s %(message)s'
+    log_format = '[%(asctime)s] %(processName)s/%(name)s : %(levelname)s %(name)s %(message)s'
     if args.verbosity == 0:
         logging.basicConfig(level=logging.WARNING, format=log_format)
     elif args.verbosity == 1:
