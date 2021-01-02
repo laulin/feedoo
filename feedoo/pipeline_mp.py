@@ -4,21 +4,25 @@ import multiprocessing
 import time
 import signal
 from feedoo.pipeline_sp import PipelineSP
+import os
 
 class PipelineMP:
-    def __init__(self, actions):
+    def __init__(self, actions, privileges):
         self._log = logging.getLogger("PipelineMP")
         self._pipeline_sp = PipelineSP(actions)
         self._running = multiprocessing.Event()
         self._process = None
         self._manager = multiprocessing.Manager()
         self._actions_states = self._manager.dict()
+        self._privileges = privileges
 
     def _process_kernel(self, pipeline_id, actions):
+        self._privileges.increase_privileges()
         self._pipeline_sp.create(pipeline_id, actions)
+        self._privileges.drop_privileges()
 
         self._actions_states["id"] = pipeline_id
-        self._log.info("Pipeline {} is running".format(pipeline_id))
+        self._log.info("Pipeline {} is running in process {}".format(pipeline_id, os.getpid()))
         while self._running.is_set():
             changed = self._pipeline_sp.update()
             
@@ -41,7 +45,7 @@ class PipelineMP:
         signal.signal(signal.SIGINT, original_sigint_handler)
 
     def update(self):
-        pass
+        return False
 
     def finish(self):
         self._running.clear()

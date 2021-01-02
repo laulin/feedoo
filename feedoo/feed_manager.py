@@ -5,6 +5,7 @@ from feedoo.privileges import Privileges
 import time
 import sys
 import logging
+import os
 
 
 class FeedManager:
@@ -13,13 +14,15 @@ class FeedManager:
         self._pipelines = []
         self._log = logging.getLogger(str(self.__class__.__name__))
         self._states = None
+        self._privileges = Privileges(*self._configuration.get_privileges())
 
     def setup(self):
         plugins = Plugins()
         action_modules = plugins.load_vanilla()
+        self._privileges.decrease_privileges()
         for pipeline_id, pipeline_actions in self._configuration.iterate_pipelines():
             self._log.info("Create pipeline {}".format(pipeline_id))
-            new_pipeline = PipelineMP(action_modules)
+            new_pipeline = PipelineMP(action_modules, self._privileges)
             new_pipeline.create(pipeline_id, pipeline_actions)
 
             self._pipelines.append(new_pipeline)
@@ -32,9 +35,7 @@ class FeedManager:
         self._states = FeedooStates(**parameters)
 
     def drop_privileges(self):
-        uid_name,  gid_name = self._configuration.get_privileges()
-        privileges = Privileges(uid_name,  gid_name)
-        privileges.drop_privileges()
+        self._privileges.drop_privileges()
 
     def update(self):
         output = False
@@ -52,7 +53,9 @@ class FeedManager:
         try:
             self._log.debug("Start processing")
             while(1):
-                time.sleep(0.25)
+                changed = self.update()
+                if changed == False:
+                    time.sleep(0.25)
         except KeyboardInterrupt:
             self.finish()
             sys.exit(0)
