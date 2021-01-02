@@ -14,7 +14,8 @@ run: build
 	sudo docker run -it --rm --net=host -v $(shell pwd)/db:/db --name feedoo feedoo feedoo -v
 
 profile: build
-	sudo docker run -it --rm --net=host -v $(shell pwd)/db:/db --name feedoo feedoo python3 -m cProfile -o /db/out.profile -m feedoo.feedoo -v -c /etc/feedoo/benchmark.yaml
+	sudo docker run -it --rm --net=host -v $(shell pwd)/db:/db --name feedoo feedoo feedoo -v -c /etc/feedoo/benchmark.yaml
+	#sudo docker run -it --rm --net=host -v $(shell pwd)/db:/db --name feedoo feedoo python3 -m cProfile -o /db/out.profile -m feedoo.feedoo -v -c /etc/feedoo/benchmark.yaml
 
 clear:
 	docker images -a | grep none | grep -E -o "[0-9a-f]{12,12}" | xargs docker rmi -f
@@ -28,3 +29,6 @@ rethinkdb:
 
 clean_pip:
 	rm -rf dist/ build/ *.egg-info/
+
+htop:
+	sudo docker exec -it feedoo htop
