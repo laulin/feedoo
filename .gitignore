@@ -1,5 +1,5 @@
-dist/**
-build/**
-feedoo.egg-info/**
+**/dist/*
+**/build/*
+**/*.egg-info/*
 **/__pycache__
 db/out.profile
