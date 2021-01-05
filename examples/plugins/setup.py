@@ -13,5 +13,5 @@ setup(name='feedoo_hash',
     long_description_content_type="text/markdown",
     zip_safe=False,
     python_requires='>=3',
-    entry_points={'feedoo.plugins': 'package = feedoo_hash'}
+    entry_points={'feedoo.plugins': 'package = feedoo_hash'} # mandatory to be used by feedoo !
 )
