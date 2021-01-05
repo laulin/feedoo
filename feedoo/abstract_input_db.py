@@ -54,6 +54,7 @@ class AbstractInputDB(AbstractAction):
 
     def process_window(self, table, min_ts, max_ts, _time=time.time):
         documents = self._database_adapter.get_time_serie(table, self._time_key, min_ts, max_ts)
+        document_number = len(documents)
         self._log.debug("Process windows [{}, {}] in table {} with {} documents".format(min_ts, max_ts, table, len(documents)))
         for document in documents:
             event = Event(self._tag, int(_time()), document)
@@ -66,15 +67,18 @@ class AbstractInputDB(AbstractAction):
                 self._log.info("Delete table {}".format(table))
                 self._database_adapter.delete_table(table)
 
+        return document_number
 
     def process_multiple_windows(self, from_timestamp, to_timestamp):
         all_tables = self._database_adapter.list_tables()
         tables = self.get_table_matching(all_tables)
         time_range = self.get_time_range(tables)
+        document_number = 0
         for table, min_ts, max_ts in self.iterate_time_range(time_range, from_timestamp, to_timestamp):
 
-            self.process_window(table, min_ts, max_ts)
+            document_number += self.process_window(table, min_ts, max_ts)
 
+        self._log.info("Process {} documents".format(document_number))
         return
 
     def update(self, _time=time.time):
