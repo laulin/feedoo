@@ -4,7 +4,7 @@ import hashlib
 
 # MD5 sum of a key
 
-class FilterMD5(AbstractAction):
+class FilterMd5(AbstractAction):
     def __init__(self, match, key, output_key):
         AbstractAction.__init__(self, match)
         self._key = key

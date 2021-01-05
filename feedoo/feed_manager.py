@@ -19,6 +19,7 @@ class FeedManager:
     def setup(self):
         plugins = Plugins()
         action_modules = plugins.load_vanilla()
+        action_modules.update(plugins.load_addons())
         self._privileges.decrease_privileges()
         for pipeline_id, pipeline_actions in self._configuration.iterate_pipelines():
             self._log.info("Create pipeline {}".format(pipeline_id))
