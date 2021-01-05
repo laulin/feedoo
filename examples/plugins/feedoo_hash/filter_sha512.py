@@ -3,9 +3,9 @@ import hashlib
 
 # MD5 sum of a key
 
-class FilterMd5(AbstractFilterHash):
+class FilterSha512(AbstractFilterHash):
     def __init__(self, match, key, output_key):
-        AbstractFilterHash.__init__(self, match, key, output_key, hashlib.md5)
+        AbstractFilterHash.__init__(self, match, key, output_key, hashlib.sha251)
 
 
 

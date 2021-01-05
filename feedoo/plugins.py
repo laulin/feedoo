@@ -1,6 +1,7 @@
 import pkgutil
 import logging
 import pkg_resources
+from pprint import pprint
 
 import feedoo.input
 import feedoo.output
@@ -51,15 +52,15 @@ class Plugins:
         return output
 
     def load_addons(self):
-        discovered_plugins = {
-            entry_point.name: entry_point.load()
-            for entry_point
-            in pkg_resources.iter_entry_points('feedoo.plugins')
-        }
-        output = {}
+        discovered_packages = [entry_point.load() for entry_point in pkg_resources.iter_entry_points('feedoo.plugins')]
 
-        for modname, module in discovered_plugins.items():
-            output[modname] = getattr(module, self.snake_to_camel_case(modname))
-            self._log.info("Plugin loaded : {}".format(modname))
+        output = {}
+        for package in discovered_packages:
+            self._log.info("Walk package {}".format(package.__name__))
+            for importer, modname, ispkg in pkgutil.iter_modules(package.__path__):
+                if ispkg == False and modname in package.__all__:
+                    self._log.info("Found module {}".format(modname))
+                    module = importer.find_module(modname).load_module(modname)
+                    output[modname] = getattr(module, self.snake_to_camel_case(modname))
 
         return output
