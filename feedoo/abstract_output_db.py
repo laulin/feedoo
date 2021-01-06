@@ -46,6 +46,7 @@ class AbstractOutputDB(AbstractAction):
             
         except Exception as e:
             self._log.error("Can't insert data ({})".format(repr(e)))
+            self._log.error("Try to insert {}".format(documents))
 
         del self._buffer[tablename]
 

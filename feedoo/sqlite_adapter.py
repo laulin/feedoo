@@ -30,7 +30,7 @@ class SqliteAdapter:
             fields.append(tmp)
 
         sql_cmd = "CREATE TABLE IF NOT EXISTS {} ({});".format(table_name, ",".join(fields))
-        self._log.debug("Execute : " + sql_cmd)
+        self._log.info("Execute : " + sql_cmd)
 
         cursor.execute(sql_cmd)
         self._connection.commit()
@@ -39,7 +39,7 @@ class SqliteAdapter:
         cursor = self._connection.cursor()
 
         sql_cmd = "DROP TABLE IF EXISTS {};".format(table_name)
-        self._log.debug("Execute : " + sql_cmd)
+        self._log.info("Execute : " + sql_cmd)
 
         cursor.execute(sql_cmd)
         self._connection.commit()
