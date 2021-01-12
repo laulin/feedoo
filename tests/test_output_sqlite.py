@@ -67,3 +67,51 @@ class TestOutputSqlite(unittest.TestCase):
         db.close()
 
         self.assertEqual(len(result), 1)
+
+    def test_prod(self):
+        parameters = {
+        "time_key" : "timestamp",
+        "filename" : DB_FILE,
+        "table_template" : "sys_ram_%Y%m%d",
+        "fields" :{
+            "eth0_rx_packets": "INTEGER",
+            "eth0_rx_errors": "INTEGER",
+            "eth0_rx_bytes": "INTEGER",
+            "eth0_tx_packets": "INTEGER",
+            "eth0_tx_errors": "INTEGER",
+            "eth0_tx_bytes": "INTEGER",
+            "source": "TEXT",
+            "timestamp": "INTEGER"
+        },
+        "buffer_size" : 10,
+        "match" : "sys.netif",
+        "db_path": "/tmp/cache.db"
+        }
+
+        output_sqlite = OutputSqlite(**parameters)
+        data = [{'source': 'jarvis-2', 'tag': 'sys.ram', 'timestamp': 1609928073, 'Mem_used': 1732584, 'Mem_free': 2186188, 'Swap_total': 102396, 'Swap_used': 2048, 'Swap_free': 100348, 'Mem_total': 3918772}, 
+        {'source': 'jarvis-2', 'tag': 'sys.ram', 'timestamp': 1609928074, 'Mem_used': 1732592, 'Mem_free': 2186180, 'Swap_total': 102396, 'Swap_used': 2048, 'Swap_free': 100348, 'Mem_total': 3918772}, 
+        {'source': 'jarvis-2', 'tag': 'sys.ram', 'timestamp': 1609928075, 'Mem_used': 1732584, 'Mem_free': 2186188, 'Swap_total': 102396, 'Swap_used': 2048, 'Swap_free': 100348, 'Mem_total': 3918772}, 
+        {'source': 'jarvis-2', 'tag': 'sys.ram', 'timestamp': 1609928076, 'Mem_used': 1732616, 'Mem_free': 2186156, 'Swap_total': 102396, 'Swap_used': 2048, 'Swap_free': 100348, 'Mem_total': 3918772}, 
+        {'source': 'jarvis-2', 'tag': 'sys.ram', 'timestamp': 1609928078, 'Mem_used': 1732836, 'Mem_free': 2185936, 'Swap_total': 102396, 'Swap_used': 2048, 'Swap_free': 100348, 'Mem_total': 3918772}, 
+        {'source': 'jarvis-2', 'timestamp': 1609928078, 'tag': 'sys.ram', 'Mem_used': 1733072, 'Mem_free': 2185700, 'Swap_total': 102396, 'Swap_used': 2048, 'Swap_free': 100348, 'Mem_total': 3918772}, 
+        {'source': 'jarvis-2', 'tag': 'sys.ram', 'timestamp': 1609928079, 'Mem_used': 1733104, 'Mem_free': 2185668, 'Swap_total': 102396, 'Swap_used': 2048, 'Swap_free': 100348, 'Mem_total': 3918772}, 
+        {'source': 'jarvis-2', 'tag': 'sys.ram', 'timestamp': 1609928080, 'Mem_used': 1733104, 'Mem_free': 2185668, 'Swap_total': 102396, 'Swap_used': 2048, 'Swap_free': 100348, 'Mem_total': 3918772}, 
+        {'source': 'jarvis-2', 'tag': 'sys.ram', 'timestamp': 1609928081, 'Mem_used': 1733088, 'Mem_free': 2185684, 'Swap_total': 102396, 'Swap_used': 2048, 'Swap_free': 100348, 'Mem_total': 3918772}, 
+        {'source': 'jarvis-2', 'tag': 'sys.ram', 'timestamp': 1609928082, 'Mem_used': 1733072, 'Mem_free': 2185700, 'Swap_total': 102396, 'Swap_used': 2048, 'Swap_free': 100348, 'Mem_total': 3918772}]
+        
+        for d in data:
+            event = Event("sys.netif", 1608026350, d)
+            output_sqlite.do(event)
+
+        output_sqlite.finish()
+
+        # read back the db
+        db = SqliteAdapter(DB_FILE, parameters["fields"])
+        db.connect()
+        result = db.get_time_serie("sys_ram_20210106", "timestamp", 1609928072, 1609928083)
+        #print(db.list_tables())
+        db.close()
+        print(result)
+
+        # self.assertEqual(len(result), 1)
