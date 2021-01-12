@@ -16,7 +16,7 @@ class TestOutputLineProtocol(unittest.TestCase):
         with open("/tmp/archive/j2/sys-20201022") as f:
             result = f.read()
             
-        expected = 'my_mez,source={source} data="aaaaaa",tick=10 1603373121000\n'
+        expected = 'my_mez,source=j2 data="aaaaaa",tick=10 1603373121000\n'
         self.assertEqual(result, expected)
 
 

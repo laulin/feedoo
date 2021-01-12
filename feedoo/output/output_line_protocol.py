@@ -37,7 +37,7 @@ class OutputLineProtocol(AbstractOutputFile):
 
                 time = Chronyk(v[self._time_key])
                 ts = int(time.timestamp() * 1000)
-                line = "{} {} {}".format(self._header, ",".join(tmp), ts)
+                line = "{} {} {}".format(self._header.format(**v), ",".join(tmp), ts)
                 lines.append(line)
             except Exception as e:
                 self._log.warning("failed to create line '{}'".format(repr(e)))
