@@ -36,7 +36,7 @@ class OutputLineProtocol(AbstractOutputFile):
                         tmp.append('{name}={value}'.format(name=f, value=value))
 
                 time = Chronyk(v[self._time_key])
-                ts = int(time.timestamp() * 1000)
+                ts = int(time.timestamp() * 1000000000) # ns
                 line = "{} {} {}".format(self._header.format(**v), ",".join(tmp), ts)
                 lines.append(line)
             except Exception as e:
