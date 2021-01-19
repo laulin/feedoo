@@ -7,14 +7,8 @@ from fluentbit_server.fluentbit_request_handler import FluentbitRequestHandler
 from fluentbit_server.fluentbit_server import FluentbitServer
 from fluentbit_server.fluentbit_ssl import FluentbitSSL
 from functools import partial
-from socketserver import ThreadingMixIn
 import threading
 import queue
-
-class ThreadingFluentbitServer(ThreadingMixIn, FluentbitServer):
-    allow_reuse_address = True
-
-
 
 class InputForward(AbstractAction):
     def __init__(self, host="localhost", port=24224, tls_enable=False, key_file=None, crt_file=None, shared_key=None, server_hostname="", buffer_size=32768, queue_size=1000, _start_server=True):
@@ -34,7 +28,7 @@ class InputForward(AbstractAction):
         self._queue = queue.Queue(queue_size)
         self._server = None
         if _start_server:
-            self._server = ThreadingFluentbitServer((host, port), FluentbitRequestHandler, transport_factory, authentication_factory, ssl)
+            self._server = FluentbitServer((host, port), FluentbitRequestHandler, transport_factory, authentication_factory, ssl)
             self._thread = threading.Thread(target=self._server.serve_forever)
             self._thread.start()
 
@@ -55,7 +49,6 @@ class InputForward(AbstractAction):
             try:
                 new_k = k.decode("utf8")
             except Exception as e:
-                #self._log.warning("Can't decode {} ({})".format(k, repr(e)))
                 new_k = k
 
             try:
