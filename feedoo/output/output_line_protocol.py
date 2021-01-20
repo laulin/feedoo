@@ -40,6 +40,6 @@ class OutputLineProtocol(AbstractOutputFile):
                 line = "{} {} {}".format(self._header.format(**v), ",".join(tmp), ts)
                 lines.append(line)
             except Exception as e:
-                self._log.warning("failed to create line '{}'".format(repr(e)))
+                self._log.warning("failed to create line '{}' with value '{}".format(repr(e), v))
 
         return "\n".join(lines) + "\n"
