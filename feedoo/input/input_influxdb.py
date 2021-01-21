@@ -18,9 +18,13 @@ class InputInfluxdb(AbstractAction):
         return event
 
     def push_results(self, results):
+        counter = 0
         for document in results.get_points():
+            counter += 1
             event = Event(self._tag, int(time.time()), document)
             self.call_next(event)
+
+        self._log.info("Process {} documents".format(counter))
 
     def update(self):
         if self._initial_query is not None:
