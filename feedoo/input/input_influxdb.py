@@ -5,7 +5,7 @@ import time
 
 
 class InputInfluxdb(AbstractAction):
-    def __init__(self, tag:str, query:str, window:int=60 initial_query:str=None, database:str="telegrag", host:str="localhost", port:int=8086):
+    def __init__(self, tag:str, query:str, window:int=60, initial_query:str=None, database:str="telegrag", host:str="localhost", port:int=8086):
         AbstractAction.__init__(self)
         self._query = query
         self._initial_query = initial_query
