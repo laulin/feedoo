@@ -9,7 +9,7 @@ class InputInfluxdb(AbstractAction):
         AbstractAction.__init__(self)
         self._query = query
         self._initial_query = initial_query
-        self._client = InfluxDBClient(host=host, port=port, database=database
+        self._client = InfluxDBClient(host=host, port=port, database=database)
         self._window = int(window)
         self._last_time = time.time()
     
