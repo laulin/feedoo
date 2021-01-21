@@ -12,6 +12,7 @@ class InputInfluxdb(AbstractAction):
         self._client = InfluxDBClient(host=host, port=port, database=database)
         self._window = int(window)
         self._last_time = time.time()
+        self._tag = tag
     
     def do(self, event):
         # directly forward
