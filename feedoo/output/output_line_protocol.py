@@ -1,11 +1,12 @@
 from feedoo.abstract_output_file import AbstractOutputFile
 from chronyk import Chronyk
 import json
+import time
 
 # push document to file using line protocol
 
 class OutputLineProtocol(AbstractOutputFile):
-    def __init__(self, match, time_key, mesurement, tag_keys, field_keys, path_template, buffer_size=1000, timeout_flush=60, db_path=None):
+    def __init__(self, match, mesurement, tag_keys, field_keys, path_template, time_key:str=None, buffer_size=1000, timeout_flush=60, db_path=None):
         AbstractOutputFile.__init__(self, match, time_key, path_template, buffer_size, timeout_flush, db_path)
 
         self._mesurement = mesurement
@@ -35,8 +36,11 @@ class OutputLineProtocol(AbstractOutputFile):
                     else:
                         tmp.append('{name}={value}'.format(name=f, value=value))
 
-                time = Chronyk(v[self._time_key])
-                ts = int(time.timestamp() * 1000000000) # ns
+                if self._time_key is not None:
+                    time = Chronyk(v[self._time_key])
+                    ts = int(time.timestamp() * 1000000000) # ns
+                else:
+                    ts = int(time.time() * 1000000000) # ns
                 line = "{} {} {}".format(self._header.format(**v), ",".join(tmp), ts)
                 lines.append(line)
             except Exception as e:

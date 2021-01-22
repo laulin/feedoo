@@ -9,7 +9,7 @@ class TestOutputLineProtocol(unittest.TestCase):
         shutil.rmtree("/tmp/archive/")
 
     def test_1(self):
-        action = OutputLineProtocol("*", "timestamp", "my_mez", ["source"], ["data", "tick"], "/tmp/archive/{source}/sys-%Y%m%d")
+        action = OutputLineProtocol("*", "my_mez", ["source"], ["data", "tick"], "/tmp/archive/{source}/sys-%Y%m%d", "timestamp")
         event_1 = Event("my_tag", 1603373121, {"timestamp":1603373121, "data":"aaaaaa", "tick":10, "source":"j2"})
         action.do(event_1)
         action.finish()
