@@ -23,7 +23,7 @@ class OutputLineProtocol(AbstractOutputFile):
         self._log.debug("Header : '{}'".format(header))
         return header
 
-    def value_to_string(self, values):
+    def value_to_string(self, values, _time=time.time):
         lines = []
         for v in values:
             try:
@@ -37,10 +37,10 @@ class OutputLineProtocol(AbstractOutputFile):
                         tmp.append('{name}={value}'.format(name=f, value=value))
 
                 if self._time_key is not None:
-                    time = Chronyk(v[self._time_key])
-                    ts = int(time.timestamp() * 1000000000) # ns
+                    current_time = Chronyk(v[self._time_key])
+                    ts = int(current_time.timestamp() * 1000000000) # ns
                 else:
-                    ts = int(time.time() * 1000000000) # ns
+                    ts = int(_time() * 1000000000) # ns
                 line = "{} {} {}".format(self._header.format(**v), ",".join(tmp), ts)
                 lines.append(line)
             except Exception as e:

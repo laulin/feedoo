@@ -19,12 +19,12 @@ class AbstractOutputFile(AbstractAction):
         self._last_flush = 0
         self._timeout_flush = timeout_flush
 
-    def do(self, event):
+    def do(self, event, _time=time):
         record = event.record
         if self._time_key is not None and self._time_key in record:
             current_time = Chronyk(record[self._time_key])
         else:
-            current_time = Chronyk(time())
+            current_time = Chronyk(_time())
 
         path = current_time.timestring(self._path_template)
         path = path.format(**record)
@@ -34,19 +34,19 @@ class AbstractOutputFile(AbstractAction):
         self._buffer[path].append(record)
 
         if len(self._buffer[path]) > self._buffer_size:
-            self.flush_one(path)
+            self.flush_one(path, _time)
 
         return event
 
-    def finish(self):
+    def finish(self, _time=time):
         self._log.debug("finish")
 
         for k in tuple(self._buffer.keys()):
             self._log.info("Flush (finish) {}".format(k))
-            self.flush_one(k)
+            self.flush_one(k, _time)
         self._buffer.dump()
 
-    def flush_one(self, path):
+    def flush_one(self, path, _time=time):
         self._log.debug("flush to {}".format(path))
 
         with suppress(FileExistsError):
@@ -55,7 +55,7 @@ class AbstractOutputFile(AbstractAction):
 
         with open(path, "a") as f:
             values = self._buffer[path]
-            data = self.value_to_string(values)
+            data = self.value_to_string(values, _time)
             f.write(data)
             del self._buffer[path]
 
@@ -66,6 +66,6 @@ class AbstractOutputFile(AbstractAction):
                 self._log.info("Flush {}".format(path))
                 self.flush_one(path)
 
-    def value_to_string(self, values):
+    def value_to_string(self, values, _time=time):
         raise NotImplemented()
 

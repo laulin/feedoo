@@ -7,6 +7,6 @@ class OutputArchive(AbstractOutputFile):
     def __init__(self, match, time_key, path_template, buffer_size=1000, timeout_flush=60, db_path=None):
         AbstractOutputFile.__init__(self, match, time_key, path_template, buffer_size, timeout_flush, db_path)
 
-    def value_to_string(self, values):
+    def value_to_string(self, values, _time=None):
         return "\n".join(map(json.dumps, values)) + "\n"
 
