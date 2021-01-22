@@ -21,7 +21,11 @@ class AbstractOutputFile(AbstractAction):
 
     def do(self, event):
         record = event.record
-        time = Chronyk(record[self._time_key])
+        if self._time_key is not None and self._time_key in record:
+            time = Chronyk(record[self._time_key])
+        else:
+            time = Chronyk(time())
+
         path = time.timestring(self._path_template)
         path = path.format(**record)
         if path not in self._buffer:
