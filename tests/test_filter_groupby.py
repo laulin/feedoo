@@ -74,6 +74,30 @@ class TestFilterGroupby(unittest.TestCase):
         expected = Event(tag='grouped', timestamp=1, record={'a': 'x', 'b': 'y', 'value': 2})
         next_action.receive.assert_called_with(expected)
 
+    def test_no_value(self):
+        action = FilterGroupby("*", "grouped", ["a", "b"], ["__not_value__"], unique=True)
+        next_action = Mock()
+        action.set_next(next_action)
+
+        event = Event("my_tag", 123456789, {"a": "x", "b" : "y"})
+        action.do(event)
+        event = Event("my_tag", 123456789, {"a": "x", "b" : "y"})
+        action.do(event)
+        action.update(absolute_time(1))
+        expected = Event(tag='grouped', timestamp=1, record={'a': 'x', 'b': 'y', 'value': [{'__not_value__': None}]})
+        next_action.receive.assert_called_with(expected)
+
+    def test_missing_key(self):
+        action = FilterGroupby("*", "grouped", ["a", "d"], ["c"])
+        next_action = Mock()
+        action.set_next(next_action)
+
+        event = Event("my_tag", 123456789, {"a": "x", "b" : "y", "c" : "aaa" })
+        action.do(event)
+        action.update(absolute_time(1))
+        expected = Event(tag='grouped', timestamp=1, record={'a': 'x', 'd': "None", 'value': [{'c': 'aaa'}]})
+        next_action.receive.assert_called_with(expected)
+
 
 
 
