@@ -22,11 +22,11 @@ class AbstractOutputFile(AbstractAction):
     def do(self, event):
         record = event.record
         if self._time_key is not None and self._time_key in record:
-            time = Chronyk(record[self._time_key])
+            current_time = Chronyk(record[self._time_key])
         else:
-            time = Chronyk(time())
+            current_time = Chronyk(time())
 
-        path = time.timestring(self._path_template)
+        path = current_time.timestring(self._path_template)
         path = path.format(**record)
         if path not in self._buffer:
             self._buffer[path] = list()
